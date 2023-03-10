@@ -86,6 +86,19 @@
 
 % The time plan should give an approximate date when the work is to be finished. It should also list mandatory seminars and milestones for the project with dates for critical steps that are needed to finish the work (which can include, depending on programme, e.g., intermediate report, mandatory seminars, presentation, opposition, and final report).
 
+
+% 1. Intro
+% - dep trees,
+%  UD
+%  - abstr trees, GF
+%  - strengths and weaknesses
+%   -> useful synthesis: UD-GF
+%   -> applications:
+%     - translation  - CL 2020
+%     - semantics    - CL 2020
+%     - concept alignment - Arianna
+%     - SMU work - analysis of real world law text
+
 \section{Introduction}
 
 
@@ -117,6 +130,12 @@ These can, among other uses, be used to preserve information from the UD labels 
 
 
 \section{Problem}
+
+% 2. Background & Problem
+% - old ud-gf
+% - newer naive approach - github + article 2017
+%   - limitations
+%   - performance
 
 The current ud2gf implementation has some limitations. It quickly becomes extremely slow for sentences more than a couple of words and/or
 when using large GF-grammars, e.g. ones containing Wordnet\cite{angelov2016predicting}. Additionally, if the structure differs too much between the representation of a sentence in UD format and as a GF tree, it is not possible to describe the required transformation in the current "labels file" language.
@@ -200,6 +219,19 @@ Here we can see that in UD, the word "cute" is in the root, while the conjunctio
 The translation described by a labels file is not one-to-one and there are often many possible GF trees that a UD tree could be translated to. The possible trees are currently ranked by completeness, as in how many of the words are included in the generated tree. However this ranking is incomplete and in case two possible trees, with the same GF category, cover the same words, an arbitrary tree will be chosen. A better choice could be to also check the linearization of these trees and rank those whose linearization is more similar to the original string higher. It would also be possible to completely exclude trees with differing linearization, but that would run counter to the goal of robustness.
 
 Another problem is that it can sometimes be difficult to debug why a rule in a labels file is not firing, so it would be useful to have a debugging tool to help diagnosing such issues.
+
+
+% 3. The new algorithm
+% - definitions
+% - examples
+% - how annotations work
+
+% 4. Evaluation
+% - synthetic experiment: RGL -> UD -> RGL
+%   - completeness - kan alltid få ett fullständigt träd
+%   - accuracy
+%   - performance
+%   - error analysis
 
 \section{Context}
 
