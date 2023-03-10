@@ -11,7 +11,7 @@
       tex = pkgs.texlive.combine {
           inherit (pkgs.texlive) scheme-minimal latex-bin latexmk
           chngcntr hyperref pdftexcmds infwarerr kvoptions parskip
-          etoolbox pgf epstopdf-pkg
+          etoolbox pgf epstopdf-pkg todonotes
           ;
           # inherit (pkgs.texlive) scheme-medium chngcntr ;
       };
