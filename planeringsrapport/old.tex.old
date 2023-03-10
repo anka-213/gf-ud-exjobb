@@ -1,0 +1,74 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{minted}
+\usepackage{hyperref}
+
+\title{Thesis proposal \\ A formalization of type theory in Agda}
+\author{Andreas Källberg}
+\date{November 2017}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Agda is a proof assistant and a dependently typed language. Something about models for type theory and why it is important to  formalize them. Actually choose one of the suggestions below, instead of writing something generic that might fit all of them.
+
+See here for instructions: http://www.cse.chalmers.se/edu/year/2016/course/DAT315/tcsis-prop.pdf
+
+\subsection{Summarize the background and current state}
+
+\subsection{Clearly defined research question}
+
+\subsection{Importance}
+
+\subsection{Why is this a significant step?}
+
+\subsection{What shall be done?}
+
+\subsection{Methods}
+
+\subsection{Backup plan}
+
+\subsection{Delimitation}
+
+\section{Proposal suggestions from Thierry Coquand and Peter Dybjer}
+
+\begin{enumerate}
+  \item Look into the work by Maggesi and Hirschowitz and explore how
+their abstract perspective helps with formalizations about syntax of
+type theory.  This involves formalizing notions like categories,
+monads, and modules over a monad.  The idea would be to do this
+formalization in the cubical extension of Agda.
+
+Slides:
+http://web.math.unifi.it/users/maggesi/talks/2017-04-26-fpfm.pdf
+
+\item Voevodsky, Ahrens, Lumsdaine compare different notions of models
+of type theory.  One possible task is to take any of these notions
+(for example, categories with families) and state of an instance of
+such a model is "the" initial model, as well as construct this model
+concretely.
+
+https://arxiv.org/abs/1705.04310
+
+\item Formalize the syntax of type theory with Pi, Sigma, Nat, and a
+universe using what should be the initial categories with families and
+work towards proving results like injectivity of the type
+constructurs, decidability of type checking, and canonicity based on a
+technique called “glueing” [2], which as opposed to [1] works without
+defining a reduction relation.
+\end{enumerate}
+
+[1] Related formalization based on logical relations and reduction:
+   https://github.com/mr-ohman/logrel-mltt
+
+ [2] http://www.cse.chalmers.se/~coquand/norm.pdf
+
+
+
+\bibliographystyle{plain}
+\bibliography{main}
+
+\end{document}

@@ -1,0 +1,315 @@
+\documentclass{article}
+
+
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{minted}
+
+\usepackage{graphicx}
+
+\usepackage[colorinlistoftodos]{todonotes}
+
+\usepackage{parskip}
+\setlength{\parskip}{10pt} 
+
+\usepackage{tikz}
+\usetikzlibrary{arrows, decorations.markings}
+
+\usepackage{chngcntr}
+\counterwithout{figure}{section}
+
+
+
+
+\title{Thesis proposal \\ A formalization of type theory in Agda}
+\author{Andreas Källberg}
+\date{November 2017}
+
+
+% \maketitle
+
+
+
+
+\begin{document}
+
+
+\begin{titlepage}
+  
+
+\centering
+  
+  
+{\scshape\LARGE Master thesis project proposal\\}
+  
+\vspace{0.5cm}
+  
+{\huge\bfseries Constructing an initial object in the category of Categories with Families\\}
+  
+\vspace{2cm}
+  
+{\Large Andreas Källberg\\}
+  
+  
+\vspace{1.0cm}
+  
+{\large Suggested Supervisor at CSE: Probably one of: Peter Dybjer, Thierry Coquand or Andreas Abel\\}
+  
+\vspace{1.5cm}
+  
+{\large Relevant completed courses student 1:\par}
+  
+{\itshape DAT140, Types for Programs and Proofs\\}
+{\itshape DAT060, Logic in Computer Science\\}
+{\itshape No course code yet, Initial Types Club meetings with Andreas Abel\\}
+  
+  
+\vfill
+
+  
+
+\vfill
+  
+{\large \today\\} 
+
+
+\end{titlepage}
+
+
+
+\section{Acronyms}
+In this proposal the acronym CwF is used for Categories with Families.
+
+\section{Preface}
+This proposal is based on a proposal suggestion from Thierry Coquand and Peter Dybjer. Here is the suggestion:
+
+% I have not fully grasped all of the concepts in the suggestion, so part of the thesis work will be to read up on the concepts. I don't understand myself why the work is important, but I trust their word on it. 
+
+\begin{quote}
+Voevodsky, Ahrens, Lumsdaine\cite{ahrens2017categorical} compare different notions of models
+of type theory.  One possible task is to take any of these notions
+(for example, categories with families) and state of an instance of
+such a model is "the" initial model, as well as construct this model
+concretely.
+
+\url{https://arxiv.org/abs/1705.04310}
+\end{quote}
+
+And here is a bit of clarification from Dybjer:
+
+\begin{quote}
+What is meant, I think, is to
+
+(i) define the category of Cwfs where the objects are cwfs, and the arrows are cwf-morphisms.
+
+(ii) construct an initial object of this category, that is, build a cwf from syntax in some way and then construct a cwf-morphism to any other cwf.
+
+Item (ii) is closely related to what Konstantinos Brilakis has been working on during the autumn, and is still working on. Konstantinos is at the moment working on the construction of an initial cwf, and has previously worked on several different constructions of initial cwfs in the subcategories of "unityped cwfs" (there is only one type) and "simply typed cwfs" (types do not depend on contexts). Konstantinos has worked in standard Agda, based on intensional type theory without univalence and function extensionality. That setting is not appropriate for development of the category of cwfs, hence Konstantinos has only constructed the initial (unityped, simply typed) cwfs,  but not proved that they are initial in the appropriate category.
+\end{quote}
+
+% This is my attempt to explain the concepts and the project from the best of my understanding.
+
+
+\section{Summary of the background and current state}
+% What to explain:
+% 
+% \begin{itemize}
+%     % \item Dependent Types
+%     % \item Agda
+%     % \item Type theory
+%     \item Dependent Type Theory
+%     \item Categories
+%     \item CwF:s
+%     \item Initial objects
+%     % \item Univalence and Homotopy Type Theory
+% \end{itemize}
+
+\subsection{Agda}
+Agda is a dependently typed language and a proof assistant. Dependent types means that a type can depend on the values and that there is no distinction between values and types.
+For example:
+\begin{minted}{agda}
+replicate : {A : Set} -> (n : Nat) -> (x : A) -> Vec A n
+\end{minted}
+is a function which creates a vector of length n filled with copies of the value x.
+Here, the type of the output \verb!Vec A n! depends on the value of the input value \verb!n!.
+
+Thanks to the Curry-Howard isomorphism -- which states that types corresponds to logical propositions and that programs corresponds to proofs --
+Agda can also be used as a proof assistant.
+By writing a program that has the type which corresponds to the proposition that you want to prove, the proposition is proven to be true
+and the type checker in Agda can verify that the proof is correct.
+
+% \begin{minted}{agda}
+% data Vec (A : Set a) : Nat -> Set a where
+%   []  : Vec A zero
+%   _∷_ : forall. {n} (x : A) (xs : Vec A n) -> Vec A (suc n)
+% \end{minted}
+
+% \subsection{Agda}
+% TO DO: (This is draft and not complete sentences)
+
+% Proofs are constructed by constructing programs which gives examples of what you want to show. Constructive proofs: For example if you want to show that there exists a number which fulfills a criterion then you would write an algorithm which finds a concrete example of such a number. If you want to prove that something is true for all numbers then you would take the number as an argument and use structural induction (and recursion) over the number, which in the case of Peano-numbers (which are used in Agda) is the same as classical induction.
+
+% A data-type can either be constructed or deconstructed. By adding limitations to how a data type can be constructed, then the existence of such a data type can be a proof of some statement. The information in this proof can be re-obtained when the structure is deconstructed. For example, there is a data type for equality, which takes two different type parameters, but can only be constructed when the parameters are identical. By deconstructing this data type, the equality can be re-obtained.
+
+\subsection{Categories}
+A category is a generalization of the concept of sets and functions.
+
+A category is a structure which is defined by a number of axioms.
+A category $C$ consists of:
+\begin{enumerate}
+    \item A set ob$(C)$ with elements called {\em objects}.
+    \item A set hom$(C)$ with elements called {\em morphisms} or {\em arrows}. Each morphism has an associated source object and target object.
+          A morphism with source $a \in ob(C)$ and target $b \in ob(C)$ is written $a \rightarrow b$. The set of all morphisms from $a$ to $b$ is written as $hom(a,b)$.
+    \item For each three objects $a, b, c \in ob(C)$ a binary operation $hom(a,b)\times{}hom(b,c) \rightarrow hom(a,c)$ called composition.
+          The composition of $f : a \rightarrow b$ and $g : b \rightarrow c$ is written as $g \circ f$.
+    \item For each object $x$ a morphism $1_C : x \rightarrow x$ called the identity morphism.
+\end{enumerate}
+where the composition operation $\circ$ is associative and the identity $1_x$ is the left and right identity for composition.  
+
+% Morphism from $a$ to $b$ where $a$ and $b$ are objects ($a,b \in Ob(C)$) is written $a \rightarrow b$.
+
+\subsubsection{Initial objects}
+An initial object in a category $C$ is an object $\emptyset$, where for each object $x \in Ob(C)$
+there exists a unique morphism $! : \emptyset \rightarrow x$.
+
+\subsection{Type theory}
+Type theory is as the name indicates related to data types in programming languages.
+More specifically, it is the mathematics which describes how type systems and type checkers work.
+
+Type Theory can also be seen as an alternative to set theory which can be used as the basis for all of mathematics. Examples of type theories are "Typed $\lambda$-calculus", "Peer-Martin Lööf's intuitionistic type theory" and "Homotopy type theory".
+Another example is "Categories with Families" \cite{dybjer1995internal} (or CwFs for short), which this proposal is about. 
+
+% Dependent type theory
+
+\subsection{Categories with Families}
+
+% Categories with Families (\gls{cwf})
+
+Categories with Families (CwF) is a notion of type theory for dependent types designed to be similar to the syntax of dependently typed languages. 
+Dybjer also introduces the concept of CwF-morphisms between pairs of CwFs.
+\cite{dybjer1995internal}
+
+\subsection{Univalence and Homotopy Type Theory}
+Homotopy type theory is a type theory based on the topological concept of Homotopy.
+In classical type theory two different proofs for the same proposition are identical.
+In homotopy type theory, this is not true. This means that some proofs are more difficult to make.
+
+The most important gain from using homotopy type theory is the univalence axiom.
+The {\em univalence axiom} states that if two types are equivalent/isomorphic, they are identical. In symbols:
+$$ (A = B) \simeq (A \simeq B) $$
+If two different representations for the same concept are isomorphic then they are identical according to the univalence axiom.
+Univalence simplifies many proofs and allows many proofs that would be impossible without it.
+% One example of such a gain is {\em function extensionality} which means that a pointwise proof of equality for functions extends to a proof of equality for the functions. In other words, if $f, g : a \rightarrow b$ and $x : a$:
+% $$ (\forall x. f(x) = g(x)) \simeq (f = g) $$
+
+There is an extension for Agda which has the univalence axiom called {\em Univalent Agda}.
+
+% TO DO: Mention costs
+
+% Models: A system for building up type theory. These models are equivalent, which is shown in V.A.L.
+
+
+
+
+\section{Research question} \label{research-question}
+
+% The goal is to show that it is possible to construct a system where CwF is the initial model. The secondary goal is to construct this model concretely in Agda and thereby showing that it is possible formally.
+
+The goals of this project are:
+\begin{enumerate}
+    \item To formally define (in univalent Agda) a category where CwFs are the objects and CwF-morphisms are the arrows.
+    \item To construct an initial object of this category and formally prove that it is an initial object by constructing a CwF-morphism to to all other CwFs. 
+\end{enumerate}
+
+
+% (i) define the category of Cwfs where the objects are cwfs, and the arrows are cwf-morphisms.
+% 
+% (ii) construct an initial object of this category, that is, build a cwf from syntax in some way and then construct a cwf-morphism to any other cwf.
+
+
+
+% What does "state of an instance of such a model is 'the' initial model" mean? I guess that it is related to the following quote from Voevodsky, Ahrens, Lumsdaine:
+% For a given kind of categorical structures and a given type theory one expects furthermore to be able to build, from the syntax, an initial object of a category or 2-category whose objects are categorical structures of this kind equipped with suitable extra operations 'modelling' the type and term formers of the type theory under consideration.
+%  
+% Does this mean that I would try to construct a category of models for type theory with CwF as the initial object and what (perhaps the mappings used in ALV?) as the morphisms? If so, how is this different from what ALV did in their paper?
+
+
+\section{Previous work}
+%TO DO
+During the autumn Konstantinos Brilakis has been working on a closely related project. About this Dybjer said:
+
+\begin{quote}
+Item (ii) is closely related to what Konstantinos Brilakis has been working on during the autumn, and is still working on. Konstantinos is at the moment working on the construction of an initial cwf, and has previously worked on several different constructions of initial cwfs in the subcategories of "unityped cwfs" (there is only one type) and "simply typed cwfs" (types do not depend on contexts). Konstantinos has worked in standard Agda, based on intensional type theory without univalence and function extensionality. That setting is not appropriate for development of the category of cwfs, hence Konstantinos has only constructed the initial (unityped, simply typed) cwfs,  but not proved that they are initial in the appropriate category.
+\end{quote}
+
+
+
+\section{Importance}
+Type theory is important because programming languages are built on types. It is especially important for dependently typed languages.
+
+Type theory is also important because it is the theory behind proof assistants, which can be used for discovering errors in mathematical proofs.
+
+Categories with Families is a notion of type theory that is close to syntax of dependently typed languages, this makes it extra useful for describing them.
+
+By formalizing these structures in Agda
+\begin{enumerate}
+    \item We get a more solid mathematical ground for CwFs
+    \item We get a library for working on CwFs in Agda
+\end{enumerate}
+% This is a fundamental part of type theory 
+% It is the basis for research in type theory???
+% By formally proving this the research is lead forward.
+
+\section{Why is this a significant step?}
+This has never been done before. As was mentioned above, Konstantinos has been working on constructing
+the initial CwF in standard Agda without univalence, which means that he was only able to construct the object
+for limited subcategories of CwF.
+
+% The subject matter has been assumed and is mentioned in VAL wherefore it is important to prove it formally.
+% This project connects different models in type theory and can be a part in connecting them into a unified whole.
+
+\section{What shall be done}
+The current theoretical models for dependently typed languages are lacking.
+This project aims to take one such model, namely categories with families, and develop the theoretical foundations one step further.
+
+% Grundproblemet är: Det finns inga bra modeller för dependet types
+% Lösningen är: Diverse modeller, men de behöver vidareutvecklas.
+% Min lösning är att vidareutveckla CwF lite.
+
+% TO DO:
+% The first step is to read up on Type Theory, Categories with Families, Initial Models, and related concepts.
+
+% The second step is to construct a model of ??? to familiarize myself with the methods and to evaluate how practical they are.
+
+% Construct a system for type theory with e.g. CwF as the initial model in Agda. 
+% ??? Has an informal proof been done?
+
+\section{Methods}
+The language Agda will be used to concretely describe the model and formally prove the properties of the model.
+
+I am familiar with Agda from the course Types for Proofs and Programs and have played around with the language on my free time, so that was the obvious choice of proof assistant.
+
+Univalent Agda is a good choice because the proofs will most likely require the univalence axiom.
+
+% ??? Something about the mathemagical parts?
+% ??? Which methods will be used in Agda? Univalent Agda? Yes.
+
+\section{Backup plan}
+If there are problems with making the initial model, one backup option would be to limit
+the project to simpler subcategories of CwF like Konstantinos did in his project.
+
+The minimum achievements expected from this project would be part 1 of the research question.
+Having a model of CwF in univalent Agda is in itself useful.
+
+\section{Delimitation}
+Currently I see no need for further delimitation over what is given in section \ref{research-question}.
+%The project is to construct the formalizations in points 1) and 2) and nothing else. 
+
+
+\bibliographystyle{plain}
+\bibliography{old}  %% i.e. look in main.bib
+
+\end{document}
