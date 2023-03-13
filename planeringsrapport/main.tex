@@ -105,17 +105,33 @@
 %     - SMU work - analysis of real world law text
 
 \section{Introduction}
-Something general about rule based NLG and NLP
-and computer grammars
+\todo[inline]{Something general about rule based NLG and NLP
+and computer grammars}
 
 \subsection{Dependency trees and Universal Dependencies}
-Dependency trees is a way of doing things \todo{write something here}
+A dependency tree is a tree structure that shows the grammatical relationship between words in a sentence. Each word becomes a node in the tree with the main verb as the root and the edges represents the relation and the direction of the dependency.
 
-Universal Dependencies is a specifc dep tree thing for NLG \todo{and here}
+For example in the sentence "John ate an apple", the word "ate" would become the root and "John" and "apple" would be direct children, where the arrow from "ate" to apple would be labeled as the subject relation while the arrow to "apple" would be labeled as the object. There would additionally be an arrow from "apple" to "an" which marks that "an" is a determiner for "apple".
+
+\todo[inline]{Add an image here}
+
+% Not mine: Universal Dependencies (UD) is a framework for representing the syntactic structure of natural language sentences. It is an annotation scheme that provides a universal set of part-of-speech tags and dependency labels that can be applied across different languages.
+
+The specific standard for dependency trees that this paper is about is called Universal Dependencies (UD). UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
+
+\todo[inline]{Talk about the machine learning aspect of UD}
+
+% One way to describe the structure of a sentence is through so-called dependency trees where the words in a sentence form a tree with one word is designated as the root and all the other words attach based on their relation to other words
+
+% Dependency trees is a way of doing things \todo{write something here}
+
+% Universal Dependencies is a specifc dep tree thing for NLG \todo{and here}
 
 % Universal Dependencies\cite{mcdonald-al-2013} (UD) is another grammar formalism which uses machine-learning for parsing, which allows it to use context more in order to guess which interpretation was intended. The training data is based on a large set of sentences, which have been manually tagged with labels and a tree structure.
 
 \subsection{Abstract trees and Grammatical Framework}
+
+Another way of describing the grammatical structure of a sentence is through abstract syntax trees, where instead of using words as the nodes in the tree, you use
 
 Some basic intro on abstract trees
 \todo{Write about abstract trees} \todo{consider swapping order}
@@ -144,6 +160,16 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 % % Briefly describe and motivate the project, and convince the reader of the importance of the proposed thesis work.
 % % A good introduction will answer these questions: Why is addressing these challenges significant for gaining new knowledge
 % % in the studied domain? How and where can this new knowledge be applied?
+
+\subsection{Applications}
+
+%   -> useful synthesis: UD-GF
+%   -> applications:
+%     - translation  - CL 2020
+%     - semantics    - CL 2020
+%     - concept alignment - Arianna
+%     - SMU work - analysis of real world law text
+
 
 
 % Background to the assignment. Why is it relevant?
@@ -245,15 +271,8 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 % - examples
 % - how annotations work
 
-% 4. Evaluation
-% - synthetic experiment: RGL -> UD -> RGL
-%   - completeness - kan alltid få ett fullständigt träd
-%   - accuracy
-%   - performance
-%   - error analysis
-
 \section{Context}
-
+\todo[inline]{What's the difference between this and intro?}
 % This work is mostly a continuation of the work in \cite{kolachina-ranta-2017}.
 
 % A practical problem for which this tool can be useful can be found in \cite{listenmaa-etal-2021-towards}. In the Future Work section, under "Robust fall-back options", gf2ud is mentioned as a possible solution to making the parser more robust.
@@ -287,8 +306,9 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 % Limitations. What should be left out and why?
 \section{Limitations}
 
-- Only the direction of ud2gf is studied here. why?
-- other limitations?
+Only the direction of ud2gf is studied here. \todo{why?}
+
+\todo[inline]{other limitations?}
 
 
 \section{Approach}
@@ -344,6 +364,22 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 % % test-case scenarios. Explain how and why you plan to use the evaluation criteria in order to demonstrate the functionalities and
 % % design goals. Explain how you plan to compare your prototype to the state of the art using the proposed test-case evaluation scenarios
 % % and benchmarks.
+
+\subsection{Evaluation}
+One method for evaluation is through synthetic experiments of generating random GF trees through GF's built in functionality, then translating those to UD trees and then back to GF again. There are several different aspects that could be evaluated here:
+\begin{itemize}
+    \item Completeness: the ability to always get complete trees and no Backups
+    \item Accuracy: How well the tree matches the original after a roundtrip
+    \item Perfomance: How fast the code runs
+    \item Error analysis: \todo{What does this mean?}
+\end{itemize}
+
+% 4. Evaluation
+% - synthetic experiment: RGL -> UD -> RGL
+%   - completeness - kan alltid få ett fullständigt träd
+%   - accuracy
+%   - performance
+%   - error analysis
 
 
 % Risk analysis and ethical considerations.
