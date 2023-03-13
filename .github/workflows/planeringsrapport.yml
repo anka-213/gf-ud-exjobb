@@ -63,13 +63,13 @@ jobs:
           # retention-days: # optional, default is 1
       - name: Deploy GitHub Pages site
         uses: actions/deploy-pages@v1.2.5
-        # with:
+        with:
           # Should this action only emit build telemetry instead of deploying the build artifact?
           # emit_telemetry: # optional, default is false
           # The status of the previous build.
           # conclusion: # optional
           # GitHub token
-          # token: # default is ${{ github.token }}
+          token: ${{ github.token }} # default is ${{ github.token }}
           # Time in milliseconds after which to timeout and cancel the deployment (default: 10 minutes)
           # timeout: # optional, default is 600000
           # Maximum number of status report errors before cancelling a deployment (default: 10)
