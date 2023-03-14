@@ -54,7 +54,7 @@ jobs:
       - name: Copy pdf
         run: |
           mkdir _site
-          cp planeringsrapport/main.pdf _site/planneringsrapport.pdf
+          cp planeringsrapport/main.pdf _site/planeringsrapport.pdf
 
       # - name: Setup Pages
       #   uses: actions/configure-pages@v3
