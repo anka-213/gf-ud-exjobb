@@ -17,7 +17,12 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -66,7 +71,7 @@ jobs:
       - name: Deploy GitHub Pages site
         id: deployment
         uses: actions/deploy-pages@v1.2.5
-        with:
+        # with:
           # Should this action only emit build telemetry instead of deploying the build artifact?
           # emit_telemetry: # optional, default is false
           # The status of the previous build.
