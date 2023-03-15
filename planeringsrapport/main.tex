@@ -322,56 +322,56 @@ Only the direction of ud2gf is studied here. \todo{why?}
 \section{Approach}
 % Method of accomplishment. How should the work be carried out?
 
-\subsection{Performance}
+% \subsection{Performance}
 
-1. Finding the main source of slowness, which was done with profiling.
+% 1. Finding the main source of slowness, which was done with profiling.
 
-2. Analysing the current algorithms, which are based on brute-force, trying all combinations, with some simple filtering.
+% 2. Analysing the current algorithms, which are based on brute-force, trying all combinations, with some simple filtering.
 
-3. Finding a better algorithm, which avoids exploring paths that could never be the correct answer and which avoids duplicate work.
+% 3. Finding a better algorithm, which avoids exploring paths that could never be the correct answer and which avoids duplicate work.
 
-4. Analysing algorithmic complexity of both algorithms and testing the practical performance to confirm the results.
+% 4. Analysing algorithmic complexity of both algorithms and testing the practical performance to confirm the results.
 
-\subsection{Flexibility}
+% \subsection{Flexibility}
 
-In order to allow changing the shape of trees when translating from UD to GF, the macro language needs to be expanded.
-A first prototype of this
-can be done with minimal code changes by making macro expansion recursive and then representing the code for the transformation in Church-encoding, inspired by lambda-calculus.
+% In order to allow changing the shape of trees when translating from UD to GF, the macro language needs to be expanded.
+% A first prototype of this
+% can be done with minimal code changes by making macro expansion recursive and then representing the code for the transformation in Church-encoding, inspired by lambda-calculus.
 
-This approach can be evaluated by seeing how well it covers different tree shape changes for different trees one would encounter.
+% This approach can be evaluated by seeing how well it covers different tree shape changes for different trees one would encounter.
 
-It could also be worthwhile to make a more user-friendly version of the advanced macros that can be understood without knowing about Church-encoding
+% It could also be worthwhile to make a more user-friendly version of the advanced macros that can be understood without knowing about Church-encoding
 
-\subsection{Debugging tool}
-Go through each component of the algorithms in order to find where applying a rule can go wrong and add detection for them. Additionally try out the debugging tool on a real grammar, e.g. in the context of \cite{listenmaa-etal-2021-towards}, in order to find edge-cases which were not handled by the debugging tool.
+% \subsection{Debugging tool}
+% Go through each component of the algorithms in order to find where applying a rule can go wrong and add detection for them. Additionally try out the debugging tool on a real grammar, e.g. in the context of \cite{listenmaa-etal-2021-towards}, in order to find edge-cases which were not handled by the debugging tool.
 
-% Trial and error, whenever a problem arises that the tool doesn't find a helpful explanation for, try to add support for it.
+% % Trial and error, whenever a problem arises that the tool doesn't find a helpful explanation for, try to add support for it.
 
-\subsection{Linearization-aware translation}
-Here we need a way to determine which linearization is actually closer and when to keep multiple options for a later stage of the translation. Some care also needs to be taken in determining which trees can be tossed away and which ones need to be kept around for a later stage.
+% \subsection{Linearization-aware translation}
+% Here we need a way to determine which linearization is actually closer and when to keep multiple options for a later stage of the translation. Some care also needs to be taken in determining which trees can be tossed away and which ones need to be kept around for a later stage.
 
-Evaluating if the results are better with this version can be done in a large part by comparing the input string with the resulting string after translating to GF and linearizing.
+% Evaluating if the results are better with this version can be done in a large part by comparing the input string with the resulting string after translating to GF and linearizing.
 
-% Various scientific approaches are appropriate for different challenges and project goals. Outline and justify the ones that
-% you have selected. For example, when your project considers systematic data collection, you need to explain how you will analyze
-% the data, in order to address your challenges and project goals.
-%
-% One scientific approach is to use formal models and rigorous
-% mathematical argumentation to address aspects like correctness and efficiency. If this is relevant, describe the related algorithmic
-% subjects, and how you plan to address the studied problem. For example, if your plan is to study the problem from a computability aspect,
-% address the relevant issues, such as algorithm and data structure design, complexity analysis, etc.  If you plan to develop and
-% evaluate a prototype, briefly describe your plans to design, implement, and evaluate your prototype by reviewing at most two relevant
-% issues, such as key functionalities and their evaluation criteria.
-%
-% The design and implementation should specify prototype properties,
-% such as functionalities and performance goals, e.g., scalability, memory, energy. Motivate key design selection, with respect to state
-% of the art and existing platforms, libraries, etc.
-%
-% When discussing evaluation criteria, describe the testing environment, e.g., test-bed
-% experiments, simulation, and user studies, which you plan to use when assessing your prototype. Specify key tools, and preliminary
-% test-case scenarios. Explain how and why you plan to use the evaluation criteria in order to demonstrate the functionalities and
-% design goals. Explain how you plan to compare your prototype to the state of the art using the proposed test-case evaluation scenarios
-% and benchmarks.
+% % Various scientific approaches are appropriate for different challenges and project goals. Outline and justify the ones that
+% % you have selected. For example, when your project considers systematic data collection, you need to explain how you will analyze
+% % the data, in order to address your challenges and project goals.
+% %
+% % One scientific approach is to use formal models and rigorous
+% % mathematical argumentation to address aspects like correctness and efficiency. If this is relevant, describe the related algorithmic
+% % subjects, and how you plan to address the studied problem. For example, if your plan is to study the problem from a computability aspect,
+% % address the relevant issues, such as algorithm and data structure design, complexity analysis, etc.  If you plan to develop and
+% % evaluate a prototype, briefly describe your plans to design, implement, and evaluate your prototype by reviewing at most two relevant
+% % issues, such as key functionalities and their evaluation criteria.
+% %
+% % The design and implementation should specify prototype properties,
+% % such as functionalities and performance goals, e.g., scalability, memory, energy. Motivate key design selection, with respect to state
+% % of the art and existing platforms, libraries, etc.
+% %
+% % When discussing evaluation criteria, describe the testing environment, e.g., test-bed
+% % experiments, simulation, and user studies, which you plan to use when assessing your prototype. Specify key tools, and preliminary
+% % test-case scenarios. Explain how and why you plan to use the evaluation criteria in order to demonstrate the functionalities and
+% % design goals. Explain how you plan to compare your prototype to the state of the art using the proposed test-case evaluation scenarios
+% % and benchmarks.
 
 \section{Evaluation}
 One method for evaluation is through synthetic experiments of generating random GF trees through GF's built in functionality, then translating those to UD trees and then back to GF again. There are several different aspects that could be evaluated here:
@@ -379,7 +379,7 @@ One method for evaluation is through synthetic experiments of generating random 
     \item Completeness: the ability to always get complete trees and no Backups
     \item Accuracy: How well the tree matches the original after a roundtrip
     \item Perfomance: How fast the code runs
-    \item Error analysis: \todo{What does this mean?}
+    \item Error analysis: Examine the cause of errors and issues
 \end{itemize}
 
 % 4. Evaluation
@@ -392,11 +392,15 @@ One method for evaluation is through synthetic experiments of generating random 
 
 % Risk analysis and ethical considerations.
 \section{Risk analysis and ethical considerations}
-There are very little risks to speak of as the work is
+There are very little risks to speak of as the practical work is already complete.
 
 There are no ethical considerations to speak of, since ...
 
+% Important that the analysis is correct since it can be used in policy decisions in the legal application
+
 (possibly evaluation data for the project and training data for the UD models)
+
+% Explainable AI
 
 % Time plan.
 \section{Time plan}
@@ -405,6 +409,17 @@ The main parts that remain is evaluation and writing the report itself. Optional
 
 The plan is to complete the thesis before the summer of 2023.
 
+% Implementation done 15:e mars
+
+% Halvtidsrapport efter påsk? 14:e april
+
+% evaluation experiment: 28:e april
+
+% writing about evaluation: 12:e maj
+
+% två veckor innan presentationen ska färdig presentation skickas till Aarne
+
+% 10:e juni?
 
 % The time plan should give an approximate date when the work is to be finished. It should also list mandatory seminars and milestones for the project with dates for critical steps that are needed to finish the work (which can include, depending on programme, e.g., intermediate report, mandatory seminars, presentation, opposition, and final report).
 
