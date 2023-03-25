@@ -110,21 +110,28 @@
 
 \section{Introduction}
 
-In the beginning there was the word and it was good.
+In the beginning was the word and it was good. However, it is difficult to make computers understand natural languages. There are many different approaches that has been used to make this process easier. In this thesis we will focus on two such tools\todo{annat ord?}, both of which are meant to analyse the grammatical structure and syntax of a sentence.
+
+\begin{verbatim}
+- Kort om paradigmer
+- Kort om verktygen
+- Vad som är gjort
+- Vad som behöver göras
 
 Applications:
 - Let a computer understand human language
 - Allow the computer to do things with human writing
 - For example,
--  - try to understan the meaning
+-  - try to understand the meaning
 -  - make transformations on the writing (which?)
 -  - generate human language based on abstract knowledge
+\end{verbatim}
 
 Reliablility and predictability are very important in many applications, for example law.
 
 
 In rule based Natural Language Processing (NLP) we want to be able to take a text and analyse it at a higher level and make transformations to it.
-In order to do this, we first need a way to parse the text into a syntax tree, which describes the relationship between
+In order to do this, we first need a way to parse the text into a syntax tree, which describes the relationship between words in a sentence.
 
 
 
@@ -136,6 +143,8 @@ Something
 
 \todo[inline]{Something general about rule based NLG and NLP
 and computer grammars}
+
+% TODO: Ta reda på vad UD används till
 
 \subsection{Dependency trees and Universal Dependencies}
 A dependency tree is a tree structure that shows the grammatical relationship between words in a sentence. Each word becomes a node in the tree with the main verb as the root and the edges represents the relation and the direction of the dependency.
@@ -207,7 +216,6 @@ GF is very strict when it comes to following grammar and spelling, which means t
 While the machine-learning based approach of UD allows it to guess the correct tree better for ambiguous sentences and allows it to handle grammatically incorrect sentences better, GF is much more capable when
 it comes to performing transformations on the sentences, while maintaining correct morphology and grammar. This makes it attractive to parse sentences
 using UD and then convert the parsed trees to GF trees in order to perform further transformations.
-
 
 
 % Anteckningar
