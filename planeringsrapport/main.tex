@@ -110,7 +110,7 @@
 
 \section{Introduction}
 
-In the beginning was the word and it was good. However, it is difficult to make computers understand natural languages. There are many different approaches that has been used to make this process easier. In this thesis we will focus on two such tools\todo{annat ord?}, both of which are meant to analyse the grammatical structure and syntax of a sentence.
+In the beginning was the word and it was good. However, it is difficult to make computers understand natural languages. There are many different approaches that has been used to make this process easier. In this thesis we will focus on two such ways\todo{annat ord?}, both of which are meant to analyse the grammatical structure and syntax of a sentence.
 
 \begin{verbatim}
 - Kort om paradigmer
@@ -151,7 +151,7 @@ A dependency tree is a tree structure that shows the grammatical relationship be
 
 % For example in the sentence "John ate an apple", the word "ate" would become the root and "John" and "apple" would be direct children, where the arrow from "ate" to apple would be labeled as the subject relation while the arrow to "apple" would be labeled as the object. There would additionally be an arrow from "apple" to "an" which marks that "an" is a determiner for "apple".
 
-\todo[inline]{Add an image here}
+% \todo[inline]{Add an image here}
 
 \begin{center}
 
@@ -213,7 +213,7 @@ Grammatical Framework\cite{ranta-2004} (GF) is a formalism for describing natura
 % % Grammatical Framework has [some] advantages for [usecase], so it would be useful to be able to parse using UD and then get out a GF tree. A
 GF is very strict when it comes to following grammar and spelling, which means that it will often refuse to parse sentences if they contain even the smallest error. UD on the other hand uses machine-learning to give some parse tree for all sentences regardless of how many errors they have.
 
-While the machine-learning based approach of UD allows it to guess the correct tree better for ambiguous sentences and allows it to handle grammatically incorrect sentences better, GF is much more capable when
+While the machine-learning-based approach of UD allows it to guess the correct tree better for ambiguous sentences and allows it to handle grammatically incorrect sentences better, GF is much more capable when
 it comes to performing transformations on the sentences, while maintaining correct morphology and grammar. This makes it attractive to parse sentences
 using UD and then convert the parsed trees to GF trees in order to perform further transformations.
 
@@ -257,10 +257,10 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 %     - SMU work - analysis of real world law text
 
 There exists a proof-of-concept implementation of a tool for converting between the trees for GF and UD,
-with the help of so called labels files which describe the mapping between UD labels and GF functions,
+with the help of so-called labels-files which describe the mapping between UD labels and GF functions,
 called gf-ud, which contains both a component for converting from UD to GF, called ud2gf\cite{kolachina-ranta-2017}
 and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-2016}. This work will focus on the ud2gf component.
-\todo{these references apply to an older version of gf-ud, from before my work}
+\todo{these references apply to an older version of gf-ud, from before the one I was working on. a part of the goal of this thesis is to document the old-new version that my changes was based on}
 
 % The labels files can also contain macros, which allows constructing virtual GF functions during the translation from UD, which will be expanded to real GF functions at the end of the translation.
 % These can, among other uses, be used to preserve information from the UD labels about subtrees, which can then be used at later points of the transformation to ensure that the desired GF tree is produced.
@@ -281,10 +281,10 @@ There has also been work using it for analysis of law text for the purpose of ma
 
 The current ud2gf implementation has some limitations. There are three main problems this work tries to fix.
 
-The first problem is that it quickly becomes extremely slow for sentences more than a couple of words and/or
+The first problem is that it quickly becomes extremely slow for sentences with more than a couple of words and/or
 when using large GF-grammars, e.g. GF-grammars containing Wordnet\cite{angelov2016predicting}. \\
 The second problem is that if the structure differs too much between the representation of a sentence in UD format and as a GF tree, it is not possible to describe the required transformation in the current "labels file" language. See section \ref{sect:flex} below for more details. \\
-The third problem is that it can sometimes be difficult to figure out why a rule in a labels file is not firing, so it would be useful to have a debugging tool to help diagnosing such issues.
+The third problem is that it can sometimes be difficult to figure out why a rule in a labels-file is not firing, so it would be useful to have a debugging tool to help diagnosing such issues.
 
 
 \subsection{Flexibility}\label{sect:flex}
@@ -397,7 +397,7 @@ The translation described by a labels file is not one-to-one and there are often
 
 2. Improve flexibility of macro language, allowing changing the structure of the trees while translating from GF to UD. One challenge here is in figuring out either how to change the algorithms to support these more advanced transformations or to find a way to allow them without needing to change the algorithms.
 
-3. Write a debugging tool, which analyzes exactly what it is that prevents a rule in a labels file from firing or what prevents that tree from being selected.
+3. Write a debugging tool, which analyzes exactly what it is that prevents a rule in a labels-file from firing or what prevents that tree from being selected.
 One challenge here is how to explain to the user the issue for all the possible things that can go wrong.
 There is also an engineering challenge in making an algorithm that figures out what went wrong and why.
 % either repeating the steps of the algorithm in order to find the issues or transforming the algorithm in a way that they can explain what went wrong
@@ -416,9 +416,9 @@ There is also an engineering challenge in making an algorithm that figures out w
 % Limitations. What should be left out and why?
 \section{Limitations}
 
-Only the direction of converting UD trees to GF trees is studied here, because that is what was relevant to the application at hand. Furhermore the two directions are almost completely independent in the implementation.
+Only the direction of converting UD trees to GF trees is studied here, because that is what was relevant to the application at hand. Furthermore, the two directions are almost completely independent in the implementation.
 
-
+% I normalfallet behöver avgränsningarna inte motiveras.
 
 % Limit the work mostly to what has already been done
 
@@ -440,11 +440,11 @@ These methods were used for the different parts of the project
 
 1. Finding the main source of slowness, which was done with profiling.
 
-2. Analysing the current algorithms, which are based on brute-force, trying all combinations, with some simple filtering.
+2. Analysing the current algorithms, which are based on brute force, trying all combinations, with some simple filtering.
 
 3. Finding a better algorithm, which avoids exploring paths that could never be the correct answer and which avoids duplicate work.
 
-4. Analysing algorithmic complexity of both the new and the old algorithm and testing the practical performance to confirm the results.
+4. Analysing the algorithmic complexity of both the new and the old algorithm and testing the practical performance to confirm the results.
 
 \subsection{Flexibility}
 
@@ -488,11 +488,11 @@ Evaluating if the results are better with this version can be done in a large pa
 % % and benchmarks.
 
 \section{Evaluation}
-One method for evaluation is through synthetic experiments of generating random GF trees through GF's built in functionality, then translating those to UD trees and then back to GF again. There are several different aspects that could be evaluated here:
+One method for evaluation is through synthetic experiments of generating random GF trees through GF's built-in functionality, then translating those to UD trees and then back to GF again. There are several different aspects that could be evaluated here:
 \begin{itemize}
-    \item Completeness: the ability to always get complete trees without needing to invent what GF2UD calls Backup GF funtions, for when no functions in the GF grammar was possible to use to connect a subtree
+    \item Completeness: the ability to always get complete trees without needing to invent what GF2UD calls Backup GF functions, for when no functions in the GF grammar were possible to use to connect a subtree
     \item Accuracy: How well the tree matches the original after a roundtrip
-    \item Perfomance: How fast the code runs
+    \item Performance: How fast the code runs
     \item Error analysis: Examine the cause of errors and issues
 \end{itemize}
 
@@ -508,7 +508,7 @@ One method for evaluation is through synthetic experiments of generating random 
 \section{Risk analysis and ethical considerations}
 There are very few risks to speak of as the practical work is already complete.
 
-There are hardly any ethical considerations to speak of, since this is mostly a theoretical work. In some applications the reliablilty of the results can be critical, but in  order to make such an application, the users would have to evaluate the reliablility as a part of the process. Additionally, being a rule-based system makes the results more predictable and makes it easier to fix any errors that comes up.
+There are hardly any ethical considerations to speak of, since this is mostly a theoretical work. In some applications, the reliability of the results can be critical, but in  order to make such an application, the users would have to evaluate the reliablility as a part of the process. Additionally, being a rule-based system makes the results more predictable and makes it easier to fix any errors that comes up.
 
 % Important that the analysis is correct since it can be used in policy decisions in the legal application
 
@@ -527,10 +527,13 @@ The plan is to complete the thesis before the summer of 2023.
     \hline
     Task & Target completion date \\
     \hline
+    Writing seminar I & Deadline missed \\
     Implementation done & 15th March \\
-    Halftime report & 14th April \\
+    Planning report & 14th March \\
+    Halftime report & 27th April \\
     Evaluation experiment & 28th April \\
     Writing about evaluation & 12th May \\
+    Writing seminar II & 25th May \\
     Finished presentation sent to Aarne & Two weeks before presentation \\
     Presentation deadline & 10th June \\
     \hline
