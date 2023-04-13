@@ -110,7 +110,7 @@
 
 \section{Introduction}
 
-In the beginning was the word and it was good. However, it is difficult to make computers understand natural languages. There are many different approaches that has been used to make this process easier. In this thesis we will focus on two such ways\todo{annat ord?}, both of which are meant to analyse the grammatical structure and syntax of a sentence.
+In the beginning was the word and it was good. However, it is difficult to make computers understand natural languages. There are many different approaches that has been used to make this process easier. In this thesis we will focus on two such ways, both of which are meant to analyze the grammatical structure and syntax of a sentence.
 
 \begin{verbatim}
 - Kort om paradigmer
@@ -127,7 +127,7 @@ Applications:
 -  - generate human language based on abstract knowledge
 \end{verbatim}
 
-Reliablility and predictability are very important in many applications, for example law.
+Reliability and predictability are very important in many applications, for example law.
 
 
 In rule based Natural Language Processing (NLP) we want to be able to take a text and analyse it at a higher level and make transformations to it.
@@ -265,7 +265,8 @@ and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-
 % The labels files can also contain macros, which allows constructing virtual GF functions during the translation from UD, which will be expanded to real GF functions at the end of the translation.
 % These can, among other uses, be used to preserve information from the UD labels about subtrees, which can then be used at later points of the transformation to ensure that the desired GF tree is produced.
 
-gf-ud has been used for both translation and semantics\cite{ranta2020abstract}.\todo{actually explain this} Another application has been in concept alignment\cite{masciolini2021grammar}.
+The gf-ud tool has been used for both translation and semantics\cite{ranta2020abstract}. %\todo{actually explain this}
+Another application has been in concept alignment\cite{masciolini2021grammar}.
 There has also been work using it for analysis of law text for the purpose of making a Controlled Natural Language for law\cite{listenmaa-etal-2021-towards}.
 
 \section{Problem}
@@ -395,12 +396,15 @@ The translation described by a labels file is not one-to-one and there are often
 
 1. Analyze algorithms and improve performance. The main challenge here is to find an algorithm for finding matching trees without exponential complexity on the number of children of a node in the UD tree.
 
+1.5. Document the new version of the tool which this work is based on
+
 2. Improve flexibility of macro language, allowing changing the structure of the trees while translating from GF to UD. One challenge here is in figuring out either how to change the algorithms to support these more advanced transformations or to find a way to allow them without needing to change the algorithms.
 
 3. Write a debugging tool, which analyzes exactly what it is that prevents a rule in a labels-file from firing or what prevents that tree from being selected.
 One challenge here is how to explain to the user the issue for all the possible things that can go wrong.
 There is also an engineering challenge in making an algorithm that figures out what went wrong and why.
 % either repeating the steps of the algorithm in order to find the issues or transforming the algorithm in a way that they can explain what went wrong
+
 
 \subsection{Future work}
 
