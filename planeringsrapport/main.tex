@@ -184,9 +184,9 @@ A dependency tree is a tree structure that shows the grammatical relationship be
 The specific standard for dependency trees that this paper is about is called Universal Dependencies (UD). UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
 
 
-Robust för ogrammatiska meningar osv och ger alltid ett resultat
+% TODO: Robust för ogrammatiska meningar osv och ger alltid ett resultat
 
-\todo[inline]{Talk about the machine learning aspect of UD}
+% \todo[inline]{Talk about the machine learning aspect of UD}
 
 % One way to describe the structure of a sentence is through so-called dependency trees where the words in a sentence form a tree with one word is designated as the root and all the other words attach based on their relation to other words
 
@@ -200,13 +200,13 @@ Robust för ogrammatiska meningar osv och ger alltid ett resultat
 
 Another way of describing the grammatical structure of a sentence is through abstract syntax trees, where instead of using words as the nodes in the tree, you use
 
-Some basic intro on abstract trees
-\todo{Write about abstract trees} \todo{consider swapping order}
+% \todo[inline]{Write about abstract trees}
+% \todo[inline]{Add an image}
 
 Grammatical Framework\cite{ranta-2004} (GF) is a formalism for describing natural language grammars as code, which allows converting between natural language and a language-independent abstract syntax. It is split into a generic resource grammar that covers morphology and the language as a whole and application grammars for a more narrow domain which allows a more semantic abstract syntax. When you try to write a grammar that covers a very wide domain, you will often get an over-generating grammar where each sentence can be parsed in very many ways into many different trees, where usually only one is the intended way.
 
 \subsection{Differences between GF and UD}
-% Strenght and weaknesses
+% Strengths and weaknesses
 
 
 % % Grammatical Framework has [some] advantages for [use-case], so it would be useful to be able to parse using UD and then get out a GF tree. A
@@ -260,7 +260,7 @@ with the help of so-called labels-files which describe the mapping between UD la
 called gf-ud, which contains both a component for converting from UD to GF, called ud2gf\cite{kolachina-ranta-2017}\footnotemark[1]
 and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-2016}\footnotemark[1]. This work will focus on the ud2gf component.
 
-\footnotetext[1]{These references apply to an older version of gf-ud, from before the one this thesis is based on. A part of the goal of this thesis is to document this version in addition to documenting the changes made in the process of this thesis.}
+\footnotetext[1]{These references apply to an older version of gf-ud, from before the one this thesis is based on. A part of the goal of this thesis is to document the later version in addition to documenting the changes made in the process of this thesis.}
 
 % \todo{these references apply to an older version of gf-ud, from before the one I was working on. a part of the goal of this thesis is to document the old-new version that my changes was based on}
 
@@ -394,7 +394,9 @@ The translation described by a labels file is not one-to-one and there are often
 
 % do this in an efficient way
 
-\todo[inline]{Change this so it's clear that it has already been done}
+% \todo[inline]{Change this so it's clear that it has already been done}
+
+The steps 1-3 has already been completed as of the writing of this planning report.
 
 1. Analyze algorithms and improve performance. The main challenge here is to find an algorithm for finding matching trees without exponential complexity on the number of children of a node in the UD tree.
 
@@ -440,7 +442,7 @@ Only the direction of converting UD trees to GF trees is studied here, because t
 
 These methods were used for the different parts of the project
 
-\todo[inline]{Change these to past tense}
+% \todo[inline]{Change these to past tense}
 \subsection{Performance}
 
 1. Finding the main source of slowness, which was done with profiling.
@@ -454,43 +456,21 @@ These methods were used for the different parts of the project
 \subsection{Flexibility}
 
 In order to allow changing the shape of trees when translating from UD to GF, the macro language needs to be expanded.
-A first prototype of this
-can be done with minimal code changes by making macro expansion recursive and then representing the code for the transformation in Church-encoding, inspired by lambda-calculus.
+A first prototype of this with minimal code changes has been done by making macro expansion recursive and then representing the code for the transformation in Church-encoding, inspired by lambda-calculus.
 
 This approach can be evaluated by seeing how well it covers different tree shape changes for different trees one would encounter.
 
 It could also be worthwhile to make a more user-friendly version of the advanced macros that can be understood without knowing about Church-encoding
 
 \subsection{Debugging tool}
-Go through each component of the algorithms in order to find where applying a rule can go wrong and add detection for them. Additionally try out the debugging tool on a real grammar, e.g. in the context of \cite{listenmaa-etal-2021-towards}, in order to find edge-cases which were not handled by the debugging tool.
+Going through each component of the algorithms in order to find where applying a rule can go wrong and add detection for them. Additionally trying out the debugging tool on a real grammar, e.g. in the context of \cite{listenmaa-etal-2021-towards}, in order to find edge-cases which were not handled by the debugging tool.
 
 % Trial and error, whenever a problem arises that the tool doesn't find a helpful explanation for, try to add support for it.
 
 \subsection{Linearization-aware translation}
-Here we need a way to determine which linearization is actually closer and when to keep multiple options for a later stage of the translation. Some care also needs to be taken in determining which trees can be tossed away and which ones need to be kept around for a later stage.
+Here we need a way to determine which linearization is actually closer and when to keep multiple options for a later stage of the translation. Some care also needs to be taken in determining which trees can be discarded and which ones need to remain available for a later stage.
 
 Evaluating if the results are better with this version can be done in a large part by comparing the input string with the resulting string after translating to GF and linearizing.
-
-% % Various scientific approaches are appropriate for different challenges and project goals. Outline and justify the ones that
-% % you have selected. For example, when your project considers systematic data collection, you need to explain how you will analyze
-% % the data, in order to address your challenges and project goals.
-% %
-% % One scientific approach is to use formal models and rigorous
-% % mathematical argumentation to address aspects like correctness and efficiency. If this is relevant, describe the related algorithmic
-% % subjects, and how you plan to address the studied problem. For example, if your plan is to study the problem from a computability aspect,
-% % address the relevant issues, such as algorithm and data structure design, complexity analysis, etc.  If you plan to develop and
-% % evaluate a prototype, briefly describe your plans to design, implement, and evaluate your prototype by reviewing at most two relevant
-% % issues, such as key functionalities and their evaluation criteria.
-% %
-% % The design and implementation should specify prototype properties,
-% % such as functionalities and performance goals, e.g., scalability, memory, energy. Motivate key design selection, with respect to state
-% % of the art and existing platforms, libraries, etc.
-% %
-% % When discussing evaluation criteria, describe the testing environment, e.g., test-bed
-% % experiments, simulation, and user studies, which you plan to use when assessing your prototype. Specify key tools, and preliminary
-% % test-case scenarios. Explain how and why you plan to use the evaluation criteria in order to demonstrate the functionalities and
-% % design goals. Explain how you plan to compare your prototype to the state of the art using the proposed test-case evaluation scenarios
-% % and benchmarks.
 
 \section{Evaluation}
 One method for evaluation is through synthetic experiments of generating random GF trees through GF's built-in functionality, then translating those to UD trees and then back to GF again. There are several different aspects that could be evaluated here:
@@ -513,7 +493,7 @@ One method for evaluation is through synthetic experiments of generating random 
 \section{Risk analysis and ethical considerations}
 There are very few risks to speak of as the practical work is already complete.
 
-There are hardly any ethical considerations to speak of, since this is mostly a theoretical work. In some applications, the reliability of the results can be critical, but in  order to make such an application, the users would have to evaluate the reliablility as a part of the process. Additionally, being a rule-based system makes the results more predictable and makes it easier to fix any errors that comes up.
+There are hardly any ethical considerations to speak of, since this is mostly a theoretical work. In some applications, the reliability of the results can be critical, but in  order to make such an application, the users would have to evaluate the reliability as a part of the process. Additionally, being a rule-based system makes the results more predictable and makes it easier to fix any errors that comes up.
 
 % Important that the analysis is correct since it can be used in policy decisions in the legal application
 
