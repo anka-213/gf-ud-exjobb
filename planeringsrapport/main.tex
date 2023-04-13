@@ -111,39 +111,37 @@
 
 \section{Introduction}
 
-In the beginning was the word and it was good. However, it is difficult to make computers understand natural languages. There are many different approaches that has been used to make this process easier. In this thesis we will focus on two such ways, both of which are meant to analyze the grammatical structure and syntax of a sentence.
+% In the beginning was the word and it was good. However, it is difficult to make computers understand natural languages. There are many different approaches that has been used to make this process easier. In this thesis we will focus on two such ways, both of which are meant to analyze the grammatical structure and syntax of a sentence.
 
-\begin{verbatim}
-- Kort om paradigmer
-- Kort om verktygen
-- Vad som är gjort
-- Vad som behöver göras
+% \begin{verbatim}
+% - Kort om paradigmer
+% - Kort om verktygen
+% - Vad som är gjort
+% - Vad som behöver göras
 
-Applications:
-- Let a computer understand human language
-- Allow the computer to do things with human writing
-- For example,
--  - try to understand the meaning
--  - make transformations on the writing (which?)
--  - generate human language based on abstract knowledge
-\end{verbatim}
+% Applications:
+% - Let a computer understand human language
+% - Allow the computer to do things with human writing
+% - For example,
+% -  - try to understand the meaning
+% -  - make transformations on the writing (which?)
+% -  - generate human language based on abstract knowledge
+% \end{verbatim}
 
-Reliability and predictability are very important in many applications, for example law.
+% Reliability and predictability are very important in many applications, for example law.
 
 
-In rule based Natural Language Processing (NLP) we want to be able to take a text and analyse it at a higher level and make transformations to it.
+In rule-based Natural Language Processing (NLP) we want to be able to take a text and analyse it at a higher level and make transformations to it.
 In order to do this, we first need a way to parse the text into a syntax tree, which describes the relationship between words in a sentence.
 
 
 
 There are several different formalisms for describing sentences as trees, all with their own strengths and weaknesses.
+The two we will be talking about here are Universal Dependencies (UD), which uses dependency trees, and Grammatical Framework (GF), which uses abstract syntax trees.
 
-Something
+% \todo[inline]{Write more about the goal of the project and move the rest to background}
 
-\todo[inline]{Write more about the goal of the project and move the rest to background}
-
-\todo[inline]{Something general about rule based NLG and NLP
-and computer grammars}
+% \todo[inline]{Something general about rule-based NLG and NLP and computer grammars}
 
 % TODO: Ta reda på vad UD används till
 
@@ -192,9 +190,9 @@ Robust för ogrammatiska meningar osv och ger alltid ett resultat
 
 % One way to describe the structure of a sentence is through so-called dependency trees where the words in a sentence form a tree with one word is designated as the root and all the other words attach based on their relation to other words
 
-% Dependency trees is a way of doing things \todo{write something here}
+% Using Dependency trees is a way of doing things \todo{write something here}
 
-% Universal Dependencies is a specifc dep tree thing for NLG \todo{and here}
+% Universal Dependencies is a specific dep tree thing for NLG \todo{and here}
 
 % Universal Dependencies\cite{mcdonald-al-2013} (UD) is another grammar formalism which uses machine-learning for parsing, which allows it to use context more in order to guess which interpretation was intended. The training data is based on a large set of sentences, which have been manually tagged with labels and a tree structure.
 
@@ -211,7 +209,7 @@ Grammatical Framework\cite{ranta-2004} (GF) is a formalism for describing natura
 % Strenght and weaknesses
 
 
-% % Grammatical Framework has [some] advantages for [usecase], so it would be useful to be able to parse using UD and then get out a GF tree. A
+% % Grammatical Framework has [some] advantages for [use-case], so it would be useful to be able to parse using UD and then get out a GF tree. A
 GF is very strict when it comes to following grammar and spelling, which means that it will often refuse to parse sentences if they contain even the smallest error. UD on the other hand uses machine-learning to give some parse tree for all sentences regardless of how many errors they have.
 
 While the machine-learning-based approach of UD allows it to guess the correct tree better for ambiguous sentences and allows it to handle grammatically incorrect sentences better, GF is much more capable when
@@ -241,7 +239,7 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 
 % % Maybe mention the macros in the labels files
 
-% % There exists naive implementation based on a brute-force algorithm \cite{kolachina-ranta-2017}
+% % There exists a naive implementation based on a brute-force algorithm \cite{kolachina-ranta-2017}
 
 % % Briefly describe and motivate the project, and convince the reader of the importance of the proposed thesis work.
 % % A good introduction will answer these questions: Why is addressing these challenges significant for gaining new knowledge
@@ -255,13 +253,16 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 %     - translation  - CL 2020
 %     - semantics    - CL 2020
 %     - concept alignment - Arianna
-%     - SMU work - analysis of real world law text
+%     - SMU work - analysis of real-world law text
 
 There exists a proof-of-concept implementation of a tool for converting between the trees for GF and UD,
 with the help of so-called labels-files which describe the mapping between UD labels and GF functions,
-called gf-ud, which contains both a component for converting from UD to GF, called ud2gf\cite{kolachina-ranta-2017}
-and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-2016}. This work will focus on the ud2gf component.
-\todo{these references apply to an older version of gf-ud, from before the one I was working on. a part of the goal of this thesis is to document the old-new version that my changes was based on}
+called gf-ud, which contains both a component for converting from UD to GF, called ud2gf\cite{kolachina-ranta-2017}\footnotemark[1]
+and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-2016}\footnotemark[1]. This work will focus on the ud2gf component.
+
+\footnotetext[1]{These references apply to an older version of gf-ud, from before the one this thesis is based on. A part of the goal of this thesis is to document this version in addition to documenting the changes made in the process of this thesis.
+
+% \todo{these references apply to an older version of gf-ud, from before the one I was working on. a part of the goal of this thesis is to document the old-new version that my changes was based on}
 
 % The labels files can also contain macros, which allows constructing virtual GF functions during the translation from UD, which will be expanded to real GF functions at the end of the translation.
 % These can, among other uses, be used to preserve information from the UD labels about subtrees, which can then be used at later points of the transformation to ensure that the desired GF tree is produced.
