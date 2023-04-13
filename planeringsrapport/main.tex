@@ -28,6 +28,7 @@
 \usepackage{chngcntr}
 \counterwithout{figure}{section}
 
+\usepackage{comment}
 
 \begin{document}
 
@@ -396,8 +397,6 @@ The translation described by a labels file is not one-to-one and there are often
 
 1. Analyze algorithms and improve performance. The main challenge here is to find an algorithm for finding matching trees without exponential complexity on the number of children of a node in the UD tree.
 
-1.5. Document the new version of the tool which this work is based on
-
 2. Improve flexibility of macro language, allowing changing the structure of the trees while translating from GF to UD. One challenge here is in figuring out either how to change the algorithms to support these more advanced transformations or to find a way to allow them without needing to change the algorithms.
 
 3. Write a debugging tool, which analyzes exactly what it is that prevents a rule in a labels-file from firing or what prevents that tree from being selected.
@@ -405,10 +404,11 @@ One challenge here is how to explain to the user the issue for all the possible 
 There is also an engineering challenge in making an algorithm that figures out what went wrong and why.
 % either repeating the steps of the algorithm in order to find the issues or transforming the algorithm in a way that they can explain what went wrong
 
+4. Document the version of the tool on which this work is based on, which had changed since what was written in \cite{kolachina-ranta-2017}
 
 \subsection{Future work}
 
-4. If there is time, update the algorithm to look at the linearization in order to try to select trees that match the original string as closely as possible and evaluate what difference this makes. This is only possible with improved performance from goal 1, but keeping it fast will still be a challenge. There are also some challenges here in how it should interact with the advanced macros in goal 2. We also need to handle when a GF tree has multiple linearizations, e.g. if it results in a conjugation table.
+5. If there is time, update the algorithm to look at the linearization in order to try to select trees that match the original string as closely as possible and evaluate what difference this makes. This is only possible with improved performance from goal 1, but keeping it fast will still be a challenge. There are also some challenges here in how it should interact with the advanced macros in goal 2. We also need to handle when a GF tree has multiple linearizations, e.g. if it results in a conjugation table.
 
 % % improve
 
