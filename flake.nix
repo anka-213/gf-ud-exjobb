@@ -6,43 +6,47 @@
   };
   outputs = { self, nixpkgs, flake-utils }:
     with flake-utils.lib; eachSystem allSystems (system:
-    let
-      pkgs = nixpkgs.legacyPackages.${system};
-      tex = pkgs.texlive.combine {
-          inherit (pkgs.texlive) scheme-minimal latex-bin latexmk
-          chngcntr hyperref pdftexcmds infwarerr kvoptions parskip
-          etoolbox pgf epstopdf-pkg todonotes metafont
-          moreverb amsmath subfig psnfss babel-english
-          caption minted chemfig geometry eso-pic
-          float datetime2 microtype biblatex titlesec
-          fancyhdr fvextra catchfile xstring lineno framed
-          ;
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        tex = pkgs.texlive.combine {
+          inherit (pkgs.texlive) scheme-medium latex-bin latexmk
+            chngcntr hyperref pdftexcmds infwarerr kvoptions parskip
+            etoolbox pgf epstopdf-pkg todonotes metafont
+            moreverb amsmath subfig psnfss babel-english
+            caption minted chemfig geometry eso-pic
+            float datetime2 microtype biblatex titlesec
+            fancyhdr fvextra catchfile xstring lineno framed
+            fancyvrb upquote simplekv tracklang biblatex-ieee
+            helvetic
+            ;
           # inherit (pkgs.texlive) scheme-medium chngcntr ;
-      };
-    in rec {
-      packages = {
-        inherit tex;
-        document = pkgs.stdenvNoCC.mkDerivation rec {
-          name = "latex-demo-document";
-          src = self;
-          buildInputs = [ pkgs.coreutils tex ];
-          phases = ["unpackPhase" "buildPhase" "installPhase"];
-          buildPhase = ''
-            export PATH="${pkgs.lib.makeBinPath buildInputs}";
-            mkdir -p .cache/texmf-var
-            env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-              latexmk -interaction=nonstopmode -pdf -lualatex \
-              document.tex
-          '';
-          installPhase = ''
-            mkdir -p $out
-            cp document.pdf $out/
-          '';
         };
-      };
-      devShell = pkgs.mkShell {
-        packages = [ tex ];
-      };
-      defaultPackage = packages.document;
-    });
+        pygments = pkgs.python38Packages.pygments;
+      in
+      rec {
+        packages = {
+          inherit tex pygments;
+          document = pkgs.stdenvNoCC.mkDerivation rec {
+            name = "latex-demo-document";
+            src = self;
+            buildInputs = [ pkgs.coreutils tex ];
+            phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+            buildPhase = ''
+              export PATH="${pkgs.lib.makeBinPath buildInputs}";
+              mkdir -p .cache/texmf-var
+              env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
+                latexmk -interaction=nonstopmode -pdf -lualatex \
+                document.tex
+            '';
+            installPhase = ''
+              mkdir -p $out
+              cp document.pdf $out/
+            '';
+          };
+        };
+        devShell = pkgs.mkShell {
+          packages = [ tex pygments ];
+        };
+        defaultPackage = packages.document;
+      });
 }
