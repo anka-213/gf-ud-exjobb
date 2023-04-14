@@ -41,9 +41,9 @@ jobs:
         uses: dante-ev/latex-action@2021-A
         with:
           # The root LaTeX file to be compiled
-          root_file: main.tex
+          root_file: Main.tex
           # The working directory for the latex compiler to be invoked
-          working_directory: planeringsrapport # optional
+          working_directory: thesis # optional
           # LaTeX engine to be used
           # compiler: # optional, default is latexmk
           # Extra arguments to be passed to the latex compiler
@@ -55,6 +55,7 @@ jobs:
         run: |
           mkdir _site
           cp planeringsrapport/main.pdf _site/planeringsrapport.pdf
+          cp thesis/main.pdf _site/thesis.pdf
 
       # - name: Setup Pages
       #   uses: actions/configure-pages@v3
@@ -88,4 +89,4 @@ jobs:
           # artifact_name: # optional, default is github-pages
           # Is this attempting to deploy a pull request as a GitHub Pages preview site? (NOTE: This feature is only in alpha currently and is not available to the public!)
           # preview: # optional, default is false
-      
+
