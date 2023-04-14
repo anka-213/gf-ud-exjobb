@@ -12,6 +12,10 @@
           inherit (pkgs.texlive) scheme-minimal latex-bin latexmk
           chngcntr hyperref pdftexcmds infwarerr kvoptions parskip
           etoolbox pgf epstopdf-pkg todonotes metafont
+          moreverb amsmath subfig psnfss babel-english
+          caption minted chemfig geometry eso-pic
+          float datetime2 microtype biblatex titlesec
+          fancyhdr fvextra catchfile xstring lineno framed
           ;
           # inherit (pkgs.texlive) scheme-medium chngcntr ;
       };
