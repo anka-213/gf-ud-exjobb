@@ -8,29 +8,6 @@
 
 % Background to the assignment. Why is it relevant?
 \section{Background}
-%   -> useful synthesis: UD-GF
-%   -> applications:
-%     - translation  - CL 2020
-%     - semantics    - CL 2020
-%     - concept alignment - Arianna
-%     - SMU work - analysis of real-world law text
-
-There exists a proof-of-concept implementation of a tool for converting between the trees for GF and UD,
-with the help of so-called labels-files which describe the mapping between UD labels and GF functions,
-called gf-ud, which contains both a component for converting from UD to GF, called ud2gf\cite{kolachina-ranta-2017}\footnotemark[1]
-and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-2016}\footnotemark[1]. This work will focus on the ud2gf component.
-
-\footnotetext[1]{These references apply to an older version of gf-ud, from before the one this thesis is based on. A part of the goal of this thesis is to document the later version in addition to documenting the changes made in the process of this thesis.}
-
-% \todo{these references apply to an older version of gf-ud, from before the one I was working on. a part of the goal of this thesis is to document the old-new version that my changes was based on}
-
-% The labels files can also contain macros, which allows constructing virtual GF functions during the translation from UD, which will be expanded to real GF functions at the end of the translation.
-% These can, among other uses, be used to preserve information from the UD labels about subtrees, which can then be used at later points of the transformation to ensure that the desired GF tree is produced.
-
-The gf-ud tool has been used for both translation and semantics\cite{ranta2020abstract}. %\todo{actually explain this}
-Another application has been in concept alignment\cite{masciolini2021grammar}.
-There has also been work using it for analysis of law text for the purpose of making a Controlled Natural Language for law\cite{listenmaa-etal-2021-towards}.
-
 \section{Problem}
 % The formulation of the problem at hand and, the assignment. This should include an extended version of the scientific problem definition and references to knowledge within the area given in the thesis proposal.
 
@@ -85,7 +62,7 @@ would be described in UD format as in Figures \ref{fig:ud_cute_text} and \ref{fi
     \centering
     % \include{ud-annotatrix-corpus.tex}
     % \includesvg{ud-annotatrix-corpus.svg}
-    \includegraphics[width=0.7\textwidth]{ud_cute.png}
+    \includegraphics[width=0.7\textwidth]{figure/ud_cute.png}
     \caption{The phrase "cute, fluffy and furry" as a UD tree in graphical format}
     \label{fig:ud_cute}
 \end{figure}
@@ -95,7 +72,7 @@ would be described in UD format as in Figures \ref{fig:ud_cute_text} and \ref{fi
     \centering
     % \include{ud-annotatrix-corpus.tex}
     % \includesvg{ud-annotatrix-corpus.svg}
-    \includegraphics[width=0.7\textwidth]{cute_gf.png}
+    \includegraphics[width=0.7\textwidth]{figure/cute_gf.png}
     \caption{The phrase "cute, fluffy and furry" as a GF tree in graphical format. }
     \label{fig:gf_cute}
 \end{figure}

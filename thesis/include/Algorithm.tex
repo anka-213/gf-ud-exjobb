@@ -1,0 +1,111 @@
+\chapter{The new algorithm}
+
+% Explain what the old algorithm does
+% Explain what has changed
+
+
+% The new algorithm is based on 
+
+\section{Definitions}
+
+
+
+
+\section{Examples}
+
+% When converting the sentence ``The cat is black'', from UD format to a GF format using ud2gf something happens
+% 
+% \begin{lstlisting}
+% # gf, (gf2ud) original GF tree:
+% UseCl TSim PPos (PredVP (DetCN the_Det (UseN cat_N)) (UseAP (PositA black_A)))
+% # an3, (gf2ud) final annotated tree with nonlocal operations:
+% @4: black black ADJ _  black_A A root
+%     @2: cat cat NOUN Number=Sing  cat_N N nsubj
+%         @1: the the DET _  the_Det Det det
+%     @3: is be AUX Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin  UseAP VP cop
+% 
+% # ut, tree-structured UD tree:
+% 4       black   black   ADJ     A       _       0       root    _       FUN=black_A
+%     2   cat     cat     NOUN    N       Number=Sing     4       nsubj   _       FUN=cat_N
+%         1       the     the     DET     Det     _       2       det     _       FUN=the_Det
+%     3   is      be      AUX     VP      Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin   4       cop     _       FUN=UseAP
+% 
+% # ud, UD tree in CoNLLU format:
+% # sent_id = gfud1000001
+% # text = the cat is black
+% 1       the     the     DET     Det     _       2       det     _       FUN=the_Det
+% 2       cat     cat     NOUN    N       Number=Sing     4       nsubj   _       FUN=cat_N
+% 3       is      be      AUX     VP      Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin   4       cop     _       FUN=UseAP
+% 4       black   black   ADJ     A       _       0       root    _       FUN=black_A
+% 
+% \end{lstlisting}
+
+
+We start with a UD tree
+
+Then we assign lexical entries to each node in the tree: \lstinline|"cat" -> cat_N|, it can be several in some cases
+
+Now we have a ud tree with a list of gf trees at each node
+
+We start traversing the tree, depth first, when we reach a leaf, we start processing it
+
+The main loop is: go through all the available functions and apply as many as possible and add the result to our list
+
+When no more functions can be applied, we go to the next node in the tree.
+
+In the case of ``the black cat sees us today'', we go down the tree until we reach ``the'', and nothing can be done there, so we continue
+
+Next we get to \lstinline|black_A| and can apply \lstinline|PositA : A -> AP ; head|, which gives us an $AP$ (Adjectival Phrase), so now the trees on ``black'' are
+\lstinline|[black_A : A, PositA black_A : AP]|, no more functions can be applied here, so we continue
+
+Now we are done with all the children of ``cat'', so we can start processing it. We have \lstinline|cat_N : N|. Looking through all the functions, only \lstinline|UseN : N -> CN ; head| takes an N as an argument, so that's the one that's applied, giving us \lstinline|UseN cat_N : CN|. In the next iteration we have an \lstinline|CN| available and can apply both of the functions
+\begin{lstlisting}
+    DetCN : Det -> CN -> NP ; det head
+    ModCN : AP -> CN -> CN  ; amod head
+\end{lstlisting}
+Let us verify that these are possible to apply: For \lstinline|DetCN| we need a tree of type $Det$ with the $det$ ud label for the relation and indeed, the word ``the'' has the $det$ label on the relation to ``cat'' and we have the tree \lstinline|the_Det : Det| available on ``the''. Secondly we need a $CN$ at the head and since our current head is ``cat'' and we have \lstinline|UseN cat_N : CN|, that fits perfectly giving us \lstinline|DetCN the_Det (UseN cat_N) : NP|. With similar reasoning for \lstinline{ModCN}, we have ``black'' with UD-label $amod$ and one of the available trees for ``black'' is \lstinline|PositA black_A : AP| which has the correct type/category, which allows us to construct \lstinline|ModCN (PositA black_A) (UseN cat_N) : CN|.
+
+After this iteration we have two trees on ``cat'' which both have the same category $CN$, namely
+\begin{lstlisting}
+    UseN cat_N : CN
+    ModCN (PositA black_A) (UseN cat_N) : CN
+\end{lstlisting}
+and one of them is a strict superset of the others when it comes to words covered, the first only covers ``cat'' while the second covers both ``black'' and ``cat''. This means we can prune the redundant tree \lstinline{UseN cat_N}.
+
+After this pruning, the available trees on the ``cat'' node are
+\begin{lstlisting}
+    cat_N : N
+    DetCN the_Det (UseN cat_N) : NP
+    ModCN (PositA black_A) (UseN cat_N) : CN
+\end{lstlisting}
+After this step, one function is possible to apply, namely $DetCN$, which can be applied to our new $CN$ together with \lstinline{the_Det} like before, giving us
+\begin{lstlisting}
+    DetCN the_Det (ModCN (PositA black_A) (UseN cat_N)) : NP
+\end{lstlisting}
+and like before, we get multiple trees of the same category, this time of type $NP$, once again allowing us to prune the less covering tree
+\begin{lstlisting}
+    DetCN the_Det (UseN cat_N) : NP
+\end{lstlisting}
+
+After this no more functions can be applied at the ``cat'' node, giving us a final set of cat trees
+\begin{lstlisting}
+    cat_N : N
+    ModCN (PositA black_A) (UseN cat_N) : CN
+    DetCN the_Det (ModCN (PositA black_A) (UseN cat_N)) : NP
+\end{lstlisting}
+
+and from here we continue in a similar fashion with the rest of the sentence.
+
+
+
+\subsection{Differences between versions}
+
+In the version 2 algorithm, in each iteration for a node in the UD tree (which corresponds to a word), after we have applied all possible functions and want to check if that unlocked new possible function applications, we check with \emph{all} the available trees in that node against each available function. This means that all the trees that were possible to construct in the previous iteration are still possible to construct, so we will construct them again and will need to remove the duplicates afterwards.
+
+
+
+(issues: in some cases we can get an infinite loop if we have e.g. a function \lstinline{: A -> A})
+
+
+
+\section{How annotations work}

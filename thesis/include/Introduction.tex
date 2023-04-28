@@ -41,12 +41,14 @@ A dependency tree is a tree structure that shows the grammatical relationship be
 
 % For example in the sentence "John ate an apple", the word "ate" would become the root and "John" and "apple" would be direct children, where the arrow from "ate" to apple would be labeled as the subject relation while the arrow to "apple" would be labeled as the object. There would additionally be an arrow from "apple" to "an" which marks that "an" is a determiner for "apple".
 
-% \todo[inline]{Add an image here}
+% the root is black. cop stands copula, which is the word "is". nsubj stands for nominal subject and marks the subject of the sentence, that which is black. det stands for determiner, which answers which cat it is that is black
 
-\begin{center}
+\todo[inline]{explain this picture}
 
+\begin{figure}[H]
+\centering
 %% the cat is black
-\setlength{\unitlength}{0.2mm}
+\setlength{\unitlength}{0.3mm}
 \begin{picture}(205.0,90.0)
   \put(0.0,0.0){the}
   \put(37.0,0.0){cat}
@@ -68,7 +70,9 @@ A dependency tree is a tree structure that shows the grammatical relationship be
   \put(135.0,90.0){\vector(0,-1){60.0}}
   \put(140.0,80.0){{\tiny root}}
 \end{picture}
-\end{center}
+% \end{center}
+\caption{The phrase ``the cat is black'' analyzed as a UD tree.} % Figure text below figure
+\end{figure}
 
 % Not mine: Universal Dependencies (UD) is a framework for representing the syntactic structure of natural language sentences. It is an annotation scheme that provides a universal set of part-of-speech tags and dependency labels that can be applied across different languages.
 
@@ -97,13 +101,14 @@ Another way of describing the grammatical structure of a sentence is through abs
 
 Grammatical Framework\cite{ranta-2004} (GF) is a formalism for describing natural language grammars as code, which allows converting between natural language and a language-independent abstract syntax. It is split into a generic resource grammar that covers morphology and the language as a whole and application grammars for a more narrow domain which allows a more semantic abstract syntax. When you try to write a grammar that covers a very wide domain, you will often get an over-generating grammar where each sentence can be parsed in very many ways into many different trees, where usually only one is the intended way.
 
+% \begin{figure}[htb]
+%   \centering
+%   \includegraphics[width=0.5\linewidth]{thesis/figure/cat_is_black_gf.eps}
+%   \caption{The sentence ``The cat is black'' analyzed as a GF tree}
+%   \label{fig:universe}
+% \end{figure}
+
 %  - strengths and weaknesses
-%   -> useful synthesis: UD-GF
-%   -> applications:
-%     - translation  - CL 2020
-%     - semantics    - CL 2020
-%     - concept alignment - Arianna
-%     - SMU work - analysis of real world law text
 % 
 \section{Differences between GF and UD}
 % Strengths and weaknesses
@@ -146,10 +151,28 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 % % in the studied domain? How and where can this new knowledge be applied?
 
 
+\subsection{Useful synthesis between UD and GF}
+
+\todo[inline]{explain about gf-ud, the old-old version, the new-old version and my developments on that}
 
 
+There exists a proof-of-concept implementation of a tool for converting between the trees for GF and UD,
+with the help of so-called labels-files which describe the mapping between UD labels and GF functions,
+called gf-ud, which contains both a component for converting from UD to GF, called ud2gf\cite{kolachina-ranta-2017}\footnotemark[1]
+and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-2016}\footnotemark[1]. This work will focus on the ud2gf component.
 
+\footnotetext[1]{These references apply to an older version of gf-ud, from before the one this thesis is based on. A part of the goal of this thesis is to document the later version in addition to documenting the changes made in the process of this thesis.}
 
+% \todo{these references apply to an older version of gf-ud, from before the one I was working on. a part of the goal of this thesis is to document the old-new version that my changes was based on}
+
+% The labels files can also contain macros, which allows constructing virtual GF functions during the translation from UD, which will be expanded to real GF functions at the end of the translation.
+% These can, among other uses, be used to preserve information from the UD labels about subtrees, which can then be used at later points of the transformation to ensure that the desired GF tree is produced.
+
+\subsection{Applications for the synthesis of UD and GF}
+
+The gf-ud tool has been used for both translation and semantics\cite{ranta-al-2020}. %\todo{actually explain this}
+Another application has been in concept alignment\cite{masciolini-ranta-2021}.
+There has also been work using it for analysis of law text for the purpose of making a Controlled Natural Language for law\cite{listenmaa-etal-2021-towards}.
 
 
 
