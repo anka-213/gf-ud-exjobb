@@ -40,6 +40,7 @@
 % 
 % \end{lstlisting}
 
+\subsection{Overview of article}
 
 We start with a UD tree
 
@@ -53,17 +54,132 @@ The main loop is: go through all the available functions and apply as many as po
 
 When no more functions can be applied, we go to the next node in the tree.
 
-In the case of ``the black cat sees us today'', we go down the tree until we reach ``the'', and nothing can be done there, so we continue
+\subsection{Example: The black cat}
 
-Next we get to \lstinline|black_A| and can apply \lstinline|PositA : A -> AP ; head|, which gives us an $AP$ (Adjectival Phrase), so now the trees on ``black'' are
-\lstinline|[black_A : A, PositA black_A : AP]|, no more functions can be applied here, so we continue
+For a very simple initial example, we start with the noun-phrase ``the black cat'', which has the following UD representation:
 
-Now we are done with all the children of ``cat'', so we can start processing it. We have \lstinline|cat_N : N|. Looking through all the functions, only \lstinline|UseN : N -> CN ; head| takes an N as an argument, so that's the one that's applied, giving us \lstinline|UseN cat_N : CN|. In the next iteration we have an \lstinline|CN| available and can apply both of the functions
+\begin{figure}[H]
+    \centering
+    %% the black cat
+    \setlength{\unitlength}{0.2mm}
+    \begin{picture}(158.0,90.0)
+      \put(0.0,0.0){the}
+      \put(37.0,0.0){black}
+      \put(92.0,0.0){cat}
+      \put(0.0,15.0){{\tiny DET}}
+      \put(37.0,15.0){{\tiny ADJ}}
+      \put(92.0,15.0){{\tiny NOUN}}
+      \put(56.0,30.0){\oval(88.73913043478261,66.66666666666667)[t]}
+      \put(11.630434782608695,35.0){\vector(0,-1){5.0}}
+      \put(41.0,66.33333333333334){{\tiny det}}
+      \put(74.5,30.0){\oval(49.54545454545455,33.333333333333336)[t]}
+      \put(49.72727272727273,35.0){\vector(0,-1){5.0}}
+      \put(59.5,49.66666666666667){{\tiny amod}}
+      \put(107.0,90.0){\vector(0,-1){60.0}}
+      \put(112.0,80.0){{\tiny root}}
+    \end{picture}
+    \caption{``The black cat'' as a UD tree}
+    \label{fig:the_black_cat_ud}
+\end{figure}
+
+And we use the following abstract syntax and corresponding dependency configuration (labels-file):
+
+\begin{verbatim}
+    #fun DetCN  : Det -> CN -> NP ; det  head
+    #fun ModCN  : AP  -> CN -> CN ; amod head
+    #fun UseN   : N         -> CN ; head
+    #fun PositA : A         -> AP ; head
+    
+    #cat A                        ; ADJ
+    #cat Det                      ; DET
+    #cat N                        ; NOUN
+    
+    the_Det : Det
+    black_A : A
+    cat_N : N
+\end{verbatim}
+
+The first step is to parse each word in the UD tree into their corresponding lexical GF functions. We use the configuration in the labels-file to convert UD-part-of-speech into their corresponding GF categories,
+\begin{verbatim}
+    DET -> Det
+    ADJ -> A
+    NOUN -> N
+\end{verbatim}
+
+which gives this tree
+
+% TODO: Fix this so it's not so ugly
+\begin{figure}[H]
+    \centering
+    %% the black cat
+    \setlength{\unitlength}{0.2mm}
+    \begin{picture}(158.0,90.0)
+      \put(-30.0,0.0){the$_{Det}$}
+      \put(27.0,0.0){black$_A$}
+      \put(92.0,0.0){cat$_N$}
+      \put(0.0,15.0){{\tiny Det}}
+      \put(37.0,15.0){{\tiny A}}
+      \put(92.0,15.0){{\tiny N}}
+      \put(56.0,30.0){\oval(88.73913043478261,66.66666666666667)[t]}
+      \put(11.630434782608695,35.0){\vector(0,-1){5.0}}
+      \put(41.0,66.33333333333334){{\tiny det}}
+      \put(74.5,30.0){\oval(49.54545454545455,33.333333333333336)[t]}
+      \put(49.72727272727273,35.0){\vector(0,-1){5.0}}
+      \put(59.5,49.66666666666667){{\tiny amod}}
+      \put(107.0,90.0){\vector(0,-1){60.0}}
+      \put(112.0,80.0){{\tiny root}}
+    \end{picture}
+    \caption{``The black cat'' as a UD tree, with GF lexicon entries inserted}
+    \label{fig:the_black_cat_ud_gf}
+\end{figure}
+
+% In the case of ``the black cat sees us today'', we go down the tree until we reach ``the'', and nothing can be done there, so we continue
+
+After this, we start traversing the tree, we go down the tree until we reach a node where all children have been processed. Since \lstinline{cat_N} has unprocessed children we keep going down and reach \lstinline{the_Det}. We look through the list of available functions and see that the only function that takes a \lstinline{Det} as an argument takes several arguments, so it can't be applied to a leaf node like this. There is nothing to be done here, so we continue.
+
+
+Next we get to \lstinline|black_A| and here we can apply \lstinline|PositA : A -> AP ; head|, which converts an adjective into an Adjectival Phrase (AP), so now the available trees on ``black'' are
+\lstinline|[black_A : A, PositA black_A : AP]|,\todo{draw these two trees side-by-side} no more functions can be applied here, so we continue.
+
+% A picture like 3.2, but with both the subtrees above attached to the word "black_A"
+
+Now we are done with all the children of ``cat'', so we can start processing it. We have \lstinline|cat_N : N|. Looking through all the functions, only \lstinline|UseN : N -> CN ; head| takes an N as an argument, so that's the one that's applied, giving us \lstinline|UseN cat_N : CN|. Now we have the trees
+\begin{lstlisting}
+    cat_N : N
+    UseN cat_N : CN
+\end{lstlisting}
+In the next iteration we have a \lstinline|CN| available and can apply either of the functions
 \begin{lstlisting}
     DetCN : Det -> CN -> NP ; det head
     ModCN : AP -> CN -> CN  ; amod head
 \end{lstlisting}
-Let us verify that these are possible to apply: For \lstinline|DetCN| we need a tree of type $Det$ with the $det$ ud label for the relation and indeed, the word ``the'' has the $det$ label on the relation to ``cat'' and we have the tree \lstinline|the_Det : Det| available on ``the''. Secondly we need a $CN$ at the head and since our current head is ``cat'' and we have \lstinline|UseN cat_N : CN|, that fits perfectly giving us \lstinline|DetCN the_Det (UseN cat_N) : NP|. With similar reasoning for \lstinline{ModCN}, we have ``black'' with UD-label $amod$ and one of the available trees for ``black'' is \lstinline|PositA black_A : AP| which has the correct type/category, which allows us to construct \lstinline|ModCN (PositA black_A) (UseN cat_N) : CN|.
+Let us verify that these are possible to apply: For \lstinline|DetCN| we need a tree of type $Det$ with the $det$ ud label for the relation and indeed, the word ``the'' has the $det$ label on the relation to ``cat'' and we have the tree \lstinline|the_Det : Det| available on ``the''. Secondly we need a $CN$ at the head and since our current head is ``cat'' and we have \lstinline|UseN cat_N : CN|, that fits perfectly giving us \lstinline|DetCN the_Det (UseN cat_N) : NP|. With similar reasoning for \lstinline{ModCN}, we have ``black'' with UD-label $amod$ and one of the available trees for ``black'' is \lstinline|PositA black_A : AP| which has the correct category, which allows us to construct \lstinline|ModCN (PositA black_A) (UseN cat_N) : CN|.
+
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.3\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{graph1}
+         \caption{$y=x$}
+         \label{fig:y equals x}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.3\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{graph2}
+         \caption{$y=3\sin x$}
+         \label{fig:three sin x}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.3\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{graph3}
+         \caption{$y=5/x$}
+         \label{fig:five over x}
+     \end{subfigure}
+        \caption{Three simple graphs}
+        \label{fig:three graphs}
+\end{figure}
 
 After this iteration we have two trees on ``cat'' which both have the same category $CN$, namely
 \begin{lstlisting}

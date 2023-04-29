@@ -48,7 +48,7 @@ A dependency tree is a tree structure that shows the grammatical relationship be
 \begin{figure}[H]
 \centering
 %% the cat is black
-\setlength{\unitlength}{0.3mm}
+\setlength{\unitlength}{0.2mm}
 \begin{picture}(205.0,90.0)
   \put(0.0,0.0){the}
   \put(37.0,0.0){cat}
@@ -101,12 +101,50 @@ Another way of describing the grammatical structure of a sentence is through abs
 
 Grammatical Framework\cite{ranta-2004} (GF) is a formalism for describing natural language grammars as code, which allows converting between natural language and a language-independent abstract syntax. It is split into a generic resource grammar that covers morphology and the language as a whole and application grammars for a more narrow domain which allows a more semantic abstract syntax. When you try to write a grammar that covers a very wide domain, you will often get an over-generating grammar where each sentence can be parsed in very many ways into many different trees, where usually only one is the intended way.
 
-% \begin{figure}[htb]
-%   \centering
-%   \includegraphics[width=0.5\linewidth]{thesis/figure/cat_is_black_gf.eps}
-%   \caption{The sentence ``The cat is black'' analyzed as a GF tree}
-%   \label{fig:universe}
-% \end{figure}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.5\linewidth]{thesis/figure/cat_is_black_gf.eps}
+  \caption{The sentence ``The cat is black'' analyzed as a GF tree}
+  \label{fig:universe}
+\end{figure}
+
+
+% NOTES:
+% "The cat is black" vs "The cat is not black" corresponds to PPos vs PNeg
+% ud2gf would have trouble differentiating between these because it's only in parameters
+% Macros UseCl_NegCop and UseCl_Sim corresponds to the different versions
+% These allows the information to be preserved, despite there not being any explicit GF function for the word ``not''
+%
+% Negative:
+% UseCl_NegCop (StrNeg "not") (PredVP (DetCN_theSg (StrThe "the") (UseN cat_N)) (UseAP_Cop (StrCop "be") (PositA black_A)))
+% Positive:
+% UseCl_Sim (PredVP (DetCN_theSg (StrThe "the") (UseN cat_N)) (UseAP_Cop (StrCop "be") (PositA black_A)))
+
+% #auxfun UseCl_Sim cl : Cl -> S = UseCl TSim PPos cl ; head
+% #auxfun UseCl_Ant have cl : Have -> Cl -> S = UseCl TAnt PPos cl ; aux head
+% #auxfun UseCl_NegSim do neg cl : Do -> Neg -> Cl -> S = UseCl TSim PNeg cl ; aux advmod head
+% #auxfun UseCl_NegAnt have neg cl : Have -> Neg -> Cl -> S = UseCl TAnt PNeg cl ; aux advmod head
+% #auxfun UseCl_NegCop neg cl : Neg -> Cl -> S = UseCl TSim PNeg cl ; advmod head
+
+% #auxfun UseAP_Cop cop comp : Cop -> AP -> VP = UseAP comp ; cop head
+
+% #auxcat Cop AUX
+% #auxcat Do AUX
+% #auxcat Have AUX
+% #auxcat Neg PART
+
+% Syncategorematic words:
+% #word not not Polarity=Neg
+% #word does  do  Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin
+% #word is   be  Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin
+% #word would would  VerbForm=Fin
+% #word will  will VerbForm=Fin
+
+% Syncategorematic lemmas:
+% #lemma UseCl,UseQCl,ImpVP not Neg advmod head
+% #lemma UseAP,UseAdv,UseNP be Cop cop head
+% #lemma PredVP have Have aux head
+% #lemma PredVP,ImpVP do Do aux head
 
 %  - strengths and weaknesses
 % 
