@@ -1,0 +1,118 @@
+# Place the cursor inside "graph" to get some refactoring options
+
+digraph {
+
+    compound=true;
+
+
+
+    # a -> cat_head[lhead=cluster0 label=""];
+
+    # big_head [style=invisible];
+    # big_head -> the_0 [lhead=cluster1, color=blue ];
+    # big_head -> black_head [lhead=cluster2, color=blue];
+    # big_head -> cat_head [lhead=cluster0, color=blue ];
+    the_0 -> black_head[color=transparent , lhead=cluster2,ltail=cluster1]
+    black_head -> cat_0[color=transparent ]
+
+
+
+    cat_0 -> the_0 [lhead=cluster1, ltail=cluster0, label = det];
+
+    cat_0 -> black_head [lhead=cluster2, ltail=cluster0, label = "amod"];
+
+    # rank="same";
+    #rankdir=LR
+    splines=curved;
+edge [constraint=false]
+
+    subgraph cluster1 {
+        edge [dir=none];
+        label="the";
+
+        the_0 [label="the_Det : Det", shape=none];
+    }
+
+
+    subgraph cluster2 {
+        edge [dir=none];
+        label="black";
+
+        pos="1,0!";
+        black_head [style=invisible]
+        black_head -> black_0  [color=white];
+        black_head -> PositA_1 [color=white];
+
+        {
+        black_0 [label="black_A : N", shape=none];
+        black_out[style=invisible];
+        black_0 ->black_out[color=white];
+        }
+        {
+        black_1 [label="black_A : A", shape=none];
+        PositA_1 [label="PositA : AP", shape=none];
+
+        PositA_1 -> black_1 [label=" head"];
+        }
+
+    }
+
+    subgraph cluster0 {
+        edge [dir=none];
+        # node [shape=none];
+        label="cat";
+        pos="0,0!";
+        #cat_head [style=invisible]
+        #cat_head -> cat_0  [color=white];
+        #cat_head -> UseN_1 [color=white];
+        #cat_head -> DetCN_2 [color=white];
+
+        subgraph c3{
+
+        cat_3 [label="cat_N : N", shape=none];
+        black_3 [label="black_A : A", shape=none];
+        UseN_3 [label="UseN : CN", shape=none];
+        PositA_3 [label="PositA : AP", shape=none];
+        AdjCN_3 [label="AdjCN : CN", shape=none];
+
+        PositA_3 -> cat_3;
+        UseN_3 -> black_3;
+        AdjCN_3 -> UseN_3 [label=" amod"]
+        AdjCN_3 -> PositA_3 [label=" head"]
+        }
+
+        subgraph c2{
+
+        cat_2 [label="cat_N : N", shape=none];
+        the_2 [label="the_Det : Det", shape=none];
+        UseN_2 [label="UseN : CN", shape=none];
+        DetCN_2 [label="DetCN : NP", shape=none];
+
+        UseN_2 -> cat_2;
+        DetCN_2 -> the_2 [label=" det"]
+        DetCN_2 -> UseN_2 [label=" head"]
+        }
+
+        subgraph c1{
+        cat_1 [label="cat_N : N", shape=none];
+        UseN_1 [label="UseN : CN", shape=none];
+
+        UseN_1 -> cat_1 [label=" head"];
+        }
+
+
+
+        subgraph c0 {
+        cat_0 [label="cat_N : N", shape=none];
+        cat_out[style=invisible];
+        cat_0 ->cat_out[color=white];
+        }
+
+        # cat_N : N
+        # DetCN the_Det (UseN cat_N) : NP
+        # ModCN (PositA black_A) (UseN cat_N) : CN
+
+        # cat -- N;
+    }
+
+}
