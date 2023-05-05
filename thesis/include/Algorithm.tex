@@ -138,47 +138,69 @@ which gives this tree
 After this, we start traversing the tree, we go down the tree until we reach a node where all children have been processed. Since \lstinline{cat_N} has unprocessed children we keep going down and reach \lstinline{the_Det}. We look through the list of available functions and see that the only function that takes a \lstinline{Det} as an argument takes several arguments, so it can't be applied to a leaf node like this. There is nothing to be done here, so we continue.
 
 
-Next we get to \lstinline|black_A| and here we can apply \lstinline|PositA : A -> AP ; head|, which converts an adjective into an Adjectival Phrase (AP), so now the available trees on ``black'' are
-\lstinline|[black_A : A, PositA black_A : AP]|,\todo{draw these two trees side-by-side} no more functions can be applied here, so we continue.
+\begin{figure}[H]
+    \centering
+    \subcaptionbox{``black'' as an adjective : A}[0.4\textwidth]
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_A_gf.eps}}
+    \caption{The available GF trees on the word ``black'' before the first iteration}\label{fig:black iter 0}
+\end{figure}
+
+Next we get to ``black'', with the available tree \lstinline|black_A| (\autoref{fig:black iter 0}) and here we can apply \lstinline|PositA : A -> AP ; head|, which converts an adjective into an Adjectival Phrase (AP), so now the available trees on ``black'' are
+\lstinline|[black_A : A, PositA black_A : AP]| (\autoref{fig:black iter 0}), no more functions can be applied here, so we continue.
+
+\begin{figure}[H]
+    \centering
+    \subcaptionbox{``black'' as an adjective : A}[0.4\textwidth]
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_A_gf.eps}}
+    \subcaptionbox{``black'' as an adjectival phrase: AP}[0.4\textwidth]
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_AP_gf.eps}}
+    \caption{The available GF trees on the word ``black'' after the first iteration}\label{fig:black iter 1}
+\end{figure}
 
 % A picture like 3.2, but with both the subtrees above attached to the word "black_A"
 
-Now we are done with all the children of ``cat'', so we can start processing it. We have \lstinline|cat_N : N|. Looking through all the functions, only \lstinline|UseN : N -> CN ; head| takes an N as an argument, so that's the one that's applied, giving us \lstinline|UseN cat_N : CN|. Now we have the trees
-\begin{lstlisting}
-    cat_N : N
-    UseN cat_N : CN
-\end{lstlisting}
+Now we are done with all the children of ``cat'', so we can start processing it. We have \lstinline|cat_N : N|. 
+
+\begin{figure}[H]
+    \centering
+    \subcaptionbox{``cat'' : N}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+    \caption{The available GF trees on the word ``cat'' before the first iteration}\label{fig:cat iter 0}
+\end{figure}
+
+Looking through all the functions, only \lstinline|UseN : N -> CN ; head| takes an N as an argument, so that's the one that's applied, giving us \lstinline|UseN cat_N : CN|. Now we have the trees in \autoref{fig:cat iter 1}
+% \begin{lstlisting}
+%     cat_N : N
+%     UseN cat_N : CN
+% \end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \subcaptionbox{``cat'' as a noun : N}[0.4\textwidth]
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+    \subcaptionbox{``cat'' as a common noun: CN}[0.4\textwidth]
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_CN_gf.eps}}
+    \caption{The available GF trees on the word ``cat'' after the first iteration}\label{fig:cat iter 1}
+\end{figure}
+
 In the next iteration we have a \lstinline|CN| available and can apply either of the functions
 \begin{lstlisting}
     DetCN : Det -> CN -> NP ; det head
     ModCN : AP -> CN -> CN  ; amod head
 \end{lstlisting}
-Let us verify that these are possible to apply: For \lstinline|DetCN| we need a tree of type $Det$ with the $det$ ud label for the relation and indeed, the word ``the'' has the $det$ label on the relation to ``cat'' and we have the tree \lstinline|the_Det : Det| available on ``the''. Secondly we need a $CN$ at the head and since our current head is ``cat'' and we have \lstinline|UseN cat_N : CN|, that fits perfectly giving us \lstinline|DetCN the_Det (UseN cat_N) : NP|. With similar reasoning for \lstinline{ModCN}, we have ``black'' with UD-label $amod$ and one of the available trees for ``black'' is \lstinline|PositA black_A : AP| which has the correct category, which allows us to construct \lstinline|ModCN (PositA black_A) (UseN cat_N) : CN|.
+Let us verify that these are possible to apply: For \lstinline|DetCN| we need a tree of type $Det$ with the $det$ ud label for the relation and indeed, the word ``the'' has the $det$ label on the relation to ``cat'' and we have the tree \lstinline|the_Det : Det| available on ``the''. Secondly we need a $CN$ at the head and since our current head is ``cat'' and we have \lstinline|UseN cat_N : CN|, that fits perfectly giving us \lstinline|DetCN the_Det (UseN cat_N) : NP|. With similar reasoning for \lstinline{ModCN}, we have ``black'' with UD-label $amod$ and one of the available trees for ``black'' is \lstinline|PositA black_A : AP| which has the correct category, which allows us to construct \lstinline|ModCN (PositA black_A) (UseN cat_N) : CN|. After this we have the trees in \autoref{fig:cat iter 2}
 
-\begin{figure}
-     \centering
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{graph1}
-         \caption{$y=x$}
-         \label{fig:y equals x}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{graph2}
-         \caption{$y=3\sin x$}
-         \label{fig:three sin x}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{graph3}
-         \caption{$y=5/x$}
-         \label{fig:five over x}
-     \end{subfigure}
-        \caption{Three simple graphs}
-        \label{fig:three graphs}
+\begin{figure}[H]
+    \centering
+    \subcaptionbox{cat : N\label{cat_N}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+    \subcaptionbox{cat : CN\label{cat_CN}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_CN_gf.eps}}
+    \subcaptionbox{the cat : NP\label{the_cat_NP}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_cat_NP_gf.eps}}
+    \subcaptionbox{black cat : CN\label{black_cat_CN}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
+    \caption{The four available trees on the word ``cat'' after the second iteration}\label{fig:cat iter 2}
 \end{figure}
 
 After this iteration we have two trees on ``cat'' which both have the same category $CN$, namely
@@ -186,7 +208,18 @@ After this iteration we have two trees on ``cat'' which both have the same categ
     UseN cat_N : CN
     ModCN (PositA black_A) (UseN cat_N) : CN
 \end{lstlisting}
-and one of them is a strict superset of the others when it comes to words covered, the first only covers ``cat'' while the second covers both ``black'' and ``cat''. This means we can prune the redundant tree \lstinline{UseN cat_N}.
+and one of them is a strict superset of the other when it comes to words covered, the first only covers ``cat'' while the second covers both ``black'' and ``cat''. This means we can prune the redundant tree \lstinline{UseN cat_N}.
+
+\begin{figure}[H]
+    \centering
+    \subcaptionbox{Cat\label{ci2p:cat_N}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+    \subcaptionbox{The cat\label{ci2p:the_cat_NP}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_cat_NP_gf.eps}}
+    \subcaptionbox{Black cat\label{ci2p:black_cat_CN}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
+    \caption{The three available trees on the word ``cat'' after the second iteration after pruning}\label{fig:cat iter 2 pruned}
+\end{figure}
 
 After this pruning, the available trees on the ``cat'' node are
 \begin{lstlisting}
@@ -194,7 +227,7 @@ After this pruning, the available trees on the ``cat'' node are
     DetCN the_Det (UseN cat_N) : NP
     ModCN (PositA black_A) (UseN cat_N) : CN
 \end{lstlisting}
-After this step, one function is possible to apply, namely $DetCN$, which can be applied to our new $CN$ together with \lstinline{the_Det} like before, giving us
+After this step, one function is still possible to apply, namely $DetCN$, which can be applied to our new $CN$ together with \lstinline{the_Det} like before, giving us
 \begin{lstlisting}
     DetCN the_Det (ModCN (PositA black_A) (UseN cat_N)) : NP
 \end{lstlisting}
