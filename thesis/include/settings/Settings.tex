@@ -11,7 +11,10 @@
 \usepackage{amsmath}								% Mathematical expressions (American mathematical society)
 \usepackage{amssymb}								% Mathematical symbols (American mathematical society)
 \usepackage{graphicx}								% Figures
-\usepackage{subfig}									% Enables subfigures
+% \usepackage{subfig}									% Enables subfigures
+\usepackage{caption}
+\usepackage{subcaption}
+
 \numberwithin{equation}{chapter}					% Numbering order for equations
 \numberwithin{figure}{chapter}						% Numbering order for figures
 \numberwithin{table}{chapter}						% Numbering order for tables
@@ -48,7 +51,6 @@ numbers=left, numberstyle=\tiny,
 showtabs=true
 }
 \addbibresource{references.bib}
-
 
 % OPTIONAL SETTINGS (DELETE OR COMMENT TO SUPRESS)
 
