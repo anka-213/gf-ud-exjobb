@@ -23,7 +23,7 @@ digraph {
 
     # rank="same";
     #rankdir=LR
-    splines=curved;
+    # splines=curved;
 edge [constraint=false]
 
     subgraph cluster1 {
