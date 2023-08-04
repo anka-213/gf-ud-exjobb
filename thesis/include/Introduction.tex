@@ -1,7 +1,45 @@
 % CREATED BY DAVID FRISK, 2016
 \chapter{Introduction}
 
-In the beginning was the word and it was good. However, it is difficult to make computers understand natural languages. There are many different approaches that has been used to make this process easier. In this thesis we will focus on two such ways, both of which are meant to analyze the grammatical structure and syntax of a sentence.
+\newcommand{\note}[1]{\todo{#1}}
+\renewcommand{\note}[1]{}
+
+% TODO: Link to the code somewhere
+
+Since the advent of computers, people have been trying to make them understand \note{anthropomorphism?} natural languages. Today machine learning methods are very popular \note{rephrase}, but the more traditional method is so called rule-based Natural Language Processing (NLP) and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.
+In fact, most of the terminology around programming languages comes from linguistics for this exact reason\footnote{some examples}.
+
+There are several advantages of using rule-based approaches over machine-learning, for example they are deterministic and more predictable, it is possible to fix bugs without needing to retrain the whole model and hoping that it fixes the issue and they are simpler and more understandable, instead of being a black box as most machine learning based language models are.
+% There have been many different approaches to solving...
+
+% (why not ai? more predictable, easier to fix bugs, more deterministic)
+
+Among the most simple and naive methods for handling natural language text is string replacement, e.g. adding an ``s'' to the end of a word to make it plural, regardless of what word it actually is, so we would get ``foots'' instead of the correct ``feet'' as the plural form for ``foot''.
+
+Now, we could keep adding more exceptions to these string replacement rules and get somewhat better results, but we would quickly run into complexity issues with more advanced grammar concepts, like word order changing when asking a question (``The cat is hungry'' vs ``Is the cat hungry?'') and person/number/gender agreement (e.g. person/number: ``I eat''/``The cat eats''/``They eat'' and gender agreement (in Swedish): ``Huset är fint'' vs ``Katten är fin''), so a more systematic approach would be helpful. This is where grammar formalisms come in.
+
+A grammar formalism is used to describe the connection between a plain text and structured data. To understand what a formalism is, it is useful to introduce the concept of structured data. Consider a text string like ``the cat sat on the mat''—for a general-purpose computer program, it is nothing more than an array of characters. But to a human linguist, it is full of structure: ``sat'' is the main verb, ``cat'' is the subject, “on the mat” is an adverbial. If we want to represent its grammatical structure in machine readable way, we need a \emph{grammar formalism}.
+
+
+% One method for doing this is to convert the text into an abstract structure that does not care about morphological details like 
+
+% Skillnaden mellan strängar och att ha en struktur
+
+% Now that I have introduced grammar formalisms, I need to actually explain them
+
+% TODO: Mention multilinguality of GF
+
+
+% In rule-based NLP we want to be able to take a text and analyse it at a higher level and make transformations to it.
+% In order to do this, we first need a way to parse the text into a syntax tree, which describes the relationship between words in a sentence.
+
+% For example you can write a grammar to transform the text into an abstract tree form, which allows understanding its structure and processing it\note{bad}.
+
+% There are many different approaches that have been used to make this process easier. In this thesis we will focus on two such methods, both of which are meant to analyze the grammatical structure and syntax of a sentence.
+
+There are several different formalisms for describing sentences as trees, all with their own strengths and weaknesses.
+The two we will be talking about in this paper are Universal Dependencies (UD), which is based on so called \emph{dependency trees}, and Grammatical Framework (GF), which uses \emph{constituency-based abstract syntax trees}.
+
 
 % \begin{verbatim}
 % - Kort om paradigmer
@@ -20,15 +58,6 @@ In the beginning was the word and it was good. However, it is difficult to make 
 
 % Reliability and predictability are very important in many applications, for example law.
 
-
-In rule-based Natural Language Processing (NLP) we want to be able to take a text and analyse it at a higher level and make transformations to it.
-In order to do this, we first need a way to parse the text into a syntax tree, which describes the relationship between words in a sentence.
-
-
-
-There are several different formalisms for describing sentences as trees, all with their own strengths and weaknesses.
-The two we will be talking about here are Universal Dependencies (UD), which uses dependency trees, and Grammatical Framework (GF), which uses abstract syntax trees.
-
 % \todo[inline]{Write more about the goal of the project and move the rest to background}
 
 % \todo[inline]{Something general about rule-based NLG and NLP and computer grammars}
@@ -39,44 +68,74 @@ The two we will be talking about here are Universal Dependencies (UD), which use
 \section{Dependency trees and Universal Dependencies}
 A dependency tree is a tree structure that shows the grammatical relationship between words in a sentence. Each word becomes a node in the tree with the main verb as the root and the edges represents the relation and the direction of the dependency.
 
+The specific standard for dependency trees that this paper is about is called Universal Dependencies (UD). UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
+
+In \autoref{fig:cat_sleeps_ud} we can see the sentence ``The cat sleeps'' analyzed as a UD-tree. The first step is to determine which part-of-speech each word in the sentence belongs to. In this case, ``the'' is a determiner, ``cat'' is a noun and ``sleeps'' is a verb. Next we need to determine the relation between the words: ``sleeps'' is the root of the sentence, ``cat'' is the subject of this verb and ``the'' quantifies (determines) the noun.
+
+% Constituency vs dependency trees
+
 % For example in the sentence "John ate an apple", the word "ate" would become the root and "John" and "apple" would be direct children, where the arrow from "ate" to apple would be labeled as the subject relation while the arrow to "apple" would be labeled as the object. There would additionally be an arrow from "apple" to "an" which marks that "an" is a determiner for "apple".
 
 % the root is black. cop stands copula, which is the word "is". nsubj stands for nominal subject and marks the subject of the sentence, that which is black. det stands for determiner, which answers which cat it is that is black
 
-\todo[inline]{explain this picture}
+% \todo[inline]{explain this picture}
 
+% Generated by
+% echo "the cat sleeps" | gf-ud string2gf2ud grammars/MiniLang Eng S lud
 \begin{figure}[H]
 \centering
 %% the cat is black
+% \setlength{\unitlength}{0.2mm}
+% \begin{picture}(205.0,90.0)
+%   \put(0.0,0.0){the}
+%   \put(37.0,0.0){cat}
+%   \put(83.0,0.0){is}
+%   \put(120.0,0.0){black}
+%   \put(0.0,15.0){{\tiny DET}}
+%   \put(37.0,15.0){{\tiny NOUN}}
+%   \put(83.0,15.0){{\tiny AUX}}
+%   \put(120.0,15.0){{\tiny ADJ}}
+%   \put(28.5,30.0){\oval(28.89189189189189,33.333333333333336)[t]}
+%   \put(14.054054054054054,35.0){\vector(0,-1){5.0}}
+%   \put(13.5,49.66666666666667){{\tiny det}}
+%   \put(88.5,30.0){\oval(79.3855421686747,66.66666666666667)[t]}
+%   \put(48.80722891566265,35.0){\vector(0,-1){5.0}}
+%   \put(73.5,66.33333333333334){{\tiny nsubj}}
+%   \put(111.5,30.0){\oval(28.89189189189189,33.333333333333336)[t]}
+%   \put(97.05405405405405,35.0){\vector(0,-1){5.0}}
+%   \put(96.5,49.66666666666667){{\tiny cop}}
+%   \put(135.0,90.0){\vector(0,-1){60.0}}
+%   \put(140.0,80.0){{\tiny root}}
+% \end{picture}
+
+%% the cat sleeps
 \setlength{\unitlength}{0.2mm}
-\begin{picture}(205.0,90.0)
+\begin{picture}(167.0,70.0)
   \put(0.0,0.0){the}
   \put(37.0,0.0){cat}
-  \put(83.0,0.0){is}
-  \put(120.0,0.0){black}
+  \put(83.0,0.0){sleeps}
   \put(0.0,15.0){{\tiny DET}}
   \put(37.0,15.0){{\tiny NOUN}}
-  \put(83.0,15.0){{\tiny AUX}}
-  \put(120.0,15.0){{\tiny ADJ}}
+  \put(83.0,15.0){{\tiny VERB}}
   \put(28.5,30.0){\oval(28.89189189189189,33.333333333333336)[t]}
   \put(14.054054054054054,35.0){\vector(0,-1){5.0}}
   \put(13.5,49.66666666666667){{\tiny det}}
-  \put(88.5,30.0){\oval(79.3855421686747,66.66666666666667)[t]}
-  \put(48.80722891566265,35.0){\vector(0,-1){5.0}}
-  \put(73.5,66.33333333333334){{\tiny nsubj}}
-  \put(111.5,30.0){\oval(28.89189189189189,33.333333333333336)[t]}
-  \put(97.05405405405405,35.0){\vector(0,-1){5.0}}
-  \put(96.5,49.66666666666667){{\tiny cop}}
-  \put(135.0,90.0){\vector(0,-1){60.0}}
-  \put(140.0,80.0){{\tiny root}}
+  \put(70.0,30.0){\oval(39.47826086956522,33.333333333333336)[t]}
+  \put(50.26086956521739,35.0){\vector(0,-1){5.0}}
+  \put(55.0,49.66666666666667){{\tiny nsubj}}
+  \put(98.0,70.0){\vector(0,-1){40.0}}
+  \put(103.0,60.0){{\tiny root}}
 \end{picture}
+
 % \end{center}
-\caption{The phrase ``the cat is black'' analyzed as a UD tree.} % Figure text below figure
+\caption{The phrase ``the cat sleeps'' analyzed as a UD tree.} % Figure text below figure
+\label{fig:cat_sleeps_ud}
 \end{figure}
 
-% Not mine: Universal Dependencies (UD) is a framework for representing the syntactic structure of natural language sentences. It is an annotation scheme that provides a universal set of part-of-speech tags and dependency labels that can be applied across different languages.
+In order to create a tree from a sentence, UD uses supervised machine-learning trained on a large library of manually tagged sentences.\footnote{This differs from the Large Language Models like GPT, which are based on unsupervised learning trained on untagged text from the internet.}
 
-The specific standard for dependency trees that this paper is about is called Universal Dependencies (UD). UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
+
+% Not mine: Universal Dependencies (UD) is a framework for representing the syntactic structure of natural language sentences. It is an annotation scheme that provides a universal set of part-of-speech tags and dependency labels that can be applied across different languages.
 
 
 % TODO: Robust för ogrammatiska meningar osv och ger alltid ett resultat
@@ -92,20 +151,32 @@ The specific standard for dependency trees that this paper is about is called Un
 % Universal Dependencies\cite{mcdonald-al-2013} (UD) is another grammar formalism which uses machine-learning for parsing, which allows it to use context more in order to guess which interpretation was intended. The training data is based on a large set of sentences, which have been manually tagged with labels and a tree structure.
 
 %  - abstr trees, GF
-\section{Abstract trees and Grammatical Framework}
+\section{Abstract syntax trees and Grammatical Framework}
 
-Another way of describing the grammatical structure of a sentence is through abstract syntax trees, where instead of using words as the nodes in the tree, you use
+Another way of describing the grammatical structure of a sentence is through abstract syntax trees, where instead of using words as the nodes in the tree, you use nodes tagged with functions for combining different parts of speech and with the words only being in the leaves. \todo[inline]{make this not be wrong} 
 
 % \todo[inline]{Write about abstract trees}
 % \todo[inline]{Add an image}
 
 Grammatical Framework\cite{ranta-2004} (GF) is a formalism for describing natural language grammars as code, which allows converting between natural language and a language-independent abstract syntax. It is split into a generic resource grammar that covers morphology and the language as a whole and application grammars for a more narrow domain which allows a more semantic abstract syntax. When you try to write a grammar that covers a very wide domain, you will often get an over-generating grammar where each sentence can be parsed in very many ways into many different trees, where usually only one is the intended way.
 
+In \autoref{fig:cat_sleeps_gf}, the sentence ``The cat sleeps'' is analyzed as a GF tree. Instead of having dependencies between words like in UD, the trees is built up of constituency. In this case we have a sentence clause (labeled PredVP : Cl) that consists of a noun phrase (labeled \verb|DetCN : NP|) and a verb phrase (labeled \verb|UseV : VP|) and the noun phrase in turn consists of a determiner (``the'') and what Grammatical Framework calls a \emph{common noun} (labeled UseN : CN) which in turn consists of the noun ``cat''. The verb ``sleeps'' constitutes the verb phrase.
+
+In order to build up this tree, we used these functions:
+\begin{itemize}
+    \item  \verb|UseN : N -> CN| is a function that takes a noun and converts it to a common noun, 
+    \item \verb|DetCN : Det -> CN -> NP| is a function that takes a determiner and a common noun and converts it to a noun phrase, 
+    \item \verb|UseV : V -> VP| is a function that takes a verb and converts it to a verb phrase
+    \item and finally, \verb|PredVP : NP -> VP -> Cl| is a function that takes a noun phrase and a verb phrase and converts it to a clause 
+\end{itemize}
+
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.5\linewidth]{thesis/figure/cat_is_black_gf.eps}
-  \caption{The sentence ``The cat is black'' analyzed as a GF tree}
-  \label{fig:universe}
+  % p -cat=S "the cat sleeps"  | vt
+  % \includegraphics[width=0.5\linewidth]{thesis/figure/cat_is_black_gf.eps}
+  \includegraphics[width=0.5\linewidth]{thesis/figure/cat_sleeps_cl.eps}
+  \caption{The sentence ``The cat sleeps'' analyzed as a GF tree}
+  \label{fig:cat_sleeps_gf}
 \end{figure}
 
 

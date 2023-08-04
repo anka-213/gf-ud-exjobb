@@ -1,4 +1,4 @@
-\chapter{The new algorithm}
+\chapter{The old algorithm}
 
 % Explain what the old algorithm does
 % Explain what has changed
@@ -6,12 +6,92 @@
 
 % The new algorithm is based on 
 
-\section{Definitions}
+% \section{Definitions}
 
 
 
+% TODO from meeting with Aarne
+% Rename chapter to old algorithm make new chapter for new algorithm
+% The kind of algorithm Forward something,  parsing
+% One UD tree can be many GF trees
 
-\section{Examples}
+% Example of UD corresponding to several GF trees:
+% grande famille francaice
+
+% coffee or tea and soup
+% not ambigous in UD, but the phrase is ambigous
+
+% Can linearize wrong
+
+% Church encoding of pairs
+
+% Link to github
+
+% Exempel före definition
+
+% Synkategorimatiska ord behöver särskild syntax för att dom inte har någon egen kategori
+% kategorimatiska ord är lexikal funktion (utan argument)
+% synkategorimatiska ord kommer från linjariseringsregler för funktioner tar argument
+
+% diskontinueliga saker, e.g. V2 med prepositioner är syncat
+% multiword expressions är en nod i GF men olika i UD
+
+% konjunktioner: första ordet är förälder medan alla andra ord har komma eller konjunktion som barn
+
+% Intressant idé: Definiera en mappning mellan två GF-grammatiker
+
+% Redundans: koppling åt båda håll för syncats
+
+% Old version of gf2ud still exists in gf-shell
+
+% Half time report
+
+% Describe the annotation
+% #fun
+% #cat
+% #auxfun - macros
+% #auxcat
+
+% Syncat: #morpho, #lemma, #word
+% Used both directions
+
+% Parameters aren't automatically handled, but you need to create auxfuns
+
+
+% Auxfun are not type checked 
+
+% Needed for halftime report:
+% Write what the empty chapters will contain
+
+
+\section{How annotations work}
+
+In order for the program to know which UD Part of Speech (POS) corresponds to which GF Categories and how the GF functions relates to the UD dependency labels, we need to supply annotations which describe these correspondences. Most of these annotations are bidirectional and are used both by ud2gf and gf2ud, with a few exceptions.
+
+First we have the \lstinline{#cat} annotation, which describes the mapping from GF categories and UD Part of Speech labels:
+
+\begin{lstlisting}
+    #cat GFCategory UD_POS
+    #cat N NOUN
+\end{lstlisting}
+
+Secondly we have the \lstinline{#fun} annotation, which describes GF functions and which UD dependency label each argument of the function should have. The type signature of the GF function is also required. Each function needs to have at least one head with the label \lstinline{head} and any number of children which are labeled with their corresponding UD dependency labels. It is also possible to add other UD annotations in brackets to a label.
+
+\begin{lstlisting}
+    #fun GFFunctionName : FirstArgumentCat -> SecondArgumentCat -> ReturnCat ; first_ud_label second_ud_label
+    #fun UseN : N -> CN ; head
+    #fun DetCN  : Det -> CN -> NP ; det  head
+\end{lstlisting}
+
+The function \lstinline{UseN} only has a single argument (of type \lstinline{N}), so that is required to be the head, while the function 
+
+Both of these are bidirectional and language-independent (since they refer to the abstract syntax in GF)
+
+% The different kinds of annotations in labels files
+% Funs
+
+
+%\section{Examples}
 
 % When converting the sentence ``The cat is black'', from UD format to a GF format using ud2gf something happens
 % 
@@ -40,15 +120,11 @@
 % 
 % \end{lstlisting}
 
-\subsection{Overview of article}
+\section{Overview of algorithm}
 
-We start with a UD tree
+We start with a UD tree (e.g. \autoref{fig:the_black_cat_ud}), then we first map each Part Of Speech label into a GF category and then assign lexical entries to each node in the tree according to those categories. For example, the string ``cat'', with POS ``NOUN'' would become \lstinline|cat_N : N|, which is a nullary GF function of type/category \lstinline|N|. This is done through GF's built parse function. In some cases, there are multiple possible GF expressions of the correct type and linearization, in these cases all of the possibilities are added.
 
-Then we assign lexical entries to each node in the tree: \lstinline|"cat" -> cat_N|, it can be several in some cases
-
-Now we have a ud tree with a list of gf trees at each node
-
-We start traversing the tree, depth first, when we reach a leaf, we start processing it
+Now we have a ud tree with a list of gf trees at each node (\autoref{fig:the_black_cat_ud_gf}). We start traversing the tree, depth first, when we reach a leaf, we start processing it
 
 The main loop is: go through all the available functions and apply as many as possible and add the result to our list
 
@@ -218,19 +294,34 @@ and one of them is a strict superset of the other when it comes to words covered
         {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_cat_NP_gf.eps}}
     \subcaptionbox{Black cat\label{ci2p:black_cat_CN}}
         {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
-    \caption{The three available trees on the word ``cat'' after the second iteration after pruning}\label{fig:cat iter 2 pruned}
+    \caption{The three available trees on the word ``cat'' after the second iteration after pruning. Tree (b) will not be a subtree of the final tree}\label{fig:cat iter 2 pruned}
 \end{figure}
 
-After this pruning, the available trees on the ``cat'' node are
+After this pruning, the available trees on the ``cat'' node are (\autoref{fig:cat iter 2 pruned})
 \begin{lstlisting}
     cat_N : N
     DetCN the_Det (UseN cat_N) : NP
     ModCN (PositA black_A) (UseN cat_N) : CN
 \end{lstlisting}
-After this step, one function is still possible to apply, namely $DetCN$, which can be applied to our new $CN$ together with \lstinline{the_Det} like before, giving us
+After this step, one function is still possible to apply, namely $DetCN$, which can be applied to our new $CN$ together with \lstinline{the_Det} like before, giving us the new tree
 \begin{lstlisting}
     DetCN the_Det (ModCN (PositA black_A) (UseN cat_N)) : NP
 \end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \subcaptionbox{Cat : N\label{ci3:cat_N}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+    \subcaptionbox{The cat : NP\label{ci3:the_cat_NP}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_cat_NP_gf.eps}}
+    \subcaptionbox{Black cat : CN\label{ci3:black_cat_CN}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
+    \subcaptionbox{The black cat : NP\label{ci3:the_black_cat_NP}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_black_cat_NP_gf.eps}}
+    \caption{The four available trees on the word ``cat'' after the third iteration \emph{before} pruning. Trees (a) and (c) are both subtrees of the final tree (d), while tree (b) is not a subtree of (d), because connects ``the'' directly to ``cat'' ignoring the adjective ``black''}\label{fig:cat iter 3}
+\end{figure}
+
+
 and like before, we get multiple trees of the same category, this time of type $NP$, once again allowing us to prune the less covering tree
 \begin{lstlisting}
     DetCN the_Det (UseN cat_N) : NP
@@ -243,23 +334,32 @@ After this no more functions can be applied at the ``cat'' node, giving us a fin
     DetCN the_Det (ModCN (PositA black_A) (UseN cat_N)) : NP
 \end{lstlisting}
 
-and from here we continue in a similar fashion with the rest of the sentence.
+\begin{figure}[H]
+    \centering
+    \subcaptionbox{Cat : N\label{ci3p:cat_N}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+    \subcaptionbox{Black cat : CN\label{ci3p:black_cat_CN}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
+    \subcaptionbox{The black cat : NP\label{ci3p:the_black_cat_NP}}
+        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_black_cat_NP_gf.eps}}
+    \caption{The three available trees on the word ``cat'' after the third iteration \emph{after} pruning. Trees (a) and (b) are both subtrees of the final tree (c)}\label{fig:cat iter 3 pruned}
+\end{figure}
+
+Now finally we have a complete tree which contains all of the words of the phrase, so we will choose the tree in \autoref{ci3p:the_black_cat_NP} as the final tree. 
+
+In the end, the data structure used in the calculation will look like in \autoref{fig:final nested tree}, with the UD-structure outside which we traverse in order to find which parts can be connected and in each node of this tree a list of the GF trees that are possible to construct using the words in the local UD-subtree, while conforming to the UD-labels. In this case, the word ``the'' one GF-tree, the word ``black'' has two possible trees and the word ``cat'', which also contains (?) the words ``the'' and ``black'' has four possible trees. 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{figure/black_cats/he_black_cat_graph.eps}
+    \includegraphics[width=0.7\textwidth]{figure/black_cats/the_black_cat_graph}
     \caption{An overview of the nested tree, with the UD structure outside and a list of GF-trees at each node}\label{fig:final nested tree}
 \end{figure}
 
 
-\subsection{Differences between versions}
+\section{Differences between versions}
 
 In the version 2 algorithm, in each iteration for a node in the UD tree (which corresponds to a word), after we have applied all possible functions and want to check if that unlocked new possible function applications, we check with \emph{all} the available trees in that node against each available function. This means that all the trees that were possible to construct in the previous iteration are still possible to construct, so we will construct them again and will need to remove the duplicates afterwards.
 
 
 
 (issues: in some cases we can get an infinite loop if we have e.g. a function \lstinline{: A -> A})
-
-
-
-\section{How annotations work}

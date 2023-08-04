@@ -14,7 +14,8 @@
 
 % The term [#1] indicates that there will be 1 rowbreak to split the title into two pieces, first part before \\[#1] and second part after. If you have a very long title and need to split it up into 3 rows, just use \\[#1] multiple times.
 
-\newcommand{\oneLineSubtitle}{A Subtitle that can be Very Much Longer if Necessary}
+\newcommand{\oneLineSubtitle}{}
+% \newcommand{\oneLineSubtitle}{A Subtitle that can be Very Much Longer if Necessary}
 
 
 \begin{document}
@@ -45,6 +46,26 @@
 \cleardoublepage
 \addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
+
+\show\listoftables
+
+% \if@twocolumn \@restonecoltrue \onecolumn \else \@restonecolfalse \fi 
+% \chapter *{\listtablename }
+% \@mkboth {\MakeUppercase \listtablename }{\MakeUppercase \listtablename }
+% \@starttoc {lot}
+% \if@restonecol \twocolumn \fi .
+% l.50 \show\listoftables
+
+
+% List of acronyms
+\cleardoublepage
+\chapter*{Glossary}
+\addcontentsline{toc}{chapter}{Glossary}
+\begin{acronym}
+ \acro{GF}{Grammatical Framework}
+ \acro{UD}{Universal Dependencies}
+\end{acronym}
+\printglossaries
 
 
 % START OF MAIN DOCUMENT

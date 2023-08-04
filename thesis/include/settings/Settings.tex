@@ -10,10 +10,13 @@
 \usepackage[utf8]{inputenc}							% Input settings
 \usepackage{amsmath}								% Mathematical expressions (American mathematical society)
 \usepackage{amssymb}								% Mathematical symbols (American mathematical society)
+\usepackage[pdf]{graphviz}                          % dot-files directly in latex
 \usepackage{graphicx}								% Figures
 % \usepackage{subfig}									% Enables subfigures
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{acronym}                                % For a list of abbreviations
+\usepackage{glossaries}
 
 \numberwithin{equation}{chapter}					% Numbering order for equations
 \numberwithin{figure}{chapter}						% Numbering order for figures
@@ -102,4 +105,20 @@ showtabs=true
 \setlength{\headheight}{15pt}
 
 
+
+% Glossaries
+\makeglossaries
+
+\newglossaryentry{latex}
+{
+    name=latex,
+    description={Is a markup language specially suited 
+    for scientific documents}
+}
+
+\newglossaryentry{maths}
+{
+    name=mathematics,
+    description={Mathematics is what mathematicians do}
+}
 
