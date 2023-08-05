@@ -5,17 +5,21 @@ In the new algorithm (version 3), we make two main improvements:
 
 \section{First improvement}
 
+\begin{verbatim}
 1. Apply all possible functions on each of the trees
 2. Remove duplicates (using a quadratic algorithm)
 3. Check if there are any new trees, if so go to 1
+\end{verbatim}
 
 becomes
 
+\begin{verbatim}
 1. newTrees <- trees
 2. newTrees <- apply all possible functions on each of newTrees
 3. trees += newTrees
 4. if notEmpty(newTrees): goto 2
 5. Deduplicate the list of trees
+\end{verbatim}
 
 In the first version, we only have one shared list of all the trees, both old and new trees mixed together. This means that the old trees will be used in every single iteration and time after time generate the same new trees. This produces a lot of duplicates that needs to be removed. In the new algorithm, we only generate based on the newest trees from the previous iteration, which eliminates these duplicates.
 
@@ -29,13 +33,18 @@ In the first version, we only have one shared list of all the trees, both old an
 The second improvement is a bit more intricate. Here's pseudocode for the old algorithm for applying all possible functions to a tree:
 
 Given:
+\begin{verbatim}
 headNode = A local UD head node with a list of possible GF trees
-childNodes = A list of UD child nodes each with a list of possible GF trees
-gfFunctions = A list of all GF functions that we have available and their metadata
+childNodes = A list of UD child nodes each with a list of
+  possible GF trees
+gfFunctions = A list of all GF functions that we have available
+  and their metadata
+\end{verbatim}
 
 % 1. Generate all possible combinations of a GF tree from headNode and a GF tree from each of childNodes
 % 2. For each
 
+% TODO: Overfull hboxes
 
 \begin{verbatim}
 1. For each gfFunction: f
