@@ -49,7 +49,7 @@
 
 \show\listoftables
 
-% \if@twocolumn \@restonecoltrue \onecolumn \else \@restonecolfalse \fi 
+% \if@twocolumn \@restonecoltrue \onecolumn \else \@restonecolfalse \fi
 % \chapter *{\listtablename }
 % \@mkboth {\MakeUppercase \listtablename }{\MakeUppercase \listtablename }
 % \@starttoc {lot}
@@ -81,11 +81,20 @@
 
 \input{include/Background}
 
-% The new algorithm
-\input{include/Algorithm}
-
 % METHODS
 \input{include/Methods}
+
+% The old algorithm
+\input{include/Algorithm}
+
+% The new algorithm
+\input{include/AlgorithmNew}
+
+% The debugger
+\input{include/Debugger}
+
+% Macro flexibility
+\input{include/MacroFlex}
 
 % RESULTS
 \input{include/Evaluation.tex}
