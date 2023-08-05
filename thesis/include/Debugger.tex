@@ -1,0 +1,37 @@
+\chapter{Debugger}
+
+The problem is that sometimes rules do not match and it is difficult to figure out why
+
+The goal of the debugger project is to automatically give an explanation of why a rule (function label description) doesn't match
+
+
+% TODO: Better example
+
+% Let's say we have the function $DetCN : Det -> CN -> NP ; det head$ and want to know why it wasn't used. We would call the tool with the argument \verb|dbg="DetCN 3 5"| and we would get out an explantation
+
+Let's say we have the sentence ``colorless green ideas sleep furiously'' and believe that the function $DetCN : Det -> CN -> NP ; det head$ should be applied to ``green'' and ``ideas'' respectively, but it doesn't seem to be
+used for some reason. Then we would call the $ud2gf$ tool with either \verb|dbg="DetCN 2 3"| or \verb|dbg="DetCN green ideas"| and the debugger would give back one of a list of reasons to what prevented it from being applied:
+
+- The function has been manually disabled
+- The function does not exist
+- There are multiple definitions of the function
+- The wrong number of arguments was given to the debugger (meta-error)
+- The requested indices are not found within
+  the UD tree
+- The non-head arguments are not direct children of the head argument
+- The non-head arguments have labels that don't match the labels within the UD-tree
+- Required features are missing for some of the arguments
+- No trees with the required category could be found for some of the arguments
+- The function was possible to apply, but was pruned away because a different tree with the same category had higher priority
+
+If a word exist multiple times in the sentence, you need to use the number form, otherwise you will get an ``Ambigous word'' error. In order to see the index number of a word you can either look at the conllu file directly or run \verb|ud2gf| with the \verb|ud| or \verb|ut| argument.
+
+
+\section{Implementation}
+
+The implementation is mostly a case of going through every step of te algorithm and seeing what can go wrong. Some of this process was simplified by the strong type system of Haskell, since it makes edge cases explicit, so in most cases we would get a type error if we missed handling a possible error.
+
+In order to simplify the implementation and reduce code duplication, we first run the main algorithm to generate all possible GF trees in each node of the UD tree and use this result to check what goes wrong with the specific function we're interested in.
+
+
+% First the main algorithm is run and afterwards all the generated trees are searched, this can lead to some information being missing compared to actually tracing running the algorithm and detecting where where it goes wrong. However in practice it works well enough and it significantly simplifies the implementation, since the main algorithm doesn't need to be modified nor duplicated in order to implement the debugger.

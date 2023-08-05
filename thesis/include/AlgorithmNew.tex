@@ -1,0 +1,142 @@
+\chapter{The new algorithm}
+
+
+In the new algorithm (version 3), we make two main improvements:
+
+\section{First improvement}
+
+1. Apply all possible functions on each of the trees
+2. Remove duplicates (using a quadratic algorithm)
+3. Check if there are any new trees, if so go to 1
+
+becomes
+
+1. newTrees <- trees
+2. newTrees <- apply all possible functions on each of newTrees
+3. trees += newTrees
+4. if notEmpty(newTrees): goto 2
+5. Deduplicate the list of trees
+
+In the first version, we only have one shared list of all the trees, both old and new trees mixed together. This means that the old trees will be used in every single iteration and time after time generate the same new trees. This produces a lot of duplicates that needs to be removed. In the new algorithm, we only generate based on the newest trees from the previous iteration, which eliminates these duplicates.
+
+% Next line was first attempt at the above:
+% The first improvement is that when new trees have been constructed by applying functions, we only use these new trees in the next iteration instead of putting both the old trees and the new trees in a shared list. This is because all the the trees that were possible to construct directly from the old trees have already been constructed, so there's no need to include them in the next iteration.
+
+\todo[inline]{bild}
+
+\section{Second improvement}
+
+The second improvement is a bit more intricate. Here's pseudocode for the old algorithm for applying all possible functions to a tree:
+
+Given:
+headNode = A local UD head node with a list of possible GF trees
+childNodes = A list of UD child nodes each with a list of possible GF trees
+gfFunctions = A list of all GF functions that we have available and their metadata
+
+% 1. Generate all possible combinations of a GF tree from headNode and a GF tree from each of childNodes
+% 2. For each
+
+
+\begin{verbatim}
+1. For each gfFunction: f
+2.   For each gf tree in headNode: headTree
+3.     filteredChildNodes <- Filter out which childNodes have not already been used by headTree
+4.     childCombos <- Generate a list of all combinations, where we select one GF tree from
+         each element in filteredChildNodes
+5.     For each childCombo:
+6.       For each argument of the function f: arg
+7.         Select one element from childCombo or headTree which has not been used yet
+             and which matches the required UD label and GF category
+8.       Generate a list of all valid ways to select one valid childNode for each fun arg
+\end{verbatim}
+
+If we have $f$ functions, each taking $a$ arguments and
+if the headNode contains $h$ gf-trees
+and we have $c$ child-nodes, each containing $t$ gf-trees
+and each argument matches $m$ values from childCombo, we get an algorithmic complexity of:
+
+TODO: better alternative to $m$ which reflects reality better. $m$ cannot possibly be a constant and will often vary between 0 and 1
+
+$$
+O(f h t^c (a*c+m^a))
+$$
+
+So we can see that the complexity is exponential with respect to the number of child-nodes, with a base proportional to how many GF trees each of those child-nodes have. The complexity is also exponential with the number of arguments, but this has less of an impact since GF functions always have a fixed number of arguments, unlike UD trees, where a node can have an unlimited number of children, e.g. in conjunctions.
+
+TODO: Appendix with the actual source
+
+In addition to having an exponential complexity, this also produces duplicate trees. To see this we need to go through an example.
+
+Let's say we have one function $DetCN : Det -> CN -> NP ; det head$ which takes two arguments.
+And a UD tree with a head node \emph{cat} and two children \emph{the} and \emph{black}: (See \autoref{fig:final nested tree})
+
+Now, if we were to apply this algorithm, we would generate these lists of combinations:
+\begin{verbatim}
+       cat ; head      | the ; det     | black ; amod
+       cat_N      : N  | the_Det : Det | PositA black_A : AP
+       UseN cat_N : CN |               | black_A        : A
+\end{verbatim}
+
+\begin{verbatim}
+    1. cat_N      : N , the_Det : Det, black_A        : A
+    2. cat_N      : N , the_Det : Det, PositA black_A : AP
+    3. UseN cat_N : CN, the_Det : Det, black_A        : A
+    4. UseN cat_N : CN, the_Det : Det, PositA black_A : AP
+\end{verbatim}
+
+If we now check where the function can be applied, we can see that both 3 and 4 matches,
+but in both cases they produce the same tree:
+\begin{verbatim}
+    DetCN the_Det (UseN cat_N)
+\end{verbatim}
+because the only difference is in the unused child node \verb|black|.
+
+In order to solve both the issue of poor complexity and producing duplicates, in the new algorithm, we delay the selection of tree until the latest possible moment.
+
+
+% Note: still exponential if many matching (equivalent) children. These will still be thrown away in the next step anyways
+
+
+\begin{verbatim}
+1. For each gfFunction: f
+2.   headArg <- Find the argument of f with label "head"
+3.   For each headTree in headNode.trees where headTree.cat == headArg.cat:
+4.     filteredChildNodes <- Filter out which childNodes have not already been used by headTree
+5.     For each non-head argument of f: arg
+6.       For each node in filteredChildNodes, where node.label == arg.label: childTree
+7.         return each tree where childTree.cat == arg.cat
+8.     Construct a list of trees using f and each of the valid child-trees (if any)
+\end{verbatim}
+
+We can also express the same thing in terms of a sequence of choices:
+
+\begin{verbatim}
+1. Make a list of trees from every possible combination of choices below:
+2. f <- Choose a function from gfFunctions
+3. headArg <- Find the argument of f with label "head"
+4. headTree <- Choose a tree in headNode where headTree.cat == headArg.cat:
+5. filteredChildNodes <- Filter out which childNodes have not already been used by headTree
+6. childArgTrees <- For each non-head argument of f: arg
+7.   childNode <- Choose a node in filteredChildNodes, where node.label == arg.label:
+8.   Choose a tree in childNode where childTree.cat == arg.cat
+9. Construct a tree using f, headTree and each of the childArgTrees
+\end{verbatim}
+
+Now $h_m$ is the number of trees in the head node which \emph{matches} the head arg instead of every tree in the head node.
+
+$$
+O(f h_m (c+m)^a)
+$$
+
+The complexity here is very close to just the number of trees we are generating with only a linear overhead (is this true?)
+
+Because we delayed the choice of tree until we know we need it we are no longer generating duplicate trees.
+We also have the ability to stop early, as soon as one of the arguments are impossible to satisfy, we don't need to check the rest.
+
+One possible inefficiency that remains is that if many children have the same label and category as each other we will
+generate every possible tree that uses these and then in a later stage filter out so we only have a single tree with that specific category. It might be possible to keep track of these so we don't \dots
+
+however it's probably not exponential in practice (?)
+
+
+% Another issue that has not been dealt with is infinite loops
