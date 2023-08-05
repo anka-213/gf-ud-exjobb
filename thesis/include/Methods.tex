@@ -1,16 +1,15 @@
 % CREATED BY DAVID FRISK, 2016
 \chapter{Methods}
-Methods text.
+
+% TODO: Should this be included?
 
 
-
-\section{Approach}
 % Method of accomplishment. How should the work be carried out?
 
 These methods were used for the different parts of the project
 
 % \todo[inline]{Change these to past tense}
-\subsection{Performance}
+\section{Performance}
 
 1. Finding the main source of slowness, which was done with profiling.
 
@@ -20,7 +19,7 @@ These methods were used for the different parts of the project
 
 4. Analysing the algorithmic complexity of both the new and the old algorithm and testing the practical performance to confirm the results.
 
-\subsection{Flexibility}
+\section{Flexibility}
 
 In order to allow changing the shape of trees when translating from UD to GF, the macro language needs to be expanded.
 A first prototype of this with minimal code changes has been done by making macro expansion recursive and then representing the code for the transformation in Church-encoding, inspired by lambda-calculus.
@@ -29,12 +28,12 @@ This approach can be evaluated by seeing how well it covers different tree shape
 
 It could also be worthwhile to make a more user-friendly version of the advanced macros that can be understood without knowing about Church-encoding
 
-\subsection{Debugging tool}
+\section{Debugging tool}
 Going through each component of the algorithms in order to find where applying a rule can go wrong and add detection for them. Additionally trying out the debugging tool on a real grammar, e.g. in the context of \cite{listenmaa-etal-2021-towards}, in order to find edge-cases which were not handled by the debugging tool.
 
 % Trial and error, whenever a problem arises that the tool doesn't find a helpful explanation for, try to add support for it.
 
-\subsection{Linearization-aware translation}
+\section{Linearization-aware translation}
 Here we need a way to determine which linearization is actually closer and when to keep multiple options for a later stage of the translation. Some care also needs to be taken in determining which trees can be discarded and which ones need to remain available for a later stage.
 
 Evaluating if the results are better with this version can be done in a large part by comparing the input string with the resulting string after translating to GF and linearizing.
