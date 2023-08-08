@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Planning report
+name: Planning report & thesis
 
 # Controls when the workflow will run
 on:
@@ -41,13 +41,13 @@ jobs:
         uses: dante-ev/latex-action@2021-A
         with:
           # The root LaTeX file to be compiled
-          root_file: Main.tex
+          root_file: main.tex
           # The working directory for the latex compiler to be invoked
-          working_directory: thesis # optional
+          working_directory: . # optional
           # LaTeX engine to be used
           # compiler: # optional, default is latexmk
           # Extra arguments to be passed to the latex compiler
-          # args: # optional, default is -pdf -latexoption=-file-line-error -latexoption=-interaction=nonstopmode
+          args: -pdf -latexoption=-file-line-error -latexoption=-interaction=nonstopmode -shell-escape
           # Install extra packages by apt-get
           # extra_system_packages: # optional
 
