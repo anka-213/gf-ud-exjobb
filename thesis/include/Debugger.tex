@@ -9,20 +9,21 @@ The goal of the debugger project is to automatically give an explanation of why 
 
 % Let's say we have the function $DetCN : Det -> CN -> NP ; det head$ and want to know why it wasn't used. We would call the tool with the argument \verb|dbg="DetCN 3 5"| and we would get out an explantation
 
-Let's say we have the sentence ``colorless green ideas sleep furiously'' and believe that the function $DetCN : Det -> CN -> NP ; det head$ should be applied to ``green'' and ``ideas'' respectively, but it doesn't seem to be
+Let's say we have the sentence ``colorless green ideas sleep furiously'' and believe that the function \verb|DetCN : Det -> CN -> NP ; det head| should be applied to ``green'' and ``ideas'' respectively, but it doesn't seem to be
 used for some reason. Then we would call the $ud2gf$ tool with either \verb|dbg="DetCN 2 3"| or \verb|dbg="DetCN green ideas"| and the debugger would give back one of a list of reasons to what prevented it from being applied:
 
-- The function has been manually disabled
-- The function does not exist
-- There are multiple definitions of the function
-- The wrong number of arguments was given to the debugger (meta-error)
-- The requested indices are not found within
-  the UD tree
-- The non-head arguments are not direct children of the head argument
-- The non-head arguments have labels that don't match the labels within the UD-tree
-- Required features are missing for some of the arguments
-- No trees with the required category could be found for some of the arguments
-- The function was possible to apply, but was pruned away because a different tree with the same category had higher priority
+\begin{itemize}
+    \item The function has been manually disabled
+    \item The function does not exist
+    \item There are multiple definitions of the function
+    \item The wrong number of arguments was given to the debugger (meta-error)
+    \item The requested indices are not found within the UD tree
+    \item The non-head arguments are not direct children of the head argument
+    \item The non-head arguments have labels that don't match the labels within the UD-tree
+    \item Required features are missing for some of the arguments
+    \item No trees with the required category could be found for some of the arguments
+    \item The function was possible to apply, but was pruned away because a different tree with the same category had higher priority
+\end{itemize}
 
 If a word exist multiple times in the sentence, you need to use the number form, otherwise you will get an ``Ambigous word'' error. In order to see the index number of a word you can either look at the conllu file directly or run \verb|ud2gf| with the \verb|ud| or \verb|ut| argument.
 

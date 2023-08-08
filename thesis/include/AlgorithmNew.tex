@@ -1,5 +1,6 @@
 \chapter{The new algorithm}
 
+% TODO: 60 characters max in verbatim
 
 In the new algorithm (version 3), we make two main improvements:
 
@@ -36,9 +37,9 @@ Given:
 \begin{verbatim}
 headNode = A local UD head node with a list of possible GF trees
 childNodes = A list of UD child nodes each with a list of
-  possible GF trees
+             possible GF trees
 gfFunctions = A list of all GF functions that we have available
-  and their metadata
+              and their metadata
 \end{verbatim}
 
 % 1. Generate all possible combinations of a GF tree from headNode and a GF tree from each of childNodes
@@ -49,14 +50,33 @@ gfFunctions = A list of all GF functions that we have available
 \begin{verbatim}
 1. For each gfFunction: f
 2.   For each gf tree in headNode: headTree
-3.     filteredChildNodes <- Filter out which childNodes have not already been used by headTree
-4.     childCombos <- Generate a list of all combinations, where we select one GF tree from
-         each element in filteredChildNodes
+3.     filteredChildNodes <- Filter out which childNodes have
+                             not already been used by headTree
+4.     childCombos <- Generate a list of all combinations, where
+                      we select one GF tree from each element in
+                      filteredChildNodes
 5.     For each childCombo:
 6.       For each argument of the function f: arg
-7.         Select one element from childCombo or headTree which has not been used yet
-             and which matches the required UD label and GF category
-8.       Generate a list of all valid ways to select one valid childNode for each fun arg
+7.         Select one element from childCombo or headTree which
+             has not been used yet and which matches the required
+             UD label and GF category
+8.       Generate a list of all valid ways to select one valid
+           childNode for each fun arg
+\end{verbatim}
+
+this can also be expressed in terms of a sequence of choices
+
+\begin{verbatim}
+1. f <- Choose a gfFunction
+2. headTree <- Choose a gf tree in headNode
+3. childCombo <- For each childNode not already used by headTree:
+4.     Choose a GF tree from the child node
+5. For each argument of the function f: arg
+6.   Select one element from childCombo or headTree which has not
+       been used yet and which matches the required UD label and
+       GF category
+7. Generate a list of all valid ways to select one valid
+       childNode for each fun arg
 \end{verbatim}
 
 If we have $f$ functions, each taking $a$ arguments and
@@ -67,7 +87,7 @@ and each argument matches $m$ values from childCombo, we get an algorithmic comp
 TODO: better alternative to $m$ which reflects reality better. $m$ cannot possibly be a constant and will often vary between 0 and 1
 
 $$
-O(f h t^c (a*c+m^a))
+O(f h t^c (ac+m^a))
 $$
 
 So we can see that the complexity is exponential with respect to the number of child-nodes, with a base proportional to how many GF trees each of those child-nodes have. The complexity is also exponential with the number of arguments, but this has less of an impact since GF functions always have a fixed number of arguments, unlike UD trees, where a node can have an unlimited number of children, e.g. in conjunctions.
@@ -109,26 +129,31 @@ In order to solve both the issue of poor complexity and producing duplicates, in
 \begin{verbatim}
 1. For each gfFunction: f
 2.   headArg <- Find the argument of f with label "head"
-3.   For each headTree in headNode.trees where headTree.cat == headArg.cat:
-4.     filteredChildNodes <- Filter out which childNodes have not already been used by headTree
+3.   For each headTree in headNode.trees where
+              headTree.cat == headArg.cat:
+4.     filteredChildNodes <- Filter out which childNodes have not
+                             already been used by headTree
 5.     For each non-head argument of f: arg
-6.       For each node in filteredChildNodes, where node.label == arg.label: childTree
+6.       For each node in filteredChildNodes, where
+                  node.label == arg.label: childTree
 7.         return each tree where childTree.cat == arg.cat
-8.     Construct a list of trees using f and each of the valid child-trees (if any)
+8.     Construct a list of trees using f and each of the valid
+         child-trees (if any)
 \end{verbatim}
 
 We can also express the same thing in terms of a sequence of choices:
 
 \begin{verbatim}
-1. Make a list of trees from every possible combination of choices below:
-2. f <- Choose a function from gfFunctions
-3. headArg <- Find the argument of f with label "head"
-4. headTree <- Choose a tree in headNode where headTree.cat == headArg.cat:
-5. filteredChildNodes <- Filter out which childNodes have not already been used by headTree
-6. childArgTrees <- For each non-head argument of f: arg
-7.   childNode <- Choose a node in filteredChildNodes, where node.label == arg.label:
-8.   Choose a tree in childNode where childTree.cat == arg.cat
-9. Construct a tree using f, headTree and each of the childArgTrees
+1. Make a list of trees from every possible combination of
+   choices below:
+2.   f <- Choose a function from gfFunctions
+3.   headArg <- Find the argument of f with label "head"
+4.   headTree <- Choose a tree in headNode where headTree.cat == headArg.cat:
+5.   filteredChildNodes <- Filter out which childNodes have not already been used by headTree
+6.   childArgTrees <- For each non-head argument of f: arg
+7.     childNode <- Choose a node in filteredChildNodes, where node.label == arg.label:
+8.     Choose a tree in childNode where childTree.cat == arg.cat
+9.   Construct a tree using f, headTree and each of the childArgTrees
 \end{verbatim}
 
 Now $h_m$ is the number of trees in the head node which \emph{matches} the head arg instead of every tree in the head node.
