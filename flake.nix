@@ -18,6 +18,7 @@
             fancyhdr fvextra catchfile xstring lineno framed
             fancyvrb upquote simplekv tracklang biblatex-ieee
             helvetic
+            import csquotes glossaries acronym
             ;
           # inherit (pkgs.texlive) scheme-medium chngcntr ;
         };
@@ -36,11 +37,11 @@
               mkdir -p .cache/texmf-var
               env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
                 latexmk -interaction=nonstopmode -pdf -lualatex \
-                document.tex
+                -shell-escape main.tex
             '';
             installPhase = ''
               mkdir -p $out
-              cp document.pdf $out/
+              cp main.pdf $out/
             '';
           };
         };
