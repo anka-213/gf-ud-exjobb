@@ -83,9 +83,38 @@ Secondly we have the \lstinline{#fun} annotation, which describes GF functions a
     #fun DetCN  : Det -> CN -> NP ; det  head
 \end{lstlisting}
 
-The function \lstinline{UseN} only has a single argument (of type \lstinline{N}), so that is required to be the head, while the function 
+The function \lstinline{UseN} only has a single argument (of type \lstinline{N}), so that is required to be the head, while the function \verb|DetCN| has two arguments, of types \verb|Det| and \verb|CN|, the first of which has the dependency label \verb|det|, while the second is the head. An illustration of this can be seen in \autoref{fig:DetCN}.
 
-Both of these are bidirectional and language-independent (since they refer to the abstract syntax in GF)
+\begin{figure}
+    \centering
+        \begin{dependency}
+        \begin{deptext}[column sep=0.4cm]
+              % the \& cat \\
+            % {\tt Det}\&{\tt CN}\&{\tt NP}\\
+            {\tt Det}\&{\tt CN}\\
+        \end{deptext}
+        \depedge{2}{1}{det}
+        \deproot{2}{head}
+        % \wordgroup{1}{1}{2}{args}
+        % \wordgroup{1}{3}{3}{res}
+        % \groupedge[edge below]{args}{res}{\texttt{DetCN}}{2ex}
+        \node (arg1) [below of = \wordref{1}{1}, yshift = -1ex]  {\texttt{Det}};
+        \node (arg2) [below of = \wordref{1}{2}, yshift = -1ex]  {\texttt{CN}};
+        \node (result) [right of = arg2, xshift = 1ex]  {\texttt{NP}};
+        \node (function) [left of = arg1, xshift = -1.5ex]  {\texttt{DetCN :}};
+          % Det} -> \subnode{arg2}{CN} -> NP}};
+        \draw [->, thick] (arg1) -- (arg2);
+        \draw [->, thick] (arg2) -- (result);
+        \draw [->, very thick, dashed, gray] (arg1) -- (\wordref{1}{1});
+        \draw [->, very thick, dashed, gray] (arg2) -- (\wordref{1}{2});
+    \end{dependency} \\
+    \caption{The UD shape the function \texttt{DetCN} matches against.}
+    \label{fig:DetCN}
+\end{figure}
+
+Both of these annotations are bidirectional and language-independent, since they only refer to the abstract syntax in GF.
+
+%% TODO: Other 
 
 % The different kinds of annotations in labels files
 % Funs
@@ -138,22 +167,31 @@ For a very simple initial example, we start with the noun-phrase ``the black cat
     \centering
     %% the black cat
     \setlength{\unitlength}{0.2mm}
-    \begin{picture}(158.0,90.0)
-      \put(0.0,0.0){the}
-      \put(37.0,0.0){black}
-      \put(92.0,0.0){cat}
-      \put(0.0,15.0){{\tiny DET}}
-      \put(37.0,15.0){{\tiny ADJ}}
-      \put(92.0,15.0){{\tiny NOUN}}
-      \put(56.0,30.0){\oval(88.73913043478261,66.66666666666667)[t]}
-      \put(11.630434782608695,35.0){\vector(0,-1){5.0}}
-      \put(41.0,66.33333333333334){{\tiny det}}
-      \put(74.5,30.0){\oval(49.54545454545455,33.333333333333336)[t]}
-      \put(49.72727272727273,35.0){\vector(0,-1){5.0}}
-      \put(59.5,49.66666666666667){{\tiny amod}}
-      \put(107.0,90.0){\vector(0,-1){60.0}}
-      \put(112.0,80.0){{\tiny root}}
-    \end{picture}
+    % \begin{picture}(158.0,90.0)
+    %   \put(0.0,0.0){the}
+    %   \put(37.0,0.0){black}
+    %   \put(92.0,0.0){cat}
+    %   \put(0.0,15.0){{\tiny DET}}
+    %   \put(37.0,15.0){{\tiny ADJ}}
+    %   \put(92.0,15.0){{\tiny NOUN}}
+    %   \put(56.0,30.0){\oval(88.73913043478261,66.66666666666667)[t]}
+    %   \put(11.630434782608695,35.0){\vector(0,-1){5.0}}
+    %   \put(41.0,66.33333333333334){{\tiny det}}
+    %   \put(74.5,30.0){\oval(49.54545454545455,33.333333333333336)[t]}
+    %   \put(49.72727272727273,35.0){\vector(0,-1){5.0}}
+    %   \put(59.5,49.66666666666667){{\tiny amod}}
+    %   \put(107.0,90.0){\vector(0,-1){60.0}}
+    %   \put(112.0,80.0){{\tiny root}}
+    % \end{picture}
+    \begin{dependency}
+        \begin{deptext}[column sep=0.4cm]
+              the \& black \& cat \\
+            {\tt DET}\&{\tt ADJ}\&{\tt NOUN}\\
+        \end{deptext}
+        \depedge{3}{1}{det}
+        \depedge{3}{2}{amod}
+        \deproot{3}{root}
+    \end{dependency} \\
     \caption{``The black cat'' as a UD tree}
     \label{fig:the_black_cat_ud}
 \end{figure}
@@ -187,24 +225,33 @@ which gives this tree
 % TODO: Fix this so it's not so ugly
 \begin{figure}[H]
     \centering
-    %% the black cat
-    \setlength{\unitlength}{0.2mm}
-    \begin{picture}(158.0,90.0)
-      \put(-30.0,0.0){the$_{Det}$}
-      \put(27.0,0.0){black$_A$}
-      \put(92.0,0.0){cat$_N$}
-      \put(0.0,15.0){{\tiny Det}}
-      \put(37.0,15.0){{\tiny A}}
-      \put(92.0,15.0){{\tiny N}}
-      \put(56.0,30.0){\oval(88.73913043478261,66.66666666666667)[t]}
-      \put(11.630434782608695,35.0){\vector(0,-1){5.0}}
-      \put(41.0,66.33333333333334){{\tiny det}}
-      \put(74.5,30.0){\oval(49.54545454545455,33.333333333333336)[t]}
-      \put(49.72727272727273,35.0){\vector(0,-1){5.0}}
-      \put(59.5,49.66666666666667){{\tiny amod}}
-      \put(107.0,90.0){\vector(0,-1){60.0}}
-      \put(112.0,80.0){{\tiny root}}
-    \end{picture}
+    % %% the black cat
+    % \setlength{\unitlength}{0.2mm}
+    % \begin{picture}(158.0,90.0)
+    %   \put(-30.0,0.0){the$_{Det}$}
+    %   \put(27.0,0.0){black$_A$}
+    %   \put(92.0,0.0){cat$_N$}
+    %   \put(0.0,15.0){{\tiny Det}}
+    %   \put(37.0,15.0){{\tiny A}}
+    %   \put(92.0,15.0){{\tiny N}}
+    %   \put(56.0,30.0){\oval(88.73913043478261,66.66666666666667)[t]}
+    %   \put(11.630434782608695,35.0){\vector(0,-1){5.0}}
+    %   \put(41.0,66.33333333333334){{\tiny det}}
+    %   \put(74.5,30.0){\oval(49.54545454545455,33.333333333333336)[t]}
+    %   \put(49.72727272727273,35.0){\vector(0,-1){5.0}}
+    %   \put(59.5,49.66666666666667){{\tiny amod}}
+    %   \put(107.0,90.0){\vector(0,-1){60.0}}
+    %   \put(112.0,80.0){{\tiny root}}
+    % \end{picture}
+    \begin{dependency}
+        \begin{deptext}[column sep=0.4cm]
+              {\tt the\_Det}\&{\tt black\_A}\&{\tt cat\_N}\\
+            {\tt Det}\&{\tt A}\&{\tt N}\\
+        \end{deptext}
+        \depedge{3}{1}{det}
+        \depedge{3}{2}{amod}
+        \deproot{3}{root}
+    \end{dependency} \\
     \caption{``The black cat'' as a UD tree, with GF lexicon entries inserted}
     \label{fig:the_black_cat_ud_gf}
 \end{figure}

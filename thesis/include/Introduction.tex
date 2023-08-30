@@ -109,23 +109,34 @@ In \autoref{fig:cat_sleeps_ud} we can see the sentence ``The cat sleeps'' analyz
 % \end{picture}
 
 %% the cat sleeps
-\setlength{\unitlength}{0.2mm}
-\begin{picture}(167.0,70.0)
-  \put(0.0,0.0){the}
-  \put(37.0,0.0){cat}
-  \put(83.0,0.0){sleeps}
-  \put(0.0,15.0){{\tiny DET}}
-  \put(37.0,15.0){{\tiny NOUN}}
-  \put(83.0,15.0){{\tiny VERB}}
-  \put(28.5,30.0){\oval(28.89189189189189,33.333333333333336)[t]}
-  \put(14.054054054054054,35.0){\vector(0,-1){5.0}}
-  \put(13.5,49.66666666666667){{\tiny det}}
-  \put(70.0,30.0){\oval(39.47826086956522,33.333333333333336)[t]}
-  \put(50.26086956521739,35.0){\vector(0,-1){5.0}}
-  \put(55.0,49.66666666666667){{\tiny nsubj}}
-  \put(98.0,70.0){\vector(0,-1){40.0}}
-  \put(103.0,60.0){{\tiny root}}
-\end{picture}
+% \setlength{\unitlength}{0.2mm}
+% \begin{picture}(167.0,70.0)
+%   \put(0.0,0.0){the}
+%   \put(37.0,0.0){cat}
+%   \put(83.0,0.0){sleeps}
+%   \put(0.0,15.0){{\tiny DET}}
+%   \put(37.0,15.0){{\tiny NOUN}}
+%   \put(83.0,15.0){{\tiny VERB}}
+%   \put(28.5,30.0){\oval(28.89189189189189,33.333333333333336)[t]}
+%   \put(14.054054054054054,35.0){\vector(0,-1){5.0}}
+%   \put(13.5,49.66666666666667){{\tiny det}}
+%   \put(70.0,30.0){\oval(39.47826086956522,33.333333333333336)[t]}
+%   \put(50.26086956521739,35.0){\vector(0,-1){5.0}}
+%   \put(55.0,49.66666666666667){{\tiny nsubj}}
+%   \put(98.0,70.0){\vector(0,-1){40.0}}
+%   \put(103.0,60.0){{\tiny root}}
+% \end{picture}
+
+
+    \begin{dependency}
+        \begin{deptext}[column sep=0.4cm]
+              the \& cat \& sleeps \\
+            {\tt DET}\&{\tt NOUN}\&{\tt VERB}\\
+        \end{deptext}
+        \depedge{2}{1}{det}
+        \depedge{3}{2}{nsubj}
+        \deproot{3}{root}
+    \end{dependency} \\
 
 % \end{center}
 \caption{The phrase ``the cat sleeps'' analyzed as a UD tree.} % Figure text below figure
