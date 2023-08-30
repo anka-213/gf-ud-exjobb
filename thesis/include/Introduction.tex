@@ -7,7 +7,7 @@
 % TODO: Link to the code somewhere
 
 Since the advent of computers, people have been trying to make them understand \note{anthropomorphism?} natural languages. Today machine learning methods are very popular \note{rephrase}, but the more traditional method is so called rule-based Natural Language Processing (NLP) and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.
-In fact, most of the terminology around programming languages comes from linguistics for this exact reason\footnote{some examples}.
+In fact, much of the terminology around programming languages comes from linguistics for this exact reason\footnote{some examples}.
 
 There are several advantages of using rule-based approaches over machine-learning, for example they are deterministic and more predictable, it is possible to fix bugs without needing to retrain the whole model and hoping that it fixes the issue and they are simpler and more understandable, instead of being a black box as most machine learning based language models are.
 % There have been many different approaches to solving...
@@ -160,7 +160,7 @@ Another way of describing the grammatical structure of a sentence is through abs
 
 Grammatical Framework\cite{ranta-2004} (GF) is a formalism for describing natural language grammars as code, which allows converting between natural language and a language-independent abstract syntax. It is split into a generic resource grammar that covers morphology and the language as a whole and application grammars for a more narrow domain which allows a more semantic abstract syntax. When you try to write a grammar that covers a very wide domain, you will often get an over-generating grammar where each sentence can be parsed in very many ways into many different trees, where usually only one is the intended way.
 
-In \autoref{fig:cat_sleeps_gf}, the sentence ``The cat sleeps'' is analyzed as a GF tree. Instead of having dependencies between words like in UD, the trees is built up of constituency. In this case we have a sentence clause (labeled PredVP : Cl) that consists of a noun phrase (labeled \verb|DetCN : NP|) and a verb phrase (labeled \verb|UseV : VP|) and the noun phrase in turn consists of a determiner (``the'') and what Grammatical Framework calls a \emph{common noun} (labeled UseN : CN) which in turn consists of the noun ``cat''. The verb ``sleeps'' constitutes the verb phrase.
+In \autoref{fig:cat_sleeps_gf}, the sentence ``The cat sleeps'' is analyzed as a GF tree. Instead of having dependencies between words like in UD, the trees is built up of constituency. In this case we have a sentence clause (labeled \verb|PredVP : Cl|) that consists of a noun phrase (labeled \verb|DetCN : NP|) and a verb phrase (labeled \verb|UseV : VP|) and the noun phrase in turn consists of a determiner (``the'') and what Grammatical Framework calls a \emph{common noun} (labeled \verb|UseN : CN|) which in turn consists of the noun ``cat''. The verb ``sleeps'' constitutes the verb phrase.
 
 In order to build up this tree, we used these functions:
 \begin{itemize}

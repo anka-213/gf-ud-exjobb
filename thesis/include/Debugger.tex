@@ -10,7 +10,7 @@ The goal of the debugger project is to automatically give an explanation of why 
 % Let's say we have the function $DetCN : Det -> CN -> NP ; det head$ and want to know why it wasn't used. We would call the tool with the argument \verb|dbg="DetCN 3 5"| and we would get out an explantation
 
 Let's say we have the sentence ``colorless green ideas sleep furiously'' and believe that the function \verb|DetCN : Det -> CN -> NP ; det head| should be applied to ``green'' and ``ideas'' respectively, but it doesn't seem to be
-used for some reason. Then we would call the $ud2gf$ tool with either \verb|dbg="DetCN 2 3"| or \verb|dbg="DetCN green ideas"| and the debugger would give back one of a list of reasons to what prevented it from being applied:
+used for some reason. Then we would call the \texttt{ud2gf} tool with either \verb|dbg="DetCN 2 3"| or \verb|dbg="DetCN green ideas"| and the debugger would give back one of a list of reasons to what prevented it from being applied:
 
 \begin{itemize}
     \item The function has been manually disabled
