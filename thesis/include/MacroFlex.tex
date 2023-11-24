@@ -1,11 +1,17 @@
 \chapter{Improving flexibility of macros}
 \label{improving-flexibility-macros}
 
-\todo[inline]{Explain the old macro system with an example}
+\todo[inline]{Explain the old macro system with an example. Q: Isn't that the section below already?}
+
+
 
 \section{Explanation of the macro system}
 
-In order to overcome some limitations (which?) of the conversion there is a system of macros. A macro is an imaginary GF function that will get converted into an expression of real GF functions after the processing is done.
+% What are the limitations without macros?
+% Most importantly: syncats. gf-ud assumes that every word is in a leaf, represented by a lexical gf-function. however, syncategorimatic words \todo{define?} (or functions?) come from the functions that are used to combine trees (what are those called?) and would be missing otherwise. E.g. "is" is syncategorimatic in gf for english, because there is no lexical function for copula, because not all languages use a word for copula. So we make up a lexical gf-function for "is", which is then combined with a made-up version of MkCl which is converted into the thing we need.
+% This is terrible writing!
+
+In order to overcome some limitations \todo{(which?)} of the conversion there is a system of macros. A macro is an imaginary GF function that will get converted into an expression of real GF functions after the conversion step of gf2ud is done.
 
 % Syncats?
 
@@ -59,7 +65,7 @@ GF trees are on a higher abstraction level than UD trees. In UD, every token is 
 
 When introducing the problem and its partial solution, \cite{kolachina-ranta-2017} name as examples copulas, negations, tense auxiliaries and infinitive marks. We reproduce their example of the English copula (the verb “to be”) and its treatment in \verb|ud2gf|.
 
-Figures TODO and TODO show the difference between GF’s and UD’s treatment of copulas. In the UD tree, the copula has a category and a dependency label \verb|cop|. In the GF tree, there is no special category: the string “is” is introduced by the function \verb|UseComp : AP -> VP| rule, which makes an AP into a predicate.
+Figures \ref{fig:gf_cute} and \ref{fig:ud_cute} show the difference between GF’s and UD’s treatment of copulas. In the UD tree, the copula has a category and a dependency label \verb|cop|. In the GF tree, there is no special category: the string “is” is introduced by the function \verb|UseComp : AP -> VP| rule, which makes an AP into a predicate.
 
 % \begin{figure}
 %     \centering
@@ -98,7 +104,7 @@ As a solution, \verb|ud2gf| introduced the notion of \emph{auxiliary categories}
           \verb|UseAP_ cop ap = UseAP ap|
 \end{itemize}
 
-However, coordination was still a problem in \verb|ud2gf|. The auxiliary categories and functions were not expressive enough to transform a structure like “the small, cute and fluffy cat” from UD to GF.
+However, coordination was still a problem in \verb|ud2gf|. The auxiliary categories and functions were not expressive enough to transform a structure like ``the small, cute and fluffy cat'' from UD to GF.
 
 
 
@@ -106,7 +112,7 @@ However, coordination was still a problem in \verb|ud2gf|. The auxiliary categor
 
 \section{Intro to flexibility problem}
 
-As an example of a phrase that can be difficult to convert using the old gf2ud, let us consider the adjectival phrase "cute, fluffy and furry"
+As an example of a phrase that can be difficult to convert using the old gf2ud, let us consider the adjectival phrase ``cute, fluffy and furry''
 would be described in UD format as in Figures \ref{fig:ud_cute_text} and \ref{fig:ud_cute}.
 
 
@@ -131,7 +137,7 @@ would be described in UD format as in Figures \ref{fig:ud_cute_text} and \ref{fi
     % 5 & furry & furry & ADJ & JJ & Degree\=Pos & 1 & conj & \_ & FUN\=furry\_A \
     % \hline
     % \end{tabular}
-    \caption{The phrase "cute, fluffy and furry" as a textual UD tree}
+    \caption{The phrase ``cute, fluffy and furry'' as a textual UD tree}
     \label{fig:ud_cute_text}
 \end{figure}
 
@@ -150,7 +156,7 @@ would be described in UD format as in Figures \ref{fig:ud_cute_text} and \ref{fi
         \depedge{5}{4}{cc}
         \depedge{1}{5}{conj}
     \end{dependency} \\
-    \caption{The phrase "cute, fluffy and furry" as a UD tree in graphical format}
+    \caption{The phrase ``cute, fluffy and furry'' as a UD tree in graphical format}
     \label{fig:ud_cute}
 \end{figure}
 % \include{}
@@ -160,7 +166,7 @@ would be described in UD format as in Figures \ref{fig:ud_cute_text} and \ref{fi
     % \include{ud-annotatrix-corpus.tex}
     % \includesvg{ud-annotatrix-corpus.svg}
     \includegraphics[width=0.7\textwidth]{figure/cute_gf.png}
-    \caption{The phrase "cute, fluffy and furry" as a GF tree in graphical format. }
+    \caption{The phrase ``cute, fluffy and furry'' as a GF tree in graphical format. }
     \label{fig:gf_cute}
 \end{figure}
 
@@ -170,7 +176,7 @@ The GF version of the same tree, shown in Figure \ref{fig:gf_cute}, would look l
 ConjAP and_Conj (ConsAP (PositA cute_A)
                         (BaseAP (PositA fluffy_A) (PositA furry_A)))
 \end{verbatim}
-Here we can see that in UD, the word "cute" is in the root, while the conjunction "and" is at the bottom of the tree, while in GF the conjunction is a direct child of the root. This transformation can not be preformed by the simple single-layer transformations that are available in the current macro-system for labels files.
+Here we can see that in UD, the word ``cute'' is in the root, while the conjunction ``and'' is at the bottom of the tree, while in GF the conjunction is a direct child of the root. This transformation can not be preformed by the simple single-layer transformations that are available in the current macro-system for labels files.
 
 
 

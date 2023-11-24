@@ -63,10 +63,19 @@
 % Needed for halftime report:
 % Write what the empty chapters will contain
 
+\todo[inline]{Signposting: In this section we will explain ...}
+
+In this chapter we first explain the annotations that are used to describe the mapping between gf trees and ud trees, then we will give a high level overview of the algorithm followed by going through a concrete example of how the algorithm works. Finally we will discuss some limitations of the old algorithms, which we will cover solutions of in the next chapter.
+
+\section{Overview}
+
+The whole process goes like this: first we do X (section XXX, then we do Y (section YYY)
+
+Gf trees consist of functions and categories, UD trees consist of PoS annotations and dependency labels (plus some extra annotation)
 
 \section{How annotations work}
 
-In order for the program to know which UD Part of Speech (POS) corresponds to which GF Categories and how the GF functions relates to the UD dependency labels, we need to supply annotations which describe these correspondences. Most of these annotations are bidirectional and are used both by ud2gf and gf2ud, with a few exceptions.
+In order for the program to know which UD Part of Speech (POS) corresponds to which GF Categories and how the GF functions relates to the UD dependency labels, we need to supply annotations which describe these correspondences. Most of these annotations are bidirectional and are used both by ud2gf and gf2ud.
 
 First we have the \lstinline{#cat} annotation, which describes the mapping from GF categories and UD Part of Speech labels:
 
@@ -75,8 +84,9 @@ First we have the \lstinline{#cat} annotation, which describes the mapping from 
     #cat N NOUN
 \end{lstlisting}
 
-Secondly we have the \lstinline{#fun} annotation, which describes GF functions and which UD dependency label each argument of the function should have. The type signature of the GF function is also required. Each function needs to have at least one head with the label \lstinline{head} and any number of children which are labeled with their corresponding UD dependency labels. It is also possible to add other UD annotations in brackets to a label.
+Secondly we have the \lstinline{#fun} annotation, which describes GF functions and which UD dependency label each argument of the function should have (see \autoref{fig:DetCN} for graphical representation of such an annotation). The type signature of the GF function is also required. Each function needs to have at least one head with the label \lstinline{head} and any number of children which are labeled with their corresponding UD dependency labels. It is also possible to add other UD annotations in brackets to a label.
 
+\todo[inline]{How to give this listing a number and a label}
 \begin{lstlisting}
     #fun GFFunctionName : FirstArgumentCat -> SecondArgumentCat -> ReturnCat ; first_ud_label second_ud_label
     #fun UseN : N -> CN ; head
@@ -87,7 +97,7 @@ The function \lstinline{UseN} only has a single argument (of type \lstinline{N})
 
 \begin{figure}
     \centering
-        \begin{dependency}
+    \begin{dependency}
         \begin{deptext}[column sep=0.4cm]
               % the \& cat \\
             % {\tt Det}\&{\tt CN}\&{\tt NP}\\
@@ -108,7 +118,7 @@ The function \lstinline{UseN} only has a single argument (of type \lstinline{N})
         \draw [->, very thick, dashed, gray] (arg1) -- (\wordref{1}{1});
         \draw [->, very thick, dashed, gray] (arg2) -- (\wordref{1}{2});
     \end{dependency} \\
-    \caption{The UD shape the function \texttt{DetCN} matches against.}
+    \caption{The UD shape that the function \texttt{DetCN} matches against.}
     \label{fig:DetCN}
 \end{figure}
 
@@ -196,8 +206,25 @@ For a very simple initial example, we start with the noun-phrase ``the black cat
     \label{fig:the_black_cat_ud}
 \end{figure}
 
-And we use the following abstract syntax and corresponding dependency configuration (labels-file):
+And we use the following GF abstract syntax:
 
+\todo[inline]{Place these side-by-side}
+\begin{verbatim}
+  cat
+    Det CN NP AP N A;
+  fun
+    -- Syntactic functions
+    DetCN  : Det -> CN -> NP;
+    ModCN  : AP  -> CN -> CN;
+    UseN   : N         -> CN;
+    PositA : A         -> AP;
+
+    -- Lexical functions:
+    the_Det : Det;
+    black_A : A;
+    cat_N : N;
+\end{verbatim}
+and the following corresponding dependency configuration (labels-file):
 \begin{verbatim}
     #fun DetCN  : Det -> CN -> NP ; det  head
     #fun ModCN  : AP  -> CN -> CN ; amod head
@@ -207,20 +234,18 @@ And we use the following abstract syntax and corresponding dependency configurat
     #cat A                        ; ADJ
     #cat Det                      ; DET
     #cat N                        ; NOUN
-    
-    the_Det : Det
-    black_A : A
-    cat_N : N
 \end{verbatim}
 
-The first step is to parse each word in the UD tree into their corresponding lexical GF functions. We use the configuration in the labels-file to convert UD-part-of-speech into their corresponding GF categories,
+Notice how only the lexical categories (returned by lexical functions) have a corresponding UD Part of Speech. This is a distinction between GF's phrase structure structure grammar, which uses phrasal categories covering entire phrases, and UD's dependency grammar, where the individual words are annotated with a Part of Speech. \todo{Write a section in the introduction to refer back to here.}
+
+The first step is to parse each word in the UD tree into their corresponding lexical GF functions. We use the configuration in the labels-file to convert UD-part-of-speech into their corresponding GF categories.
 \begin{verbatim}
     DET -> Det
     ADJ -> A
     NOUN -> N
 \end{verbatim}
-
-which gives this tree
+And then we use the GF parser on each individual lemma (word in the dictionary form), with the category we just got\todo{Explain that gf parser wants to know which category to parse in}.
+This gives the tree in \autoref{fig:the_black_cat_ud_gf}. Notice how the words have been replaced by GF lexical functions and the POS annotations have been replaced by GF Categories. The UD dependency labels still remain.
 
 % TODO: Fix this so it's not so ugly
 \begin{figure}[H]
@@ -256,9 +281,11 @@ which gives this tree
     \label{fig:the_black_cat_ud_gf}
 \end{figure}
 
+%% I was here
+
 % In the case of ``the black cat sees us today'', we go down the tree until we reach ``the'', and nothing can be done there, so we continue
 
-After this, we start traversing the tree, we go down the tree until we reach a node where all children have been processed. Since \lstinline{cat_N} has unprocessed children we keep going down and reach \lstinline{the_Det}. We look through the list of available functions and see that the only function that takes a \lstinline{Det} as an argument takes several arguments, so it can't be applied to a leaf node like this. There is nothing to be done here, so we continue.
+After converting UD POS annotations to GF categories and parsing words to GF lexical functions, we start traversing the UD tree. The tree is processed from the bottom up, starting with the leaves. Since \lstinline{cat_N} has unprocessed children we keep going down and reach \lstinline{the_Det}. We look through the list of available functions and see that the only function that takes a \lstinline{Det} as an argument takes several arguments, so it can't be applied to a leaf node like this. There is nothing to be done here, so we continue.
 
 
 \begin{figure}[H]
@@ -365,7 +392,7 @@ After this step, one function is still possible to apply, namely $DetCN$, which 
         {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
     \subcaptionbox{The black cat : NP\label{ci3:the_black_cat_NP}}
         {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_black_cat_NP_gf.eps}}
-    \caption{The four available trees on the word ``cat'' after the third iteration \emph{before} pruning. Trees (a) and (c) are both subtrees of the final tree (d), while tree (b) is not a subtree of (d), because connects ``the'' directly to ``cat'' ignoring the adjective ``black''}\label{fig:cat iter 3}
+    \caption{The four available trees on the word ``cat'' after the third iteration \emph{before} pruning. Trees (a) and (c) are both subtrees of the final tree (d), while tree (b) is not a subtree of (d), because it connects ``the'' directly to ``cat'' ignoring the adjective ``black''}\label{fig:cat iter 3}
 \end{figure}
 
 
@@ -374,14 +401,14 @@ and like before, we get multiple trees of the same category, this time of type $
     DetCN the_Det (UseN cat_N) : NP
 \end{lstlisting}
 
-After this no more functions can be applied at the ``cat'' node, giving us a final set of cat trees
+After this no more functions can be applied at the ``cat'' node, giving us a final set of cat trees (\autoref{fig:cat iter 3 pruned})
 \begin{lstlisting}
     cat_N : N
     ModCN (PositA black_A) (UseN cat_N) : CN
     DetCN the_Det (ModCN (PositA black_A) (UseN cat_N)) : NP
 \end{lstlisting}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \subcaptionbox{Cat : N\label{ci3p:cat_N}}
         {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
@@ -403,10 +430,29 @@ In the end, the data structure used in the calculation will look like in \autore
 \end{figure}
 
 
+\begin{figure}
+    \centering
+    %% the black cat
+    \setlength{\unitlength}{0.2mm}
+    \begin{dependency}
+        % TODO: Maybe don't center each line here
+        \begin{deptext}[column sep=0.4cm]
+              the\_Det : Det \& black\_A : A \& cat\_N : N \\
+            \& PositA black\_A : AP \& UseN cat\_N : CN \\
+            \& \& DetCN the\_Det (UseN cat\_N) : NP \\
+            \& \& AdjCN (PositA black\_A) (UseN cat\_N) : CN \\
+        \end{deptext}
+        \depedge{3}{1}{det}
+        \depedge{3}{2}{amod}
+        \deproot{3}{root}
+    \end{dependency} \\
+    \caption{An overview of the nested tree, with the UD structure outside and a list of GF-trees at each node}
+    \label{fig:final_nested_compact}
+\end{figure}
+
+
 \section{Differences between versions}
 
 In the version 2 algorithm, in each iteration for a node in the UD tree (which corresponds to a word), after we have applied all possible functions and want to check if that unlocked new possible function applications, we check with \emph{all} the available trees in that node against each available function. This means that all the trees that were possible to construct in the previous iteration are still possible to construct, so we will construct them again and will need to remove the duplicates afterwards.
 
 
-
-(issues: in some cases we can get an infinite loop if we have e.g. a function \lstinline{: A -> A})

@@ -6,3 +6,7 @@ You may consider to instead divide this chapter into discussion of the results a
 \section{Discussion}
 
 \section{Conclusion}
+
+\section{Future work}
+
+1. There are still many cases that the conversion can not handle, for example: If a GF grammar has functions of type \lstinline{: A -> A}) or some combination of functions that can achieve that type, we can get an infinite loop of that function being repeatedly applied, so it's important that such functions are not included in the labels file. This is not detected automatically, so it is up to the user to notice it and fix the issue.

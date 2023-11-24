@@ -2,7 +2,7 @@
 \chapter{Introduction}
 
 \newcommand{\note}[1]{\todo{#1}}
-\renewcommand{\note}[1]{}
+%\renewcommand{\note}[1]{}
 
 % TODO: Link to the code somewhere
 
@@ -294,6 +294,33 @@ The gf-ud tool has been used for both translation and semantics\cite{ranta-al-20
 Another application has been in concept alignment\cite{masciolini-ranta-2021}.
 There has also been work using it for analysis of law text for the purpose of making a Controlled Natural Language for law\cite{listenmaa-etal-2021-towards}.
 
+\section{What problem does ud2gf solve?}
+\todo[inline]{Add edge labels to graph}
+
+\begin{figure}
+    \centering
+    % \includegraphics{}
+    % \missingfigure{Graph of possible ways to convert from text to logic}
+    \begin{tikzpicture}
+        \tikzset{snake it/.style={decorate, decoration=snake}}
+		\node(Text) at (-5, 0) {Text};
+		\node(DT) at (-1.5, 0.75) {Dependency Tree};
+		\node(AST) at (1.5, -0.75) {Abstract syntax tree};
+		\node(Logic) at (5, 0) {Logic};
+		\draw[->] (Text.north) to (DT.west);
+		\draw[->, snake it] (Text.east) to (AST.west);
+		\draw[->] (AST.east) to (Logic.south);
+		\draw[->, snake it] (DT.east) to (Logic.west);
+		\draw[->,dashed] (DT.south) edge (AST.north) ;
+    \end{tikzpicture}
+    \caption{An overview of how gf2ud can be helpful in converting from text to logic}
+    \label{fig:enter-label}
+\end{figure}
+
+Converting from text to dependency trees is a solved problem (cite). Converting from AST to logic is a solved problem (cite). Converting from dependency trees to logic is a difficult problem (cite). Converting from text to AST is difficult because too strict (cite). By converting from DT to AST we can use the two easy problems to get a path
+
+\section{Why these three problems?}
+\todo[inline]{Because they were issues that popped up during the work at SMU}
 
 
 % Från mallen

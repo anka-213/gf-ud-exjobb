@@ -4,15 +4,18 @@
 
 In the new algorithm (version 3), we make two main improvements:
 
+\todo[inline]{Describe the pseudocode on a higher level, so the user don't need to read them}
+
 \section{First improvement}
 
+Before the improvement, a high level description of the algorithm would look roughly like this:
 \begin{verbatim}
 1. Apply all possible functions on each of the trees
 2. Remove duplicates (using a quadratic algorithm)
 3. Check if there are any new trees, if so go to 1
 \end{verbatim}
 
-becomes
+which had the issue that the same trees were calculated many times just to be immediately thrown away. To solve this, we only calculate new trees based on trees we have not seen before, roughly like this:
 
 \begin{verbatim}
 1. newTrees <- trees
