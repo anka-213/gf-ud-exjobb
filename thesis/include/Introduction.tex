@@ -6,19 +6,38 @@
 
 % TODO: Link to the code somewhere
 
-Since the advent of computers, people have been trying to make them understand \note{anthropomorphism?} natural languages. Today machine learning methods are very popular \note{rephrase}, but the more traditional method is so called rule-based Natural Language Processing (NLP) and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.
-In fact, much of the terminology around programming languages comes from linguistics for this exact reason\footnote{some examples}.
+Since the advent of computers, people have been trying to make them understand natural languages. Today machine learning methods are very popular\note{rephrase}, but the more traditional method is so called rule-based Natural Language Processing (NLP) and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.\cite{chomsky-1957,lambek-1958,curry1961some}
+In fact, much of the terminology around programming languages comes from linguistics for this exact reason\footnote{Programming \emph{languages} have a \emph{syntax} and a \emph{grammar} which is \emph{parsed} and lexed into \emph{lexemes}}. This work will focus on connecting the two rule-based NLP formalisms of \emph{Grammatical Framework}\cite{ranta-2011} and \emph{Universal Dependencies}\cite{nivre-etal-2016-universal}.\footnote{The code is found on github: https://github.com/GrammaticalFramework/gf-ud}
 
-There are several advantages of using rule-based approaches over machine-learning, for example they are deterministic and more predictable, it is possible to fix bugs without needing to retrain the whole model and hoping that it fixes the issue and they are simpler and more understandable, instead of being a black box as most machine learning based language models are.
+
+While machine-learning is currently dominating in NLP, using rule-based approaches still provides several important advantages over those based on machine-learning.
+For example, rule-based approaches are deterministic and more predictable. They make it possible to fix individual bugs without needing to retrain the whole model, hoping that it fixes the issue. They are also more transparent, rather than being a black box as most machine learning based language models are. % \todo{When are these properties important? E.g. when correctness is important, (law, medicine)}
+These properties are particularly important when correctness is crucial, for example in law and medicine.
 % There have been many different approaches to solving...
+% Rule-based approaches are deterministic and more predictable. They are also more modular: it is possible to fix a single bug without needing to retrain the whole model. This makes them transparent, instead of being a black box as most machine learning based language models are.
 
 % (why not ai? more predictable, easier to fix bugs, more deterministic)
 
-Among the most simple and naive methods for handling natural language text is string replacement, e.g. adding an ``s'' to the end of a word to make it plural, regardless of what word it actually is, so we would get ``foots'' instead of the correct ``feet'' as the plural form for ``foot''.
+While technically even the most naive string replacement method\footnote{e.g. adding an ``s'' to the end of a word to make it plural, producing ``foots'' instead of the correct ``feet''} is an instance of ``rule-based NLP'', in practice we tend to us more sophisticated tools, namely \emph{grammar formalisms}.
 
-Now, we could keep adding more exceptions to these string replacement rules and get somewhat better results, but we would quickly run into complexity issues with more advanced grammar concepts, like word order changing when asking a question (``The cat is hungry'' vs ``Is the cat hungry?'') and person/number/gender agreement (e.g. person/number: ``I eat''/``The cat eats''/``They eat'' and gender agreement (in Swedish): ``Huset är fint'' vs ``Katten är fin''), so a more systematic approach would be helpful. This is where grammar formalisms come in.
+% % Draft
+% One problem in NLP is to convert from text into mathematical logic, to allow a computer program to deduce things. 
+% 
+% % SMU in background or here?
+% 
+% Something converting directly from text to logic is difficult
+% Converting from AST to logic is easy (this is what programming languages do)
+% 
+% % Forward references 
+% 
+% % Way too specific to come this early!
+% Among the most simple and naive methods for handling natural language text is string replacement, e.g. adding an ``s'' to the end of a word to make it plural, regardless of what word it actually is, so we would get ``foots'' instead of the correct ``feet'' as the plural form for ``foot''.
+% 
+% Now, we could keep adding more exceptions to these string replacement rules and get somewhat better results, but we would quickly run into complexity issues with more advanced grammar concepts, like word order changing when asking a question (``The cat is hungry'' vs ``Is the cat hungry?'') and person/number/gender agreement (e.g. person/number: ``I eat''/``The cat eats''/``They eat'' and gender agreement (in Swedish): ``Huset är fint'' vs ``Katten är fin''), so a more systematic approach would be helpful. This is where grammar formalisms come in.
+% % End irrelevant stuff
 
-A grammar formalism is used to describe the connection between a plain text and structured data. To understand what a formalism is, it is useful to introduce the concept of structured data. Consider a text string like ``the cat sat on the mat''—for a general-purpose computer program, it is nothing more than an array of characters. But to a human linguist, it is full of structure: ``sat'' is the main verb, ``cat'' is the subject, “on the mat” is an adverbial. If we want to represent its grammatical structure in machine readable way, we need a \emph{grammar formalism}.
+A grammar formalism is used to describe the connection between a plain text and structured data. To understand what a formalism is, it is useful to introduce the concept of structured data. Consider a text string like ``the cat sat on the mat''—for a general-purpose computer program, it is nothing more than an array of characters. But to a human linguist, it is full of structure: ``sat'' is the main verb, ``cat'' is the subject, “on the mat” is an adverbial. A grammar formalism is simply a way to represent this grammatical structure in a machine readable way.
+%If we want to represent its grammatical structure in machine readable way, we need a \emph{grammar formalism}.
 
 
 % One method for doing this is to convert the text into an abstract structure that does not care about morphological details like 
@@ -39,6 +58,10 @@ A grammar formalism is used to describe the connection between a plain text and 
 
 There are several different formalisms for describing sentences as trees, all with their own strengths and weaknesses.
 The two we will be talking about in this paper are Universal Dependencies (UD), which is based on so called \emph{dependency trees}, and Grammatical Framework (GF), which uses \emph{constituency-based abstract syntax trees}.
+
+\todo[inline]{This paper is about combining these two methods. Move 1.4 here}
+
+\todo[inline]{Add a figure that shows the difference between Dependency Grammars, Constituency Grammars (a.k.a. phrase structure grammars) and Abstract Syntax Trees}
 
 
 % \begin{verbatim}
@@ -66,9 +89,10 @@ The two we will be talking about in this paper are Universal Dependencies (UD), 
 
 %  - dep trees, UD
 \section{Dependency trees and Universal Dependencies}
-A dependency tree is a tree structure that shows the grammatical relationship between words in a sentence. Each word becomes a node in the tree with the main verb as the root and the edges represents the relation and the direction of the dependency.
+\todo[inline]{This is Theory, not intro}
+A dependency tree is a tree structure that shows the grammatical relationship between words in a sentence\cite{tesniere2015elements,nivre2006inductive}. Each word becomes a node in the tree with the main verb as the root and the edges represents the relation and the direction of the dependency.
 
-The specific standard for dependency trees that this paper is about is called Universal Dependencies (UD). UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
+The specific standard for dependency trees that this paper is about is called Universal Dependencies (UD)\cite{nivre-etal-2016-universal}. UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
 
 In \autoref{fig:cat_sleeps_ud} we can see the sentence ``The cat sleeps'' analyzed as a UD-tree. The first step is to determine which part-of-speech each word in the sentence belongs to. In this case, ``the'' is a determiner, ``cat'' is a noun and ``sleeps'' is a verb. Next we need to determine the relation between the words: ``sleeps'' is the root of the sentence, ``cat'' is the subject of this verb and ``the'' quantifies (determines) the noun.
 
@@ -295,9 +319,15 @@ Another application has been in concept alignment\cite{masciolini-ranta-2021}.
 There has also been work using it for analysis of law text for the purpose of making a Controlled Natural Language for law\cite{listenmaa-etal-2021-towards}.
 
 \section{What problem does ud2gf solve?}
-\todo[inline]{Add edge labels to graph}
+% \todo[inline]{This is the main focus of the intro}
+% 
+% \todo[inline]{Add edge labels to graph}
+% 
+% \todo[inline]{write this text}
 
-\begin{figure}
+One problem within NLP is converting from text to logic. There are several different paths one could take, each with their own issues, see \autoref{fig:text-to-logic} for an overview. The tool gf2ud makes it possible to get the robust parsing available for dependency trees and the ease of conversion to logic of Abstract Syntax Trees.
+
+\begin{figure}[H]
     \centering
     % \includegraphics{}
     % \missingfigure{Graph of possible ways to convert from text to logic}
@@ -305,22 +335,19 @@ There has also been work using it for analysis of law text for the purpose of ma
         \tikzset{snake it/.style={decorate, decoration=snake}}
 		\node(Text) at (-5, 0) {Text};
 		\node(DT) at (-1.5, 0.75) {Dependency Tree};
-		\node(AST) at (1.5, -0.75) {Abstract syntax tree};
+		\node(AST) at (1.5, -0.75) {Abstract Syntax Tree};
 		\node(Logic) at (5, 0) {Logic};
-		\draw[->] (Text.north) to (DT.west);
+		\draw[->] (Text.north) to node[above] {UDPipe} (DT.west);
 		\draw[->, snake it] (Text.east) to (AST.west);
 		\draw[->] (AST.east) to (Logic.south);
 		\draw[->, snake it] (DT.east) to (Logic.west);
-		\draw[->,dashed] (DT.south) edge (AST.north) ;
+		\draw[->,dashed] (DT.south) to node[right] {ud2gf} (AST.north) ;
     \end{tikzpicture}
     \caption{An overview of how gf2ud can be helpful in converting from text to logic}
-    \label{fig:enter-label}
+    \label{fig:text-to-logic}
 \end{figure}
 
-Converting from text to dependency trees is a solved problem (cite). Converting from AST to logic is a solved problem (cite). Converting from dependency trees to logic is a difficult problem (cite). Converting from text to AST is difficult because too strict (cite). By converting from DT to AST we can use the two easy problems to get a path
-
-\section{Why these three problems?}
-\todo[inline]{Because they were issues that popped up during the work at SMU}
+Converting from text to dependency trees is a solved problem\cite{Nivre2006,straka-etal-2016-udpipe,kanerva-etal-2020-turku}. Converting from AST to logic is a solved problem\cite{Montague1973-MONTPT-4,ranta-2004b,ranta2022end}. Converting from dependency trees to logic is a difficult problem\cite{reddy2016transforming,ranta2017explainable}. Converting from natural language text directly to AST is a difficult problem\cite{ranta-2011c,bernardy-stergios-2017,landin-1966-next-700,curry1961some,Montague1973-MONTPT-4}. By converting from DT to AST ud2gf allows us to use the two solved problems to get a path from text to logic.
 
 
 % Från mallen

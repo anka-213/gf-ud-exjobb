@@ -961,14 +961,14 @@ multilingual mathematical exercises}},
  }
 
 @BOOK{chomsky-1957,
-    AUTHOR = "Chomsky, N.",
+    AUTHOR = "Chomsky, Noam",
     TITLE = "Syntactic Structures",
     PUBLISHER = {Mouton},
     ADDRESS = {The Hague},
     YEAR = {1957} }
 
 @ARTICLE{lambek-1958,
-    AUTHOR = "J. Lambek",
+    AUTHOR = "Joachim Lambek",
     TITLE = "The mathematics of sentence structure",
     JOURNAL = {{American Mathematical Monthly}},
     VOLUME = {65},
@@ -994,7 +994,7 @@ multilingual mathematical exercises}},
 }
 
 @InProceedings{curry-1961,
-    AUTHOR = "H. B. Curry",
+    AUTHOR = "Haskell Curry",
     TITLE = "Some logical aspects of grammatical structure",
     EDITOR = "Jakobson, Roman",
     BOOKTITLE = {{Structure of Language and its
@@ -7012,6 +7012,34 @@ pages="278--296",
   year =   {2013}
 }
 
+
+@inproceedings{straka-etal-2016-udpipe,
+    title = "{UDP}ipe: Trainable Pipeline for Processing {C}o{NLL}-{U} Files Performing Tokenization, Morphological Analysis, {POS} Tagging and Parsing",
+    author = "Straka, Milan  and
+      Haji{\v{c}}, Jan  and
+      Strakov{\'a}, Jana",
+    editor = "Calzolari, Nicoletta  and
+      Choukri, Khalid  and
+      Declerck, Thierry  and
+      Goggi, Sara  and
+      Grobelnik, Marko  and
+      Maegaard, Bente  and
+      Mariani, Joseph  and
+      Mazo, Helene  and
+      Moreno, Asuncion  and
+      Odijk, Jan  and
+      Piperidis, Stelios",
+    booktitle = "Proceedings of the Tenth International Conference on Language Resources and Evaluation ({LREC}'16)",
+    month = may,
+    year = "2016",
+    address = "Portoro{\v{z}}, Slovenia",
+    publisher = "European Language Resources Association (ELRA)",
+    url = "https://aclanthology.org/L16-1680",
+    pages = "4290--4297",
+    abstract = "Automatic natural language processing of large texts often presents recurring challenges in multiple languages: even for most advanced tasks, the texts are first processed by basic processing steps {--} from tokenization to parsing. We present an extremely simple-to-use tool consisting of one binary and one model (per language), which performs these tasks for multiple languages without the need for any other external data. UDPipe, a pipeline processing CoNLL-U-formatted files, performs tokenization, morphological analysis, part-of-speech tagging, lemmatization and dependency parsing for nearly all treebanks of Universal Dependencies 1.2 (namely, the whole pipeline is currently available for 32 out of 37 treebanks). In addition, the pipeline is easily trainable with training data in CoNLL-U format (and in some cases also with additional raw corpora) and requires minimal linguistic knowledge on the users{'} part. The training code is also released.",
+}
+
+
 % @inproceedings{masciolini2021grammar,
 %   title={Grammar-based concept alignment for domain-specific machine translation},
 %   author={Masciolini, Arianna and Ranta, Aarne},
@@ -7029,3 +7057,145 @@ pages="278--296",
 %   year={2020},
 %   publisher={MIT Press One Rogers Street, Cambridge, MA 02142-1209, USA journals-info~…}
 % }
+
+
+@book{nivre2006inductive,
+  title={Inductive dependency parsing},
+  author={Nivre, Joakim},
+  year={2006},
+  publisher={Springer}
+}
+
+% Text -> DT
+@book{tesniere2015elements,
+  title={Elements of structural syntax},
+  author={Tesni{\`e}re, Lucien},
+  year={2015},
+  publisher={John Benjamins Publishing Company}
+}
+
+@Inbook{Nivre2006,
+title="Inductive Dependency Parsing",
+bookTitle="Inductive Dependency Parsing",
+year="2006",
+publisher="Springer Netherlands",
+address="Dordrecht",
+pages="87--120",
+isbn="978-1-4020-4889-0",
+doi="10.1007/1-4020-4889-0_4",
+url="https://doi.org/10.1007/1-4020-4889-0_4"
+}
+
+% udpipe
+
+@inproceedings{kanerva-etal-2020-turku,
+    title = "{T}urku Enhanced Parser Pipeline: From Raw Text to Enhanced Graphs in the {IWPT} 2020 Shared Task",
+    author = "Kanerva, Jenna  and
+      Ginter, Filip  and
+      Pyysalo, Sampo",
+    editor = "Bouma, Gosse  and
+      Matsumoto, Yuji  and
+      Oepen, Stephan  and
+      Sagae, Kenji  and
+      Seddah, Djam{\'e}  and
+      Sun, Weiwei  and
+      S{\o}gaard, Anders  and
+      Tsarfaty, Reut  and
+      Zeman, Dan",
+    booktitle = "Proceedings of the 16th International Conference on Parsing Technologies and the IWPT 2020 Shared Task on Parsing into Enhanced Universal Dependencies",
+    month = jul,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.iwpt-1.17",
+    doi = "10.18653/v1/2020.iwpt-1.17",
+    pages = "162--173",
+    abstract = "We present the approach of the TurkuNLP group to the IWPT 2020 shared task on Multilingual Parsing into Enhanced Universal Dependencies. The task involves 28 treebanks in 17 different languages and requires parsers to generate graph structures extending on the basic dependency trees. Our approach combines language-specific BERT models, the UDify parser, neural sequence-to-sequence lemmatization and a graph transformation approach encoding the enhanced structure into a dependency tree. Our submission averaged 84.5{\%} ELAS, ranking first in the shared task. We make all methods and resources developed for this study freely available under open licenses from \url{https://turkunlp.org}.",
+}
+
+% Text -> AST
+
+@article{landin-1966-next-700,
+author = {Landin, P. J.},
+title = {The next 700 programming languages},
+year = {1966},
+issue_date = {March 1966},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {9},
+number = {3},
+issn = {0001-0782},
+url = {https://doi.org/10.1145/365230.365257},
+doi = {10.1145/365230.365257},
+abstract = {A family of unimplemented computing languages is described that is intended to span differences of application area by a unified framework. This framework dictates the rules about the uses of user-coined names, and the conventions about characterizing functional relationships. Within this framework the design of a specific language splits into two independent parts. One is the choice of written appearances of programs (or more generally, their physical representation). The other is the choice of the abstract entities (such as numbers, character-strings, list of them, functional relations among them) that can be referred to in the language.The system is biased towards “expressions” rather than “statements.” It includes a nonprocedural (purely functional) subsystem that aims to expand the class of users' needs that can be met by a single print-instruction, without sacrificing the important properties that make conventional right-hand-side expressions easy to construct and understand.},
+journal = {Commun. ACM},
+month = {mar},
+pages = {157–166},
+numpages = {10}
+}
+
+@article{curry1961some,
+  title={Some logical aspects of grammatical structure},
+  author={Curry, Haskell B},
+  journal={Structure of language and its mathematical aspects},
+  volume={12},
+  pages={56--68},
+  year={1961},
+  publisher={American Mathematical Society Providence}
+}
+
+@incollection{Montague1973-MONTPT-4,
+	author = {Richard Montague},
+	booktitle = {Approaches to Natural Language},
+	editor = {Patrick Suppes and Julius Moravcsik and Jaakko Hintikka},
+	pages = {221--242},
+	publisher = {Dordrecht},
+	title = {The Proper Treatment of Quantification in Ordinary English},
+	year = {1973}
+}
+
+% DT -> logic
+
+@article{reddy2016transforming,
+  title={Transforming dependency structures to logical forms for semantic parsing},
+  author={Reddy, Siva and T{\"a}ckstr{\"o}m, Oscar and Collins, Michael and Kwiatkowski, Tom and Das, Dipanjan and Steedman, Mark and Lapata, Mirella},
+  journal={Transactions of the Association for Computational Linguistics},
+  volume={4},
+  pages={127--140},
+  year={2016},
+  publisher={MIT Press One Rogers Street, Cambridge, MA 02142-1209, USA journals-info~…}
+}
+
+@inproceedings{ranta2017explainable,
+  title={Explainable machine translation with interlingual trees as certificates},
+  author={Ranta, Aarne},
+  year={2017}
+}
+
+@incollection{ranta2022end,
+  title={An End-to-End Pipeline from Law Text to Logical Formulas},
+  author={Ranta, Aarne and Listenmaa, Inari and Soh, Jerrold and Wong, Meng Weng},
+  booktitle={Legal Knowledge and Information Systems},
+  pages={237--242},
+  year={2022},
+  publisher={IOS Press}
+}
+
+@inproceedings{yang2015efficient,
+  title={Efficient communication and collection with compact normal forms},
+  author={Yang, Edward Z and Campagna, Giovanni and A{\u{g}}acan, {\"O}mer S and El-Hassany, Ahmed and Kulkarni, Abhishek and Newton, Ryan R},
+  booktitle={Proceedings of the 20th ACM SIGPLAN International Conference on Functional Programming},
+  pages={362--374},
+  year={2015}
+}
+
+@article{ungar1984generation,
+  title={Generation scavenging: A non-disruptive high performance storage reclamation algorithm},
+  author={Ungar, David},
+  journal={ACM Sigplan notices},
+  volume={19},
+  number={5},
+  pages={157--167},
+  year={1984},
+  publisher={ACM New York, NY, USA}
+}

@@ -1,5 +1,7 @@
 \chapter{Debugger}
 
+\section{Problem description}
+
 The problem is that sometimes rules do not match and it is difficult to figure out why
 
 The goal of the debugger project is to automatically give an explanation of why a rule (function label description) doesn't match
@@ -25,14 +27,78 @@ used for some reason. Then we would call the \texttt{ud2gf} tool with either \ve
     \item The function was possible to apply, but was pruned away because a different tree with the same category had higher priority
 \end{itemize}
 
-If a word exist multiple times in the sentence, you need to use the number form, otherwise you will get an ``Ambigous word'' error. In order to see the index number of a word you can either look at the conllu file directly or run \verb|ud2gf| with the \verb|ud| or \verb|ut| argument.
+If a word exist multiple times in the sentence, you need to use the number form, otherwise you will get an ``Ambiguous word'' error. In order to see the index number of a word you can either look at the conllu file directly or run \verb|ud2gf| with the \verb|ud| or \verb|ut| argument.
 
 
 \section{Implementation}
 
-The implementation is mostly a case of going through every step of te algorithm and seeing what can go wrong. Some of this process was simplified by the strong type system of Haskell, since it makes edge cases explicit, so in most cases we would get a type error if we missed handling a possible error.
+The implementation is mostly a case of going through every step of the algorithm and seeing what can go wrong. Some of this process was simplified by the strong type system of Haskell, since it makes edge cases explicit, so in most cases we would get a type error if we missed handling a possible error.
 
 In order to simplify the implementation and reduce code duplication, we first run the main algorithm to generate all possible GF trees in each node of the UD tree and use this result to check what goes wrong with the specific function we're interested in.
 
+\section{Example}
+
+Let's look at the phrase ``large portion of walls'', which in UD format looks like this:
+
+\begin{center}
+    \begin{dependency}
+        \begin{deptext}[column sep=0.4cm]
+              {\tt large}\&{\tt portion}\&{\tt of}\&{\tt walls}\\
+            {\tt ADJ}\&{\tt NOUN}\&{\tt ADP}\&{\tt NOUN}\\
+        \end{deptext}
+        \depedge{2}{1}{amod}
+        \depedge{2}{4}{nmod}
+        \depedge{4}{3}{case}
+        \deproot{2}{root}
+    \end{dependency}
+\end{center}
+    
+First we try to form a tree of words that are not in a head--dependent relation. The tool reports that \emph{large} is not a child of \emph{walls}, and suggests an actual child of \emph{walls} (i.e. \emph{of}) as a hint for the grammar writer.
+
+\begin{lstlisting}
+$ cat tests/examples/large_portion_of_walls.conllu | gf-ud ud2gf tests/grammars/Test Eng UDS no-backups dbg='AdjCN large walls'
+
+Starting debug for AdjCN:
+AdjCN : AP -> CN -> CN ; amod head
+Error: Word number 1 ("large")  is not a child of 4 ("walls").
+    Available children: [("3","of")]
+\end{lstlisting}
+
+Next, we ask the debugger about a correct attachment, but we try to apply a function of the wrong type. The debugger answers with ``Incompatible argument labels''.
+
+
+\begin{lstlisting}
+$ cat tests/examples/large_portion_of_walls.conllu | gf-ud ud2gf tests/grammars/Test Eng UDS no-backups dbg='DetCN large portion'
+
+Starting debug for DetCN:
+DetCN : Det -> CN -> NP ; det head
+Attempting to build: DetCN large portion
+Error: Incompatible argument labels:
+ - For "large": Got amod expected det
+\end{lstlisting}
+
+Finally, if we debug a correct application, we get a step by step trace of how the tree is constructed.
+
+\begin{lstlisting}
+$ cat tests/examples/large_portion_of_walls.conllu | gf-ud ud2gf tests/grammars/Test Eng UDS no-backups dbg='AdjCN large portion'
+
+Starting debug for AdjCN:
+AdjCN : AP -> CN -> CN ; amod head
+Attempting to build: AdjCN large portion
+
+Argument "large" : AP ; amod:
+  Found trees with correct category:
+    - (PositA large_A) : AP
+
+Argument "portion" : CN ; head:
+  Found trees with correct category:
+    - (AdvCN (UseN portion_N) (PrepNP of_Prep (DetCN_aPl (UseN wall_N)))) : CN
+Trees using AdjCN found in devtree:
+    (AdjCN (PositA large_A) (AdvCN (UseN portion_N) (PrepNP of_Prep (DetCN_aPl (UseN wall_N))))) : CN
+Success!
+\end{lstlisting}
+
+
+% In this case the tree was successfully built, but pruned away because other trees had a higher priority. This typically means that you need to disable some functions and replace them with more specific functions to ensure that the desired functions are used.
 
 % First the main algorithm is run and afterwards all the generated trees are searched, this can lead to some information being missing compared to actually tracing running the algorithm and detecting where where it goes wrong. However in practice it works well enough and it significantly simplifies the implementation, since the main algorithm doesn't need to be modified nor duplicated in order to implement the debugger.

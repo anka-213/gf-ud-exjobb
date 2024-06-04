@@ -1,5 +1,8 @@
 \chapter{The old algorithm}
 
+\todo[inline]{Move to before methods?}
+\todo[inline]{Or is the goal of the paper to describe this? probably not}
+
 % Explain what the old algorithm does
 % Explain what has changed
 
@@ -11,7 +14,7 @@
 
 
 % TODO from meeting with Aarne
-% Rename chapter to old algorithm make new chapter for new algorithm
+% DONE Rename chapter to old algorithm make new chapter for new algorithm
 % The kind of algorithm Forward something,  parsing
 % One UD tree can be many GF trees
 
@@ -63,19 +66,22 @@
 % Needed for halftime report:
 % Write what the empty chapters will contain
 
-\todo[inline]{Signposting: In this section we will explain ...}
+\todo[inline]{Where is the old algorithm from?}
 
-In this chapter we first explain the annotations that are used to describe the mapping between gf trees and ud trees, then we will give a high level overview of the algorithm followed by going through a concrete example of how the algorithm works. Finally we will discuss some limitations of the old algorithms, which we will cover solutions of in the next chapter.
+% \todo[inline]{Signposting: In this section we will explain ...}
+
+In this chapter, we first explain the annotations that are used to describe the mapping between GF trees and UD trees, then we will give a high level overview of the algorithm followed by going through a concrete example of how the algorithm works. Finally, we will discuss some limitations of the old algorithms, which we will cover solutions of in the next chapter.
 
 \section{Overview}
 
-The whole process goes like this: first we do X (section XXX, then we do Y (section YYY)
+\todo[inline]{fix this}
+% The whole process goes like this: first we do X (section XXX, then we do Y (section YYY)
 
-Gf trees consist of functions and categories, UD trees consist of PoS annotations and dependency labels (plus some extra annotation)
+GF trees consist of functions and categories, UD trees consist of PoS annotations and dependency labels (plus some extra annotation)
 
 \section{How annotations work}
 
-In order for the program to know which UD Part of Speech (POS) corresponds to which GF Categories and how the GF functions relates to the UD dependency labels, we need to supply annotations which describe these correspondences. Most of these annotations are bidirectional and are used both by ud2gf and gf2ud.
+In order for the program to know which UD Part of Speech (POS) corresponds to which GF categories and how the GF functions relate to the UD dependency labels, we need to supply annotations which describe these correspondences. Most of these annotations are bidirectional and are used both by ud2gf and gf2ud.
 
 First we have the \lstinline{#cat} annotation, which describes the mapping from GF categories and UD Part of Speech labels:
 
@@ -161,9 +167,9 @@ Both of these annotations are bidirectional and language-independent, since they
 
 \section{Overview of algorithm}
 
-We start with a UD tree (e.g. \autoref{fig:the_black_cat_ud}), then we first map each Part Of Speech label into a GF category and then assign lexical entries to each node in the tree according to those categories. For example, the string ``cat'', with POS ``NOUN'' would become \lstinline|cat_N : N|, which is a nullary GF function of type/category \lstinline|N|. This is done through GF's built parse function. In some cases, there are multiple possible GF expressions of the correct type and linearization, in these cases all of the possibilities are added.
+We start with a UD tree (e.g. \autoref{fig:the_black_cat_ud}), then we first map each POS label into a GF category and then assign lexical entries to each node in the tree according to those categories. For example, the string ``cat'', with POS ``NOUN'' would become \lstinline|cat_N : N|, which is a nullary (takes no arguments) GF function of type/category \lstinline|N|. This is done through GF's built parse function. In some cases, there are multiple possible GF expressions of the correct type and linearization, in these cases all of the possibilities are added.
 
-Now we have a ud tree with a list of gf trees at each node (\autoref{fig:the_black_cat_ud_gf}). We start traversing the tree, depth first, when we reach a leaf, we start processing it
+Now we have a UD tree with a list of GF trees at each node (\autoref{fig:the_black_cat_ud_gf}). We start traversing the tree, depth first, when we reach a leaf, we start processing it
 
 The main loop is: go through all the available functions and apply as many as possible and add the result to our list
 
@@ -236,9 +242,9 @@ and the following corresponding dependency configuration (labels-file):
     #cat N                        ; NOUN
 \end{verbatim}
 
-Notice how only the lexical categories (returned by lexical functions) have a corresponding UD Part of Speech. This is a distinction between GF's phrase structure structure grammar, which uses phrasal categories covering entire phrases, and UD's dependency grammar, where the individual words are annotated with a Part of Speech. \todo{Write a section in the introduction to refer back to here.}
+Notice how only the lexical categories (returned by lexical functions) have a corresponding UD POS. This is a distinction between GF's phrase structure grammar, which uses phrasal categories covering entire phrases, and UD's dependency grammar, where the individual words are annotated with a POS. \todo{Write a section in the introduction to refer back to here.}
 
-The first step is to parse each word in the UD tree into their corresponding lexical GF functions. We use the configuration in the labels-file to convert UD-part-of-speech into their corresponding GF categories.
+The first step is to parse each word in the UD tree into their corresponding lexical GF functions. We use the configuration in the labels file to convert UD POS into their corresponding GF categories.
 \begin{verbatim}
     DET -> Det
     ADJ -> A
@@ -338,7 +344,7 @@ In the next iteration we have a \lstinline|CN| available and can apply either of
     DetCN : Det -> CN -> NP ; det head
     ModCN : AP -> CN -> CN  ; amod head
 \end{lstlisting}
-Let us verify that these are possible to apply: For \lstinline|DetCN| we need a tree of type $Det$ with the $det$ ud label for the relation and indeed, the word ``the'' has the $det$ label on the relation to ``cat'' and we have the tree \lstinline|the_Det : Det| available on ``the''. Secondly we need a $CN$ at the head and since our current head is ``cat'' and we have \lstinline|UseN cat_N : CN|, that fits perfectly giving us \lstinline|DetCN the_Det (UseN cat_N) : NP|. With similar reasoning for \lstinline{ModCN}, we have ``black'' with UD-label $amod$ and one of the available trees for ``black'' is \lstinline|PositA black_A : AP| which has the correct category, which allows us to construct \lstinline|ModCN (PositA black_A) (UseN cat_N) : CN|. After this we have the trees in \autoref{fig:cat iter 2}
+Let us verify that these are possible to apply: For \lstinline|DetCN| we need a tree of type $Det$ with the $det$ UD label for the relation and indeed, the word ``the'' has the $det$ label on the relation to ``cat'' and we have the tree \lstinline|the_Det : Det| available on ``the''. Secondly we need a $CN$ at the head and since our current head is ``cat'' and we have \lstinline|UseN cat_N : CN|, that fits perfectly giving us \lstinline|DetCN the_Det (UseN cat_N) : NP|. With similar reasoning for \lstinline{ModCN}, we have ``black'' with UD-label $amod$ and one of the available trees for ``black'' is \lstinline|PositA black_A : AP| which has the correct category, which allows us to construct \lstinline|ModCN (PositA black_A) (UseN cat_N) : CN|. After this we have the trees in \autoref{fig:cat iter 2}
 
 \begin{figure}[H]
     \centering
@@ -421,7 +427,7 @@ After this no more functions can be applied at the ``cat'' node, giving us a fin
 
 Now finally we have a complete tree which contains all of the words of the phrase, so we will choose the tree in \autoref{ci3p:the_black_cat_NP} as the final tree. 
 
-In the end, the data structure used in the calculation will look like in \autoref{fig:final nested tree}, with the UD-structure outside which we traverse in order to find which parts can be connected and in each node of this tree a list of the GF trees that are possible to construct using the words in the local UD-subtree, while conforming to the UD-labels. In this case, the word ``the'' one GF-tree, the word ``black'' has two possible trees and the word ``cat'', which also contains (?) the words ``the'' and ``black'' has four possible trees. 
+In the end, the data structure used in the calculation will look like in \autoref{fig:final nested tree}, with the UD structure outside which we traverse in order to find which parts can be connected and in each node of this tree a list of the GF trees that are possible to construct using the words in the local UD subtree, while conforming to the UD labels. In this case, the word ``the'' one GF tree, the word ``black'' has two possible trees and the word ``cat'', which also contains (?) the words ``the'' and ``black'' has four possible trees. 
 
 \begin{figure}
     \centering
@@ -450,6 +456,23 @@ In the end, the data structure used in the calculation will look like in \autore
     \label{fig:final_nested_compact}
 \end{figure}
 
+\subsection{Multiple possible GF trees of the same category}
+\label{sec:multiple_trees}
+
+In this simple example, we arrived at a state with intermediate trees that had the same type, and one was a strict subset of the other (``cat'' and ``black cat''). In a case like that, the old algorithm prunes away the smaller of the trees and continues on to the next iteration. 
+
+However, in a different grammar, we might very well end up with several trees that are of the same type, but not subsets of each other. This is the case for numerals in GF standard library, where the trees for numbers like ``eight'', ``eighteen'' and ``eighty'' formed by applying different functions to the underlying digit called \texttt{n8}. Figure \ref{fig:eight} shows an example.
+
+Due to the implementation of the GF grammar, all of the strings ``eight'', ``eighteen'' and ``eighty'' are included in the inflection table of \texttt{n8}. This means that if the input contains any of these words, it matches the abstract syntax function \texttt{n8}, and then the next steps of the algorithm will start applying all possible functions to it. And since all of these functions are parallel alternatives, the results cannot be pruned like ``cat'' and ``black cat''. At the final step, when ud2gf is forced to present the user with only one alternative, the algorithm just picks the first tree from the intermediate list. This means that sometimes the results containing numerals are simply wrong: ``I have eight cats'' might become ``I have eighteen cats''.
+
+To compensate for this issue, one can disable the potentially ambiguous functions using \verb|#disable| and use \verb|#auxfun| macros to ensure that all the relevant information is taken into consideration when deciding which trees are valid translations.
+
+\begin{figure}
+    \centering
+\includegraphics[scale=0.5]{thesis/figure/eight_eighteen_eighty.png}
+    \caption{Three GF trees formed of the digit \texttt{n8}}
+    \label{fig:eight}
+\end{figure}
 
 \section{Differences between versions}
 

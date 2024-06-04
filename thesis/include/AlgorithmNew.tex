@@ -6,12 +6,14 @@ In the new algorithm (version 3), we make two main improvements:
 
 \todo[inline]{Describe the pseudocode on a higher level, so the user don't need to read them}
 
-\section{First improvement}
+\section{First improvement: faster keepTrying}
+
+The first modification was to a function called \texttt{keepTrying}, which keeps trying to build new trees based on the currently existing ones until now new trees can be built.
 
 Before the improvement, a high level description of the algorithm would look roughly like this:
 \begin{verbatim}
 1. Apply all possible functions on each of the trees
-2. Remove duplicates (using a quadratic algorithm)
+2. Remove duplicates
 3. Check if there are any new trees, if so go to 1
 \end{verbatim}
 
@@ -27,14 +29,24 @@ which had the issue that the same trees were calculated many times just to be im
 
 In the first version, we only have one shared list of all the trees, both old and new trees mixed together. This means that the old trees will be used in every single iteration and time after time generate the same new trees. This produces a lot of duplicates that needs to be removed. In the new algorithm, we only generate based on the newest trees from the previous iteration, which eliminates these duplicates.
 
+Since all previous trees were re-generated in each iteration, the old version was $O(n^2T)$ while the new version is $O(nT)$, where $n$ is the number of iterations (which is equal to the max depth of the tree) and T is the number of possible trees at each level.
+
 % Next line was first attempt at the above:
 % The first improvement is that when new trees have been constructed by applying functions, we only use these new trees in the next iteration instead of putting both the old trees and the new trees in a shared list. This is because all the the trees that were possible to construct directly from the old trees have already been constructed, so there's no need to include them in the next iteration.
 
 \todo[inline]{bild}
 
-\section{Second improvement}
+\section{Second improvement: faster allFunsLocal}
 
-The second improvement is a bit more intricate. Here's pseudocode for the old algorithm for applying all possible functions to a tree:
+The second modification was to a function called \texttt{allFunsLocal}, which was responsible for finding all the possible combinations of functions and arguments at the current location in the UD tree that satisfy the constraints defined by the annotations. For example, for the function
+
+\begin{verbatim}
+#fun DetCN  : Det -> CN -> NP ; det  head
+\end{verbatim}
+
+the first argument needs to come from a child with UD dependency annotation \texttt{det} and be a GF tree with category \texttt{Det} and the second argument needs to be at the current local head of the UD tree and have a GF category of \texttt{CN}.
+
+Here's pseudocode for the old algorithm for allFunsLocal:
 
 Given:
 \begin{verbatim}
@@ -87,7 +99,7 @@ if the headNode contains $h$ gf-trees
 and we have $c$ child-nodes, each containing $t$ gf-trees
 and each argument matches $m$ values from childCombo, we get an algorithmic complexity of:
 
-TODO: better alternative to $m$ which reflects reality better. $m$ cannot possibly be a constant and will often vary between 0 and 1
+\todo[inline]{TODO: better alternative to $m$ which reflects reality better. $m$ cannot possibly be a constant and will often vary between 0 and 1}
 
 $$
 O(f h t^c (ac+m^a))
@@ -95,7 +107,7 @@ $$
 
 So we can see that the complexity is exponential with respect to the number of child-nodes, with a base proportional to how many GF trees each of those child-nodes have. The complexity is also exponential with the number of arguments, but this has less of an impact since GF functions always have a fixed number of arguments, unlike UD trees, where a node can have an unlimited number of children, e.g. in conjunctions.
 
-TODO: Appendix with the actual source
+\todo[inline]{TODO: Appendix with the actual source}
 
 In addition to having an exponential complexity, this also produces duplicate trees. To see this we need to go through an example.
 
@@ -158,6 +170,8 @@ We can also express the same thing in terms of a sequence of choices:
 8.     Choose a tree in childNode where childTree.cat == arg.cat
 9.   Construct a tree using f, headTree and each of the childArgTrees
 \end{verbatim}
+
+\todo[inline]{Overflow}
 
 Now $h_m$ is the number of trees in the head node which \emph{matches} the head arg instead of every tree in the head node.
 

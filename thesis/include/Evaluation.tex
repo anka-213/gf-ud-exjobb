@@ -1,4 +1,7 @@
 \chapter{Evaluation}
+
+\todo[inline]{Maybe move this chapter into methods and rewrite to not be planning report}
+
 One method for evaluation is through synthetic experiments of generating random GF trees through GF's built-in functionality, then translating those to UD trees and then back to GF again. There are several different aspects that could be evaluated here:
 \begin{itemize}
     \item Completeness: the ability to always get complete trees without needing to invent what GF2UD calls Backup GF functions, for when no functions in the GF grammar were possible to use to connect a subtree
@@ -7,6 +10,8 @@ One method for evaluation is through synthetic experiments of generating random 
     \item Error analysis: Examine the cause of errors and issues
 \end{itemize}
 
+\todo[inline]{Describe evaluation data}
+
 % 4. Evaluation
 % - synthetic experiment: RGL -> UD -> RGL
 %   - completeness - kan alltid få ett fullständigt träd
@@ -14,3 +19,7 @@ One method for evaluation is through synthetic experiments of generating random 
 %   - performance
 %   - error analysis
 
+
+\section{Performance}
+
+The two parts are evaluated independently. There is a synergy between the two components, especially in terms of avoiding duplication, which allows removing duplication

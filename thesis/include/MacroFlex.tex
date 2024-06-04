@@ -178,19 +178,46 @@ ConjAP and_Conj (ConsAP (PositA cute_A)
 \end{verbatim}
 Here we can see that in UD, the word ``cute'' is in the root, while the conjunction ``and'' is at the bottom of the tree, while in GF the conjunction is a direct child of the root. This transformation can not be preformed by the simple single-layer transformations that are available in the current macro-system for labels files.
 
+The main issue that made it impossible for the old macros to perform this transformation is that we need to extract several pieces of information from a node and then use them independently 
 
+\section{Solution: Recursive macros}
 
-\section{Thing}
+% Most of the time the structure in UD trees are similar enough to allow a fairly direct translation.
+% There are however some difficult cases where the structure is significantly different in a way that was impossible to overcome using the old macro system.
+% 
+% One such example is when you have a series of conjunctions, for example the phrase:
+% 
+% 
+%   small, fluffy, furry and cute
+% 
+% In 
 
-Most of the time the structure in UD trees are similar enough to allow a fairly direct translation.
-There are however some difficult cases where the structure is significantly different in a way that was impossible to overcome using the old macro system.
+In order to improve the ability to create structurally different trees when converting from UD to GF, the ability for macros to be recursive was added. This means that when a macro is substituted, the resulting head is checked again to see if the result is another macro, until no more substitutions are possible. This makes it possible to encode data using Church-encoding, in particular the church encoding for pairs: a higher order function that takes a binary function as an argument and provides the two items it contains to the inner function.
 
-One such example is when you have a series of conjunctions, for example the phrase:
+\begin{verbatim}
+type Pair a b = forall c. (a -> b -> c) -> c
+\end{verbatim}
 
-  small, fluffy, furry and cute
+In order to construct and consume these pairs we use the following helper functions
+\begin{lstlisting}
+-- ab2r = a -> b -> r
+-- Pair_a_b = ab2r -> r
+#auxfun MkPair_ a b handler : a -> b -> ab2r -> r = handler a b ; head dummy dummy
+#auxfun UsePair_ handler pair : ab2r -> Pair_a_b -> r = pair handler ; head dummy
+\end{lstlisting}
 
-In 
+When using these helpers, you would partially apply the \verb|MkPair_| helper, so it can later get the final \verb|handler| argument from \verb|UsePair_|.
+
+\begin{lstlisting}
+#auxfun AndCuteCont_ and cute : Conj -> AP -> Pair_Conj_AP = MkPair_ and cute ; cc head
+\end{lstlisting}
+
+The full implementation of conjunctions using recursive macros can be seen in \autoref{appendix:conjunctions}.
+
+% \subsection{Evaluation example}
+
+% The macros are expanded in a top-down fashion
 
 \section{Ideas for further improvements}
 
-A more structured implementation of this could be to add (anonymous) records to the syntax of macros similar to the concrete syntax of GF. 
+A more structured implementation of this could be to add (anonymous) records as well as pattern matching to the syntax of macros similar to the concrete syntax of GF. 

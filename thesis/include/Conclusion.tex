@@ -1,12 +1,40 @@
 % CREATED BY DAVID FRISK, 2016
 \chapter{Conclusion and future work}
 
-You may consider to instead divide this chapter into discussion of the results and a summary. 
+% You may consider to instead divide this chapter into discussion of the results and a summary. 
 
 \section{Discussion}
 
+% \section{Summary}
+
+In this project we set out to improve the overall usability of ud2gf, focusing on issues with performance, difficulty in debugging and lack of flexibility regarding differing tree shapes. 
+
+\subsection{Performance}
+% Resounding success
+
+The performance was greatly improved, with the slowest sentence in our test improving from 85 seconds to 44 milliseconds. One of the optimizations improved the performance by a linear factor depending on the depth of the tree, while the other optimization improved the performance by an exponential factor depending on the width of the tree.
+
+We could also see that garbage collection can have a large impact on the performance of Haskell programs. However, in our case it could easily be alleviated, without a significant impact on total memory use, by increasing the initial heap size for the program.
+
+% Most unambiguously great improvement. Concrete measurements, before vs after, details like gc, …
+
+\subsection{Debugging}
+
+This feature was less mature, but anecdotal evidence found it useful with n=2 users.
+
+\subsection{Tree shape flexibility}
+
+Mixed success: the things definitely improved, in that we can express things we couldn't before, but the new syntax is kinda clunky.
+
 \section{Conclusion}
 
-\section{Future work}
+
+\subsection{Future work}
+
+% Prefer trees which linearize to the expected thing
 
 1. There are still many cases that the conversion can not handle, for example: If a GF grammar has functions of type \lstinline{: A -> A}) or some combination of functions that can achieve that type, we can get an infinite loop of that function being repeatedly applied, so it's important that such functions are not included in the labels file. This is not detected automatically, so it is up to the user to notice it and fix the issue.
+
+% The debugging tool is mostly a rough, but useful, prototype, so it would benefit from more polishing.
+
+The expanded macro capabilities would benefit from having their own syntax to get a nicer and more user-friendly interface.
