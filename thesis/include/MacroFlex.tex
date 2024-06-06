@@ -1,9 +1,7 @@
-\chapter{Improving flexibility of macros}
+\chapter{Improving flexibility of macros}\label{sect:flex}
 \label{improving-flexibility-macros}
 
-\todo[inline]{Explain the old macro system with an example. Q: Isn't that the section below already?}
-
-
+% \todo[inline]{Explain the old macro system with an example. Q: Isn't that the section below already?}
 
 \section{Explanation of the macro system}
 
@@ -11,15 +9,18 @@
 % Most importantly: syncats. gf-ud assumes that every word is in a leaf, represented by a lexical gf-function. however, syncategorimatic words \todo{define?} (or functions?) come from the functions that are used to combine trees (what are those called?) and would be missing otherwise. E.g. "is" is syncategorimatic in gf for english, because there is no lexical function for copula, because not all languages use a word for copula. So we make up a lexical gf-function for "is", which is then combined with a made-up version of MkCl which is converted into the thing we need.
 % This is terrible writing!
 
-In order to overcome some limitations \todo{(which?)} of the conversion there is a system of macros. A macro is an imaginary GF function that will get converted into an expression of real GF functions after the conversion step of gf2ud is done.
+In order to overcome some limitations of the conversion from UD to GF, especially the issue with multiple possible matching trees mentioned in \autoref{sec:multiple_trees}, there is a system of macros. A macro is an imaginary GF function that will get converted into an expression of real GF functions after the main conversion step of gf2ud is done.
 
 % Syncats?
+% \todo[inline]{Talk about syncategorematic words}
 
-When one GF function corresponds to multiple different dependency labels, a macro can be used to disambiguate which one is meant without losing the information
+When one GF function corresponds to multiple different dependency labels, a macro can be used to disambiguate which one is meant and to avoid losing the information of that distinction.
 
-Example from \cite{kolachina-ranta-2017}
+One common case when macros are needed are so-called \emph{syncategorematic} words, that are associated with non-lexical functions\footnote{A lexical function is a function that takes zero arguments, which means that it will be in a leaf of the tree.}. For example, in GF, the copula is syncategorematic, which means that a copula cannot be parsed on its own using GF.
 
+The following is an example from \cite{kolachina-ranta-2017} that uses macros to handle the syncategorematic nature of copulas:
 
+\todo[inline]{Include some of the commented out content}
 
 % We noted in Section 2 that ud2gf has to deal with
 % ambiguity, incompleteness, noise, and ungrammaticality. The basic algorithm of Section 3 takes
@@ -56,6 +57,8 @@ Example from \cite{kolachina-ranta-2017}
 #auxfun MkVPS_Perf have vp : Have -> VP -> VPS = MkVPS (TTAnt AAnter 
   TPres) PPos vp ; aux[Tense=Pres] head
 \end{verbatim}
+
+The full syntax of macros can be found in \autoref{app:annotation}.
 
 \section{Intro to macros}
 
@@ -112,7 +115,7 @@ However, coordination was still a problem in \verb|ud2gf|. The auxiliary categor
 
 \section{Intro to flexibility problem}
 
-As an example of a phrase that can be difficult to convert using the old gf2ud, let us consider the adjectival phrase ``cute, fluffy and furry''
+As an example of a phrase that can be difficult to convert using the old ud2gf, let us consider the adjectival phrase ``cute, fluffy and furry''
 would be described in UD format as in Figures \ref{fig:ud_cute_text} and \ref{fig:ud_cute}.
 
 
@@ -218,6 +221,8 @@ The full implementation of conjunctions using recursive macros can be seen in \a
 
 % The macros are expanded in a top-down fashion
 
-\section{Ideas for further improvements}
+\section{Limitations and ideas for further improvements}
 
 A more structured implementation of this could be to add (anonymous) records as well as pattern matching to the syntax of macros similar to the concrete syntax of GF. 
+
+It could also be useful to have a more direct approach for describing the structural changes, especially since macros are only available in the \texttt{ud2gf} direction, not in the \texttt{gf2ud} direction.

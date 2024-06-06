@@ -1,5 +1,5 @@
 % CREATED BY DAVID FRISK, 2016
-\chapter{Results}
+\chapter{Results and discussion}
 % Describe you results. Use tables, diagrams etc. for illustration.
 
 \section{Performance}
@@ -9,43 +9,41 @@
 
 % Idé: Scatter-plot av optimerad mot ooptimerad
 
-The result of running different versions of the algorithm on the example file \texttt{upto12eng.conllu} using the example grammar \texttt{ShallowParse} in the gf-ud git repository can be seen in \autoref{fig:time-including-gc}. The full list of sentences included in the benchmark can be seen in \autoref{app:upto12}. All benchmarks were perfomed on a 2019 MacBook Pro, with a 2.3 GHz 8-Core Intel Core i9 CPU.
+The result of running different versions of the algorithm on the example file called \texttt{upto12eng.conllu} using the example grammar \texttt{ShallowParse} in the gf-ud git repository can be seen in \autoref{fig:time-including-gc}. The full list of sentences included in the benchmark can be seen in \autoref{app:upto12}. All benchmarks were perfomed on a 2019 MacBook Pro, with a 2.3 GHz 8-Core Intel Core i9 CPU.
 
 \begin{table}[]
     \centering
     \begin{tabular}{c|ccc}
-Time (seconds) & Calculation & Garbage Collection & Total \\
-\hline
-Original code & 2m 58s 834ms & 24s 637ms & 3m 23s 471ms \\
-Original code (fast GC) & 3m 1s 872ms & 20s 241ms & 3m 22s 113ms \\
-fastKeepTrying & 26s 171ms & 14s 767ms & 40s 938ms \\
-fastKeepTrying (fast GC) & 28s 631ms & 1s 705ms & 30s 336ms \\
-fastAllFunsLocal & 3s 166ms & 14s 31ms & 17s 197ms \\
-fastAllFunsLocal (fast GC) & 3s 203ms & 1s 253ms & 4s 456ms \\
-Both improvements & 2s 687ms & 13s 922ms & 16s 609ms \\
-Both improvements (fast GC) & 1s 253ms & 1s 253ms & 2s 506ms \\
+    Time (seconds) & Calculation & Garbage Collection & Total \\
+    \hline
+    Original code & 2m 58.8s & 24.6s & 3m 23.5s \\
+    Original code (fast GC) & 3m 01.9s & 20.2s & 3m 22.1s \\
+    fastKeepTrying & 26.2s & 14.7s & 40.9s \\
+    fastKeepTrying (fast GC) & 28.6s & 1.7s & 30.3s \\
+    fastAllFunsLocal & 3.2s & 14.3s & 17.2s \\
+    fastAllFunsLocal (fast GC) & 3.2s & 1.3s & 4.5s \\
+    Both improvements & 2.7s & 13.9s & 16.6s \\
+    Both improvements (fast GC) & 1.25s & 1.25s & 2.5s \\
     \end{tabular}
-    \caption{The total run time for converting the file upto12eng.conllu, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500Mb to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. TODO: Perform multiple measurements to reduce noise. Also, don't include milliseconds, when we don't have that precision. }
+    \caption{The total run time for converting the file upto12eng.conllu, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500Mb to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. Each measurement was only performed once, so there might be some inaccuracy because of random noise resulting from preemptive multitasking. }
     \label{tab:time-with-gc}
 \end{table}
 
-In \autoref{fig:time-vs-time} we can see the speedup for each individual sentence. The improvement of the keepTrying function gives a close to linear speedup, while the speedup from the optimized version of allFunsLocal is much larger. The theoretical expected speedup from keepTrying is a quadratic factor that becomes a linear factor based on the depth of the resulting trees. This 
+In \autoref{fig:time-vs-time} we can see the speedup for each individual sentence. The improvement of the keepTrying function gives a close to linear speedup, while the speedup from the optimized version of allFunsLocal is much larger. The theoretical expected speedup from keepTrying is a quadratic factor that becomes a linear factor based on the depth of the resulting trees. The library Criterion\protect\footnotemark{} was used to perform the measurements. A full table of results can be found in \autoref{appendix:performance}.
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{thesis/figure/Time-including-GC.png}
-    \caption{The total run time for converting the file upto12eng.conllu, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500Mb to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. TODO: Perform multiple measurements to reduce noise.}
+    \caption[The total run time for converting the file \texttt{upto12eng.conllu}, including garbage collection and startup time.]{The total run time for converting the file \texttt{upto12eng.conllu}, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500Mb to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. Each measurement was only performed once, so there might be some inaccuracy because of random noise resulting from preemptive multitasking.}
     \label{fig:time-including-gc}
 \end{figure}
-
 \begin{figure}
     \centering
-    \includegraphics[scale=0.75]{thesis/figure/Time-against-time-plot.png}
+    \includegraphics[scale=0.7]{thesis/figure/Time-against-time-plot.png}
     \caption{A log-log plot of time for each optimization against the time for the original algorithm. Each data point is the average time over several runs for a single sentence. The library Criterion\protect\footnotemark{} was used to perform the measurements.}
     \label{fig:time-vs-time}
 \end{figure}
-
 \footnotetext{http://www.serpentine.com/criterion/}
-
+ 
 In \autoref{fig:keepTrying-speedup-factor} we can see that the speedup from the keepTrying improvement is linear with respect to the logarithm of the original code, which matches the expectation of moving from converting a quadratic factor to a linear factor. 
 Looking at the slowest sentence ``In Danish, the word may even apply to shallow lagoons'', it takes 83 seconds with the original algorithm and 10 seconds with the keepTrying improvement, giving a speedup factor of 8.3. Looking at the generated tree we can confirm that it has a maximum tree depth of 9 at the top, matching the expectation.
 
@@ -65,7 +63,7 @@ In \autoref{fig:allFunsLocal-speedup-factor} we can see that the allFunsLocal im
     \label{fig:allFunsLocal-speedup-factor}
 \end{figure}
 
-TODO: Write about the minor changes in the resulting trees from the optimized version of the keepTrying function.
+% DONE: Write about the minor changes in the resulting trees from the optimized version of the keepTrying function.
 
 % DONE: \todo[inline]{Stacked diagram of all four configurations, with GC time included}
 
@@ -97,10 +95,9 @@ TODO: Write about the minor changes in the resulting trees from the optimized ve
 
 
 \subsection{Garbage Collection time}\label{sect:gc-time}
-As can be seen from the previous section, after the improved algorithm is used over 80\% of time is spent on garbage collection. This is in a large part because GHC uses a generational, moving garbage collector\cite{ungar1984generation}, which means that the cost of a garbage collection is proportional to the amount of currently living data \todo{Source for this claim}. In our case we have a large amount of long-living data, which means that every major garbage collection is expensive. The code begins by loading the GF grammar into memory, which for our test grammar takes up around 100 megabytes. There are several ways to mitigate this, but the easiest solution is to tweak the parameters for the garbage collector to make it wait longer before attempting to collect garbage, which reduces the total number of major garbage collections.
-
-
-% \todo[inline]{The text above should probably go elsewhere (if anywhere at all)}
+As we saw in \autoref{fig:time-including-gc} and \autoref{tab:time-with-gc}, when the optimized algorithm is used, over 80\% of time is spent on garbage collection. This is in a large part because GHC uses a generational, moving garbage collector\cite{ungar1984generation}, which means that the cost of a garbage collection is proportional to the amount of currently living data. % \todo{Source for this claim}
+In our case we have a large amount of long-living data, which means that every major garbage collection is expensive. The code begins by loading the GF grammar into memory, which for our test grammar takes up around 100 megabytes. There are several ways to mitigate this, but the easiest solution is to tweak the parameters for the garbage collector to make it wait longer before attempting to collect garbage, which reduces the total number of major garbage collections.
+% Nope: \todo[inline]{The text above should probably go elsewhere (if anywhere at all)}
 
 The tool ghc-gc-tool allows automatically determining which parameters are best for this by running the executable with different parameters and plotting the result. In \autoref{fig:gf-ud-integ-gc-space} we can see the result of running this on the first 60 items of upto12eng.conllu with the ShallowParse grammar from the repository. This number was chosen arbitrarily to make the runtime not be unreasonably long. 
 

@@ -4,7 +4,7 @@
 
 In the new algorithm (version 3), we make two main improvements:
 
-\todo[inline]{Describe the pseudocode on a higher level, so the user don't need to read them}
+% \todo[inline]{Describe the pseudocode on a higher level, so the user don't need to read them}
 
 \section{First improvement: faster keepTrying}
 
@@ -34,7 +34,7 @@ Since all previous trees were re-generated in each iteration, the old version wa
 % Next line was first attempt at the above:
 % The first improvement is that when new trees have been constructed by applying functions, we only use these new trees in the next iteration instead of putting both the old trees and the new trees in a shared list. This is because all the the trees that were possible to construct directly from the old trees have already been constructed, so there's no need to include them in the next iteration.
 
-\todo[inline]{bild}
+% WONTFIX: \todo[inline]{bild}
 
 \section{Second improvement: faster allFunsLocal}
 
@@ -45,6 +45,8 @@ The second modification was to a function called \texttt{allFunsLocal}, which wa
 \end{verbatim}
 
 the first argument needs to come from a child with UD dependency annotation \texttt{det} and be a GF tree with category \texttt{Det} and the second argument needs to be at the current local head of the UD tree and have a GF category of \texttt{CN}.
+
+The old algorithm did this by first listing all possible choices of the previously generated trees for the head and each direct child of the current node and then trying each function for each of those choices. The new algorithm instead starts with each individual function and then only checks choices that could possibly match that function and stops as soon as it has determined that a match is impossible.
 
 Here's pseudocode for the old algorithm for allFunsLocal:
 
@@ -99,7 +101,7 @@ if the headNode contains $h$ gf-trees
 and we have $c$ child-nodes, each containing $t$ gf-trees
 and each argument matches $m$ values from childCombo, we get an algorithmic complexity of:
 
-\todo[inline]{TODO: better alternative to $m$ which reflects reality better. $m$ cannot possibly be a constant and will often vary between 0 and 1}
+% \todo[inline]{TODO: better alternative to $m$ which reflects reality better. $m$ cannot possibly be a constant and will often vary between 0 and 1}
 
 $$
 O(f h t^c (ac+m^a))
@@ -107,7 +109,7 @@ $$
 
 So we can see that the complexity is exponential with respect to the number of child-nodes, with a base proportional to how many GF trees each of those child-nodes have. The complexity is also exponential with the number of arguments, but this has less of an impact since GF functions always have a fixed number of arguments, unlike UD trees, where a node can have an unlimited number of children, e.g. in conjunctions.
 
-\todo[inline]{TODO: Appendix with the actual source}
+% \todo[inline]{TODO: Appendix with the actual source}
 
 In addition to having an exponential complexity, this also produces duplicate trees. To see this we need to go through an example.
 
@@ -163,31 +165,38 @@ We can also express the same thing in terms of a sequence of choices:
    choices below:
 2.   f <- Choose a function from gfFunctions
 3.   headArg <- Find the argument of f with label "head"
-4.   headTree <- Choose a tree in headNode where headTree.cat == headArg.cat:
-5.   filteredChildNodes <- Filter out which childNodes have not already been used by headTree
+4.   headTree <- Choose a tree in headNode where 
+                     headTree.cat == headArg.cat:
+5.   filteredChildNodes <- Filter out the childNodes that have not 
+                               already been used by headTree
 6.   childArgTrees <- For each non-head argument of f: arg
-7.     childNode <- Choose a node in filteredChildNodes, where node.label == arg.label:
-8.     Choose a tree in childNode where childTree.cat == arg.cat
+7.       childNode <- Choose a node in filteredChildNodes, where 
+                          node.label == arg.label:
+8.       Choose a tree in childNode where childTree.cat == arg.cat
 9.   Construct a tree using f, headTree and each of the childArgTrees
 \end{verbatim}
 
-\todo[inline]{Overflow}
+% Solved: \todo[inline]{Overflow}
 
-Now $h_m$ is the number of trees in the head node which \emph{matches} the head arg instead of every tree in the head node.
+Now $h_m$ is the number of trees in the head node which \emph{matches} the head argument instead of every tree in the head node.
 
 $$
 O(f h_m (c+m)^a)
 $$
 
-The complexity here is very close to just the number of trees we are generating with only a linear overhead (is this true?)
+The complexity here is in most cases very close to just the number of trees we are generating with only a linear overhead. % \todo{is this true?}
 
 Because we delayed the choice of tree until we know we need it we are no longer generating duplicate trees.
 We also have the ability to stop early, as soon as one of the arguments are impossible to satisfy, we don't need to check the rest.
 
 One possible inefficiency that remains is that if many children have the same label and category as each other we will
-generate every possible tree that uses these and then in a later stage filter out so we only have a single tree with that specific category. It might be possible to keep track of these so we don't \dots
+generate every possible tree that uses these and then in a later stage filter out so we only have a single tree with that specific category. It might be possible to keep track of these so we don't needlessly produce redundant trees that will soon be thrown away anyways. 
+Another possible solution would be to have ordering constraints, so that with the otherwise equivalent children, they are forced to be used in a specific order. This would be especially relevant with coordinate structures (see also \autoref{sect:flex}), in which each child has the same category and dependency label and the ordering is important.
 
-however it's probably not exponential in practice (?)
+% however it's probably not exponential in practice (?)
+% \todo[inline]{Fix this!}
+
+% Most of the time when this happens we would like for 
 
 
 % Another issue that has not been dealt with is infinite loops

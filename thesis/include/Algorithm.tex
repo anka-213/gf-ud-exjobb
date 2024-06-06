@@ -1,7 +1,7 @@
 \chapter{The old algorithm}
 
-\todo[inline]{Move to before methods?}
-\todo[inline]{Or is the goal of the paper to describe this? probably not}
+% \todo[inline]{Move to before methods?}
+% \todo[inline]{Or is the goal of the paper to describe this? probably not}
 
 % Explain what the old algorithm does
 % Explain what has changed
@@ -74,14 +74,16 @@ In this chapter, we first explain the annotations that are used to describe the 
 
 \section{Overview}
 
-\todo[inline]{fix this}
+% \todo[inline]{fix this}
 % The whole process goes like this: first we do X (section XXX, then we do Y (section YYY)
 
-GF trees consist of functions and categories, UD trees consist of PoS annotations and dependency labels (plus some extra annotation)
+GF trees consist of functions and categories, UD trees consist of PoS annotations and dependency labels and some optional extra annotation.
+
+The ud2gf tool uses annotations in a so called \verb|.labels|-file to describe the relation between the UD labels and the GF functions. These annotations gives constraints, which are used to decide which GF functions can be applied where. The algorithm starts by parsing each individual word using GF for each of the possible category according to the annotations and the Part of Speech. Then it tries to recursively apply as many functions as possible, following the constraints from the annotations and the UD tree structure. When multiple trees of the same category are generated at the same location in the UD tree, the most complete one is selected. Finally backup functions are inserted to include the words that was not included in the most complete tree.
 
 \section{How annotations work}
 
-In order for the program to know which UD Part of Speech (POS) corresponds to which GF categories and how the GF functions relate to the UD dependency labels, we need to supply annotations which describe these correspondences. Most of these annotations are bidirectional and are used both by ud2gf and gf2ud.
+In order for the program to know which UD Part of Speech (POS) corresponds to which GF categories and how the GF functions relate to the UD dependency labels, we need to supply annotations which describe these correspondences. Most of these annotations are bidirectional and are used both by ud2gf and gf2ud. A complete description of these annotations can be found in \autoref{app:annotation}.
 
 First we have the \lstinline{#cat} annotation, which describes the mapping from GF categories and UD Part of Speech labels:
 
@@ -90,9 +92,9 @@ First we have the \lstinline{#cat} annotation, which describes the mapping from 
     #cat N NOUN
 \end{lstlisting}
 
-Secondly we have the \lstinline{#fun} annotation, which describes GF functions and which UD dependency label each argument of the function should have (see \autoref{fig:DetCN} for graphical representation of such an annotation). The type signature of the GF function is also required. Each function needs to have at least one head with the label \lstinline{head} and any number of children which are labeled with their corresponding UD dependency labels. It is also possible to add other UD annotations in brackets to a label.
+Secondly we have the \lstinline{#fun} annotation, which describes GF functions and which UD dependency label each argument of the function should have (see \autoref{fig:DetCN} for graphical representation of such an annotation). The type signature of the GF function is also required. Each function needs to have exactly one head with the label \lstinline{head} and any number of children which are labeled with their corresponding UD dependency labels. It is also possible to add other UD annotations in brackets to a label.
 
-\todo[inline]{How to give this listing a number and a label}
+% \todo[inline]{How to give this listing a number and a label}
 \begin{lstlisting}
     #fun GFFunctionName : FirstArgumentCat -> SecondArgumentCat -> ReturnCat ; first_ud_label second_ud_label
     #fun UseN : N -> CN ; head
@@ -214,7 +216,7 @@ For a very simple initial example, we start with the noun-phrase ``the black cat
 
 And we use the following GF abstract syntax:
 
-\todo[inline]{Place these side-by-side}
+% Nope: \todo[inline]{Place these side-by-side}
 \begin{verbatim}
   cat
     Det CN NP AP N A;
@@ -242,7 +244,8 @@ and the following corresponding dependency configuration (labels-file):
     #cat N                        ; NOUN
 \end{verbatim}
 
-Notice how only the lexical categories (returned by lexical functions) have a corresponding UD POS. This is a distinction between GF's phrase structure grammar, which uses phrasal categories covering entire phrases, and UD's dependency grammar, where the individual words are annotated with a POS. \todo{Write a section in the introduction to refer back to here.}
+Notice how only the lexical categories (returned by lexical functions) have a corresponding UD POS. This is a distinction between GF's phrase structure grammar, which uses phrasal categories covering entire phrases, and UD's dependency grammar, where the individual words are annotated with a POS.
+% \todo{Write a section in the introduction to refer back to here.}
 
 The first step is to parse each word in the UD tree into their corresponding lexical GF functions. We use the configuration in the labels file to convert UD POS into their corresponding GF categories.
 \begin{verbatim}
@@ -250,7 +253,7 @@ The first step is to parse each word in the UD tree into their corresponding lex
     ADJ -> A
     NOUN -> N
 \end{verbatim}
-And then we use the GF parser on each individual lemma (word in the dictionary form), with the category we just got\todo{Explain that gf parser wants to know which category to parse in}.
+And then we use the GF parser on each individual lemma (word in the dictionary form), with the category or categories we just got\footnote{The GF parser needs to know which category the result should be in order to be able to parse correctly.}. % \todo{Explain that gf parser wants to know which category to parse in}.
 This gives the tree in \autoref{fig:the_black_cat_ud_gf}. Notice how the words have been replaced by GF lexical functions and the POS annotations have been replaced by GF Categories. The UD dependency labels still remain.
 
 % TODO: Fix this so it's not so ugly

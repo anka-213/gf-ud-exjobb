@@ -1,0 +1,255 @@
+\chapter{Complete benchmark results}\label{appendix:performance}
+
+The benchmark was performed on the branch \texttt{old-benchmark} at
+\url{https://github.com/anka-213/gf-ud/tree/old-benchmark}, using the command:
+
+\begin{verbatim}
+$ stack bench --ba "--csv results.csv"
+\end{verbatim}
+
+Below is a complete table of the results, sorted by time taken for the original algorithm:
+
+\begin{longtable}[]{@{}p{40mm}cccc@{}}
+\hline
+\thead{Name} & \thead{Original\\algorithm} & \thead{Both\\improvements} & \thead{Fast\\keepTrying} & \thead{Fast\\allFunsLocal} \\
+\hline
+\endhead
+\hline
+\endlastfoot
+47: Drop the mic . & 7ms & 5ms & 5ms & 5ms \\
+45: The dress is contemporary . & 12ms & 5ms & 7ms & 6ms \\
+08: Who are they ? & 14ms & 14ms & 14ms & 14ms \\
+37: I spotted a few . & 21ms & 9ms & 11ms & 8ms \\
+70: Investigation and expeditions to the island continue . & 21ms & 14ms
+& 15ms & 14ms \\
+32: And what about Australia 's position ? & 24ms & 13ms & 17ms &
+12ms \\
+17: Then the commercial ends . & 24ms & 10ms & 13ms & 11ms \\
+57: Not all transformations in the region have been successful . & 26ms
+& 10ms & 16ms & 11ms \\
+130: The chalet burned completely down . & 27ms & 9ms & 12ms & 10ms \\
+106: The reason for advertising the video in Germany is unclear . & 31ms
+& 11ms & 15ms & 12ms \\
+97: John of Gaunt died in 1399 . & 35ms & 3ms & 9ms & 6ms \\
+129: The ruins were later built over . & 36ms & 10ms & 15ms & 11ms \\
+33: Conservationists welcomed the commission 's announcement . & 37ms &
+13ms & 17ms & 14ms \\
+55: There is no parade and there never has been . & 37ms & 24ms & 26ms &
+24ms \\
+108: The exchange of Barrosos caused a big stir . & 40ms & 11ms & 16ms &
+12ms \\
+123: They were primarily on hills . & 40ms & 17ms & 23ms & 18ms \\
+50: Is series two working so far ? & 41ms & 16ms & 20ms & 17ms \\
+74: Aldrin has been married three times . & 42ms & 6ms & 15ms & 8ms \\
+61: Moreover , many of the Macedonian and Persian elite intermarried . &
+43ms & 11ms & 21ms & 13ms \\
+75: Two measure the lengths of lunar months . & 45ms & 14ms & 24ms &
+16ms \\
+76: Its importance resides in two facts . & 53ms & 17ms & 26ms & 20ms \\
+22: Who can stop this Australia side ? & 55ms & 14ms & 29ms & 14ms \\
+112: France does n\textquotesingle t have a good reputation . & 55ms &
+7ms & 17ms & 8ms \\
+101: Production of the smartphone model was completely discontinued . &
+56ms & 19ms & 24ms & 21ms \\
+12: That \textquotesingle s what keeps us coming back for more . & 57ms
+& 26ms & 37ms & 27ms \\
+121: There are different theories about the reasons for leaving the
+place . & 57ms & 22ms & 29ms & 23ms \\
+118: And what about the parties in what , in historical rights ? & 57ms
+& 24ms & 31ms & 25ms \\
+67: The study of volcanoes is called volcanology , sometimes spelled
+vulcanology . & 60ms & 23ms & 32ms & 23ms \\
+15: She was 84 years old . & 60ms & 14ms & 24ms & 16ms \\
+24: He 's spoken in favour of torture . & 61ms & 17ms & 25ms & 19ms \\
+128: The displaced nuns were moved to the Eibingen cloister . & 61ms &
+11ms & 21ms & 12ms \\
+114: It will go for assessment . & 61ms & 13ms & 24ms & 14ms \\
+56: The Yas Marina Circuit website has exact timings . & 63ms & 20ms &
+27ms & 21ms \\
+44: They will play on Saturday , 10 June . & 66ms & 10ms & 21ms &
+13ms \\
+34: Only 50 were marketplaces . & 69ms & 11ms & 19ms & 14ms \\
+18: His skill in getting answers for taxpayers will be sorely missed . &
+69ms & 25ms & 35ms & 27ms \\
+31: Let 's just say he 's wrong . & 70ms & 20ms & 32ms & 23ms \\
+81: This city - state emerged in the same period as Sukhothai . & 71ms &
+15ms & 27ms & 18ms \\
+62: Current land reclamation projects include extending the district of
+Fontvieille . & 72ms & 20ms & 28ms & 22ms \\
+72: Each poem narrates only a part of the war . & 76ms & 19ms & 32ms &
+21ms \\
+16: Still , there are questions left unanswered . & 80ms & 19ms & 30ms &
+21ms \\
+80: Catherine of Russia was also very satisfied . & 81ms & 11ms & 21ms &
+12ms \\
+119: He believes that nobody waiting for us waits for us . & 83ms & 25ms
+& 36ms & 30ms \\
+19: More than 330 crew are onboard the ship . & 85ms & 12ms & 24ms &
+16ms \\
+96: Bouchard suffered a shocking three - set loss . & 88ms & 12ms & 26ms
+& 15ms \\
+39: A small town with two minarets glides by . & 92ms & 19ms & 37ms &
+22ms \\
+90: George was appalled by what he saw as their loose morals . & 95ms &
+29ms & 44ms & 33ms \\
+111: Are workers allowed to keep religious objects on their desks ? &
+95ms & 24ms & 35ms & 24ms \\
+14: The new iron guidelines mean more donors are needed . & 96ms & 16ms
+& 31ms & 19ms \\
+20: People got killed there . & 102ms & 10ms & 28ms & 11ms \\
+60: The multi-ethnic Achaemenid army possessed many soldiers from the
+Balkans . & 104ms & 14ms & 31ms & 16ms \\
+105: Do you argue with your alarm clock ? & 110ms & 23ms & 39ms &
+25ms \\
+59: The 2019 Winter Universiade will be hosted by Krasnoyarsk . & 124ms
+& 8ms & 41ms & 12ms \\
+94: At least 330,000 people , including 10,000 technicians , were
+involved . & 124ms & 14ms & 46ms & 18ms \\
+107: The issue might not be over for Barroso . & 132ms & 6ms & 62ms &
+6ms \\
+13: The current waiting period is eight weeks . & 132ms & 15ms & 37ms &
+18ms \\
+86: He graduated and obtained an M.A. on 21 April 1882 . & 132ms & 15ms
+& 49ms & 20ms \\
+88: Only 3000 copies were published of the first edition . & 133ms &
+20ms & 43ms & 25ms \\
+40: It is his dream to end his career here . & 141ms & 34ms & 78ms &
+35ms \\
+49: All the medics were armed , except me . & 142ms & 13ms & 41ms &
+13ms \\
+84: With population growth , new indigenous quarters were created . &
+143ms & 16ms & 39ms & 18ms \\
+87: He then returned to Kirriemuir . & 148ms & 14ms & 39ms & 16ms \\
+27: In this context , railing against trade makes sense . & 154ms & 14ms
+& 54ms & 16ms \\
+51: I do n\textquotesingle t know why I chose her ... & 162ms & 27ms &
+54ms & 30ms \\
+115: Durán acts acts as spokesman and Ángel Pintado as treasurer . &
+163ms & 12ms & 44ms & 13ms \\
+92: Louis Post Dispatch called it one of LaBeouf \textquotesingle s best
+performances . & 180ms & 16ms & 51ms & 17ms \\
+23: They have one crack at redemption , beating England . & 189ms & 19ms
+& 54ms & 20ms \\
+77: But the impact of Hispania in the newcomers was also big . & 203ms &
+17ms & 51ms & 19ms \\
+117: This department now faces new challenges . & 206ms & 17ms & 46ms &
+20ms \\
+63: In June to August 2010 famine struck the Sahel . & 210ms & 8ms &
+42ms & 13ms \\
+43: The consumer can boost the demand for change . & 214ms & 15ms & 54ms
+& 16ms \\
+120: The festive dedication took place on April 30 , 1955 . & 220ms &
+13ms & 69ms & 18ms \\
+73: This was by boat from continental Europe . & 223ms & 14ms & 45ms &
+16ms \\
+113: The hit song is " Geronimo " by Sheppard . & 225ms & 11ms & 57ms &
+11ms \\
+79: Philip next marched against his southern enemies . & 229ms & 20ms &
+50ms & 21ms \\
+25: I also struggle with passwords . & 231ms & 18ms & 59ms & 21ms \\
+109: The good numbers in Asia promptly pushed the stock markets up . &
+238ms & 21ms & 57ms & 26ms \\
+82: The Army performed well in combat in Cuba . & 247ms & 16ms & 51ms &
+20ms \\
+09: Not everyone can rise above it . & 250ms & 16ms & 63ms & 17ms \\
+99: Von Beust justified the cost increases as lack of detailed planning
+. & 251ms & 22ms & 58ms & 27ms \\
+66: The Danevirke has remained in German possession ever since . & 261ms
+& 17ms & 58ms & 21ms \\
+58: She spoke to CNN Style about the experience . & 263ms & 16ms & 56ms
+& 19ms \\
+21: He worked for the BBC for a decade . & 263ms & 15ms & 53ms & 18ms \\
+125: The hymn was well received and the audience demanded an encore . &
+275ms & 22ms & 68ms & 23ms \\
+93: The car burst into flames , and Kenseth walked away . & 276ms & 16ms
+& 64ms & 17ms \\
+41: I also wonder whether the Davis Cup played a part . & 281ms & 23ms &
+63ms & 28ms \\
+83: British cavalry troopers also received excellent mounted
+swordsmanship training . & 292ms & 25ms & 62ms & 30ms \\
+69: It was declared a wildlife sanctuary in 1975 . & 301ms & 18ms & 81ms
+& 20ms \\
+03: Maybe the dress code was too stuffy . & 307ms & 17ms & 59ms &
+20ms \\
+02: \$ 5,000 per person , the maximum allowed . & 311ms & 10ms & 172ms &
+13ms \\
+68: They generally do not explode catastrophically . & 323ms & 20ms &
+70ms & 27ms \\
+05: The scheme makes money through sponsorship and advertising . & 324ms
+& 18ms & 67ms & 21ms \\
+07: Shenzhen \textquotesingle s traffic police have opted for
+unconventional penalties before . & 324ms & 20ms & 70ms & 26ms \\
+78: Dominican priest Heinrich Kramer was assistant to the Archbishop of
+Salzburg . & 352ms & 16ms & 52ms & 19ms \\
+38: Back on the train , we continue southwards . & 375ms & 23ms & 81ms &
+25ms \\
+95: These were almost completely forgotten until after Smith
+\textquotesingle s death . & 407ms & 24ms & 84ms & 26ms \\
+91: Her 1981 album Wild West was one of her biggest sellers . & 416ms &
+26ms & 112ms & 30ms \\
+36: Day three , I was back on the EMicro . & 434ms & 17ms & 111ms &
+19ms \\
+01: The new spending is fueled by Clinton 's large bank account . &
+435ms & 15ms & 86ms & 19ms \\
+85: Lenny is a persistent bachelor who has poor luck with women . &
+529ms & 24ms & 110ms & 26ms \\
+71: These plant families are still present in Papua New Guinea . & 535ms
+& 17ms & 117ms & 20ms \\
+126: I declare the first international Olympic games over . & 555ms &
+21ms & 116ms & 29ms \\
+29: That 's just legitimately horrendous . & 588ms & 18ms & 97ms &
+19ms \\
+89: Her latest non-fiction is about Margaret Douglas , Countess of
+Lennox . & 599ms & 16ms & 109ms & 19ms \\
+53: North Carolina is ground zero in this election . & 621ms & 12ms &
+130ms & 15ms \\
+10: That \textquotesingle s not what we need in our country , folks . &
+717ms & 38ms & 163ms & 39ms \\
+122: It contains a monument to Martin Luther King , Jr. & 817ms & 17ms &
+148ms & 26ms \\
+124: In addition , its process of gilding copper is technologically
+noteworthy . & 841ms & 26ms & 173ms & 28ms \\
+54: I was just a boy with muddy shoes . & 1s 26ms & 23ms & 169ms &
+26ms \\
+28: Fast forward to 2016 and this is increasingly worthy of attention .
+& 1s 65ms & 24ms & 232ms & 27ms \\
+102: On the other hand , Vine was art in six seconds . & 1s 245ms & 16ms
+& 225ms & 21ms \\
+46: In theory , if done right , it 's un-detectable . & 1s 248ms & 15ms
+& 283ms & 15ms \\
+65: Like fjords , freshwater lakes are often deep . & 1s 273ms & 18ms &
+236ms & 20ms \\
+04: It \textquotesingle s like a super power sometimes . & 1s 377ms &
+18ms & 192ms & 25ms \\
+42: Or is it an expensive standard or prepayment tariff ? & 1s 380ms &
+23ms & 194ms & 29ms \\
+110: According to the programme , she will speak at 23.45s . & 1s 497ms
+& 15ms & 321ms & 19ms \\
+100: Simon Krätschmer gropes around alone through the dilapidated ,
+sinister barrack . & 1s 569ms & 23ms & 249ms & 44ms \\
+30: `` I loved the tropical colours , '' he says . & 1s 570ms & 20ms &
+327ms & 22ms \\
+127: Today , expansive ruins can be viewed there . & 1s 570ms & 15ms &
+327ms & 17ms \\
+98: Kühn can only shake his head . & 1s 806ms & 20ms & 320ms & 26ms \\
+52: This is a homeland security issue of the most existential kind . &
+2s 65ms & 36ms & 297ms & 42ms \\
+103: And now he is also world champion . & 2s 621ms & 25ms & 319ms &
+29ms \\
+48: The result , then , is hardly the cat \textquotesingle s pyjamas . &
+2s 630ms & 22ms & 425ms & 27ms \\
+116: Its management , however , has n\textquotesingle t been devoid of
+criticism . & 2s 835ms & 24ms & 557ms & 27ms \\
+11: Our cellphones are so much more than phones these days . & 3s 703ms
+& 27ms & 653ms & 29ms \\
+06: Previously the jets had only been seen by bloggers . & 4s 619ms &
+33ms & 580ms & 85ms \\
+35: I do n't call it a beast lightly . & 5s 824ms & 25ms & 1s 25ms &
+30ms \\
+104: It is now only unclear , in which one . & 7s 365ms & 23ms & 1s
+116ms & 28ms \\
+26: I can just do that with my life . & 40s 861ms & 44ms & 5s 0ms &
+86ms \\
+64: In Danish , the word may even apply to shallow lagoons . & 1m 24s
+835ms & 38ms & 10s 471ms & 109ms \\
+\end{longtable}

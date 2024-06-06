@@ -6,7 +6,7 @@
 
 % TODO: Link to the code somewhere
 
-Since the advent of computers, people have been trying to make them understand natural languages. Today machine learning methods are very popular\note{rephrase}, but the more traditional method is so called rule-based Natural Language Processing (NLP) and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.\cite{chomsky-1957,lambek-1958,curry1961some}
+Since the advent of computers, people have been trying to make them understand natural languages. Today machine learning methods are very popular, but the more traditional method is so called rule-based Natural Language Processing (NLP) and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.\cite{chomsky-1957,lambek-1958,curry1961some}
 In fact, much of the terminology around programming languages comes from linguistics for this exact reason\footnote{Programming \emph{languages} have a \emph{syntax} and a \emph{grammar} which is \emph{parsed} and lexed into \emph{lexemes}}. This work will focus on connecting the two rule-based NLP formalisms of \emph{Grammatical Framework}\cite{ranta-2011} and \emph{Universal Dependencies}\cite{nivre-etal-2016-universal}.\footnote{The code is found on github: https://github.com/GrammaticalFramework/gf-ud}
 
 
@@ -18,7 +18,7 @@ These properties are particularly important when correctness is crucial, for exa
 
 % (why not ai? more predictable, easier to fix bugs, more deterministic)
 
-While technically even the most naive string replacement method\footnote{e.g. adding an ``s'' to the end of a word to make it plural, producing ``foots'' instead of the correct ``feet''} is an instance of ``rule-based NLP'', in practice we tend to us more sophisticated tools, namely \emph{grammar formalisms}.
+While technically even the most naive string replacement method\footnote{e.g. adding an ``s'' to the end of a word to make it plural, producing ``foots'' instead of the correct ``feet''} is an instance of ``rule-based NLP'', in practice we tend to use more sophisticated tools, namely \emph{grammar formalisms}.
 
 % % Draft
 % One problem in NLP is to convert from text into mathematical logic, to allow a computer program to deduce things. 
@@ -59,9 +59,9 @@ A grammar formalism is used to describe the connection between a plain text and 
 There are several different formalisms for describing sentences as trees, all with their own strengths and weaknesses.
 The two we will be talking about in this paper are Universal Dependencies (UD), which is based on so called \emph{dependency trees}, and Grammatical Framework (GF), which uses \emph{constituency-based abstract syntax trees}.
 
-\todo[inline]{This paper is about combining these two methods. Move 1.4 here}
+% \todo[inline]{This paper is about combining these two methods. Move 1.4 here}
 
-\todo[inline]{Add a figure that shows the difference between Dependency Grammars, Constituency Grammars (a.k.a. phrase structure grammars) and Abstract Syntax Trees}
+% \todo[inline]{Add a figure that shows the difference between Dependency Grammars, Constituency Grammars (a.k.a. phrase structure grammars) and Abstract Syntax Trees}
 
 
 % \begin{verbatim}
@@ -89,7 +89,7 @@ The two we will be talking about in this paper are Universal Dependencies (UD), 
 
 %  - dep trees, UD
 \section{Dependency trees and Universal Dependencies}
-\todo[inline]{This is Theory, not intro}
+% \todo[inline]{This is Theory, not intro}
 A dependency tree is a tree structure that shows the grammatical relationship between words in a sentence\cite{tesniere2015elements,nivre2006inductive}. Each word becomes a node in the tree with the main verb as the root and the edges represents the relation and the direction of the dependency.
 
 The specific standard for dependency trees that this paper is about is called Universal Dependencies (UD)\cite{nivre-etal-2016-universal}. UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
@@ -297,11 +297,10 @@ using UD and then convert the parsed trees to GF trees in order to perform furth
 
 \subsection{Useful synthesis between UD and GF}
 
-\todo[inline]{explain about gf-ud, the old-old version, the new-old version and my developments on that}
+% \todo[inline]{explain about gf-ud, the old-old version, the new-old version and my developments on that}
 
-
-There exists a proof-of-concept implementation of a tool for converting between the trees for GF and UD,
-with the help of so-called labels-files which describe the mapping between UD labels and GF functions,
+Prior to this work there existed a proof-of-concept implementation of a tool for converting between the trees for GF and UD,
+with the help of so-called labels-files containing annotations which describe the mapping between UD labels and GF functions,
 called gf-ud, which contains both a component for converting from UD to GF, called ud2gf\cite{kolachina-ranta-2017}\footnotemark[1]
 and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-2016}\footnotemark[1]. This work will focus on the ud2gf component.
 
@@ -316,7 +315,7 @@ and a component for converting from GF to UD, called gf2ud\cite{kolachina-ranta-
 
 The gf-ud tool has been used for both translation and semantics\cite{ranta-al-2020}. %\todo{actually explain this}
 Another application has been in concept alignment\cite{masciolini-ranta-2021}.
-There has also been work using it for analysis of law text for the purpose of making a Controlled Natural Language for law\cite{listenmaa-etal-2021-towards}.
+It has also been used to analyze legal texts as a part of a Controlled Natural Language for law\cite{listenmaa-etal-2021-towards}.
 
 \section{What problem does ud2gf solve?}
 % \todo[inline]{This is the main focus of the intro}

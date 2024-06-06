@@ -1,0 +1,94 @@
+% Aarne's original text from annotations
+
+Annotations define the relation between GF abstract syntax trees and
+dependency trees. There are two kinds of annotations:
+
+\begin{itemize}
+% \tightlist
+\item
+  abstract annotations, which refer only to the abstract syntax
+\item
+  concrete annotations, which refer also to the concrete syntax
+\end{itemize}
+
+Abstract annotations are in principle language-independent. But if we
+want to match the conventions of some actual treebank, we may need to
+vary them, even in a ``universal'' annotation scheme such as UD.
+Concrete annotations are defined for each language separately. But it is
+possible to share some of them as well, in particular for languages that
+use functors in GF.
+
+To enable maximal sharing of annotations across languages (and other
+variations on GF and UD side), annotations can be divided into multiple
+files. The \texttt{gfud} program reads these files and builds a data
+structure that contains their union. A typical set-up is two files, one
+with abstract and one with concrete annotations. An example is
+\texttt{grammars/\{Parse.labels,ParseEng.labels,ParseSwe.labels\}},
+which are used in combination with \texttt{Parse.pgf} so that
+\texttt{Parse.labels} is combined with either \texttt{ParseEng.labels}
+or \texttt{ParseSwe.labels}.
+
+The consistency and completeness of annotations can be checked with a
+gfud command, for instance:
+
+\begin{verbatim}
+$ gfud check-annotations grammars/Parse Eng Utt
+\end{verbatim}
+
+(Utt is the start category needed for the checking environment.) When
+using annotations and checking their completeness, gfud automatically
+adds some rules:
+
+\begin{itemize}
+% \tightlist
+\item
+  \texttt{\#fun\ f\ head} for abstract syntax functions that take just
+  one argument
+\item
+  \texttt{\#morpho\ C\ 0\ \_} for categories whose linearization is just
+  a string (or a record with just a string in it)
+\end{itemize}
+
+
+%%%%%%% aarne's original starts here 
+
+%\begin{verbatim}
+%   #fun AdvVP  head advmod
+%\end{verbatim}
+
+%There must be a label for each argument. Exactly one argument must have
+%the label \texttt{head}. If the function has 1 or 0 arguments, the
+%annotation is not needed. Otherwise, \texttt{gfud} gives a warning about
+%missing annotations. A generalized form of this is a \textbf{nonlocal
+%annotation}, such as
+
+%\begin{verbatim}
+%   #fun AdvVP _ PrepNP > head obl
+%\end{verbatim}
+
+%which says that the second argument of \texttt{AdvVP} gets label
+%\texttt{obl} if it is a tree formed by the function \texttt{PrepNP}.
+%Nonlocal annotations override normal (local) function annotations. The
+%above local annotation can be seen as a shorthand of
+
+%\begin{verbatim}
+%   #fun AdvVP _ _ > head advmod
+%\end{verbatim}
+
+
+
+
+
+
+
+% \section{Evaluation}
+% 
+% \subsection{Recursive \#auxfun macros}
+% 
+% % TODO: This is already in the recursive macros 
+% 
+% In order to improve the ability to create structurally different trees when converting from UD to GF, the ability for macros to be recursive was added. This means that when a macro is substituted, the resulting head is checked again to see if the result is another macro, until no more substitutions are possible. This makes it possible to encode data using Church-encoding, in particular the church encoding for pairs: a higher order function that takes a binary function as an argument and provides the two items it contains to the inner function.
+% 
+% \begin{verbatim}
+% type Pair a b = forall c. (a -> b -> c) -> c
+% \end{verbatim}
