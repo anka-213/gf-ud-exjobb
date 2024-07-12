@@ -6,11 +6,14 @@
 
 % TODO: Link to the code somewhere
 
-Since the advent of computers, people have been trying to make them understand natural languages. Today machine learning methods are very popular, but the more traditional method is so called rule-based Natural Language Processing (NLP) and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.\cite{chomsky-1957,lambek-1958,curry1961some}
-In fact, much of the terminology around programming languages comes from linguistics for this exact reason\footnote{Programming \emph{languages} have a \emph{syntax} and a \emph{grammar} which is \emph{parsed} and lexed into \emph{lexemes}}. This work will focus on connecting the two rule-based NLP formalisms of \emph{Grammatical Framework}\cite{ranta-2011} and \emph{Universal Dependencies}\cite{nivre-etal-2016-universal}.\footnote{The code is found on github: https://github.com/GrammaticalFramework/gf-ud}
+Since the advent of computers, people have been trying to make them understand natural languages. Today machine learning methods are very popular, but the more traditional method is so called rule-based 
+\ac{NLP}
+% Natural Language Processing (NLP)
+and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.\cite{chomsky-1957,lambek-1958,curry1961some}
+In fact, much of the terminology around programming languages comes from linguistics for this exact reason\footnote{Programming \emph{languages} have a \emph{syntax} and a \emph{grammar} which is \emph{parsed} and lexed into \emph{lexemes}}. This work will focus on connecting the two rule-based \ac{NLP} formalisms of \emph{Grammatical Framework}\cite{ranta-2011} and \emph{Universal Dependencies}\cite{nivre-etal-2016-universal}.\footnote{The code is found on github: https://github.com/GrammaticalFramework/gf-ud}
 
 
-While machine-learning is currently dominating in NLP, using rule-based approaches still provides several important advantages over those based on machine-learning.
+While machine learning is currently dominating in \ac{NLP}, using rule-based approaches still provides several important advantages over those based on machine-learning.
 For example, rule-based approaches are deterministic and more predictable. They make it possible to fix individual bugs without needing to retrain the whole model, hoping that it fixes the issue. They are also more transparent, rather than being a black box as most machine learning based language models are. % \todo{When are these properties important? E.g. when correctness is important, (law, medicine)}
 These properties are particularly important when correctness is crucial, for example in law and medicine.
 % There have been many different approaches to solving...
@@ -18,10 +21,10 @@ These properties are particularly important when correctness is crucial, for exa
 
 % (why not ai? more predictable, easier to fix bugs, more deterministic)
 
-While technically even the most naive string replacement method\footnote{e.g. adding an ``s'' to the end of a word to make it plural, producing ``foots'' instead of the correct ``feet''} is an instance of ``rule-based NLP'', in practice we tend to use more sophisticated tools, namely \emph{grammar formalisms}.
+While technically even the most naive string replacement method\footnote{e.g. adding an ``s'' to the end of a word to make it plural, producing ``foots'' instead of the correct ``feet''} is an instance of ``rule-based \ac{NLP}'', in practice we tend to use more sophisticated tools, namely \emph{grammar formalisms}.
 
 % % Draft
-% One problem in NLP is to convert from text into mathematical logic, to allow a computer program to deduce things. 
+% One problem in \ac{NLP} is to convert from text into mathematical logic, to allow a computer program to deduce things. 
 % 
 % % SMU in background or here?
 % 
@@ -49,7 +52,7 @@ A grammar formalism is used to describe the connection between a plain text and 
 % TODO: Mention multilinguality of GF
 
 
-% In rule-based NLP we want to be able to take a text and analyse it at a higher level and make transformations to it.
+% In rule-based \ac{NLP} we want to be able to take a text and analyse it at a higher level and make transformations to it.
 % In order to do this, we first need a way to parse the text into a syntax tree, which describes the relationship between words in a sentence.
 
 % For example you can write a grammar to transform the text into an abstract tree form, which allows understanding its structure and processing it\note{bad}.
@@ -83,18 +86,18 @@ The two we will be talking about in this paper are Universal Dependencies (UD), 
 
 % \todo[inline]{Write more about the goal of the project and move the rest to background}
 
-% \todo[inline]{Something general about rule-based NLG and NLP and computer grammars}
+% \todo[inline]{Something general about rule-based NLG and \ac{NLP} and computer grammars}
 
 % TODO: Ta reda på vad UD används till
 
 %  - dep trees, UD
 \section{Dependency trees and Universal Dependencies}
 % \todo[inline]{This is Theory, not intro}
-A dependency tree is a tree structure that shows the grammatical relationship between words in a sentence\cite{tesniere2015elements,nivre2006inductive}. Each word becomes a node in the tree with the main verb as the root and the edges represents the relation and the direction of the dependency.
+A dependency tree is a tree structure that shows the grammatical relationship between words in a sentence\cite{tesniere2015elements,nivre2006inductive}. Each word becomes a node in the tree with the main verb as the root and the edges represent the relation and the direction of the dependency.
 
-The specific standard for dependency trees that this paper is about is called Universal Dependencies (UD)\cite{nivre-etal-2016-universal}. UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
+The specific standard for dependency trees that this paper is about is called \ac{UD}\cite{nivre-etal-2016-universal}. UD is based on the idea of making a multilingual standard for dependency trees where the same set of tags can be used regardless of which language the sentence is written in.
 
-In \autoref{fig:cat_sleeps_ud} we can see the sentence ``The cat sleeps'' analyzed as a UD-tree. The first step is to determine which part-of-speech each word in the sentence belongs to. In this case, ``the'' is a determiner, ``cat'' is a noun and ``sleeps'' is a verb. Next we need to determine the relation between the words: ``sleeps'' is the root of the sentence, ``cat'' is the subject of this verb and ``the'' quantifies (determines) the noun.
+In \autoref{fig:cat_sleeps_ud} we can see the sentence ``the cat sleeps'' analyzed as a UD-tree. The first step is to determine which part-of-speech each word in the sentence belongs to. In this case, ``the'' is a determiner, ``cat'' is a noun and ``sleeps'' is a verb. Next we need to determine the relation between the words: ``sleeps'' is the root of the sentence, ``cat'' is the subject of this verb and ``the'' quantifies (determines) the noun.
 
 % Constituency vs dependency trees
 
@@ -193,7 +196,7 @@ Another way of describing the grammatical structure of a sentence is through abs
 % \todo[inline]{Write about abstract trees}
 % \todo[inline]{Add an image}
 
-Grammatical Framework\cite{ranta-2004} (GF) is a formalism for describing natural language grammars as code, which allows converting between natural language and a language-independent abstract syntax. It is split into a generic resource grammar that covers morphology and the language as a whole and application grammars for a more narrow domain which allows a more semantic abstract syntax. When you try to write a grammar that covers a very wide domain, you will often get an over-generating grammar where each sentence can be parsed in very many ways into many different trees, where usually only one is the intended way.
+\ac{GF}\cite{ranta-2004} is a formalism for describing natural language grammars as code, which allows converting between natural language and a language-independent abstract syntax. It is split into a generic resource grammar that covers morphology and the language as a whole and application grammars for a more narrow domain which allows a more semantic abstract syntax. When you try to write a grammar that covers a very wide domain, you will often get an over-generating grammar where each sentence can be parsed in many different ways into many different trees, where usually only one is the intended way.
 
 In \autoref{fig:cat_sleeps_gf}, the sentence ``The cat sleeps'' is analyzed as a GF tree. Instead of having dependencies between words like in UD, the trees is built up of constituency. In this case we have a sentence clause (labeled \verb|PredVP : Cl|) that consists of a noun phrase (labeled \verb|DetCN : NP|) and a verb phrase (labeled \verb|UseV : VP|) and the noun phrase in turn consists of a determiner (``the'') and what Grammatical Framework calls a \emph{common noun} (labeled \verb|UseN : CN|) which in turn consists of the noun ``cat''. The verb ``sleeps'' constitutes the verb phrase.
 
@@ -324,7 +327,7 @@ It has also been used to analyze legal texts as a part of a Controlled Natural L
 % 
 % \todo[inline]{write this text}
 
-One problem within NLP is converting from text to logic. There are several different paths one could take, each with their own issues, see \autoref{fig:text-to-logic} for an overview. The tool gf2ud makes it possible to get the robust parsing available for dependency trees and the ease of conversion to logic of Abstract Syntax Trees.
+One problem within \ac{NLP} is converting from text to logic. There are several different paths one could take, each with their own issues, see \autoref{fig:text-to-logic} for an overview. The tool gf2ud makes it possible to get the robust parsing available for dependency trees and the ease of conversion to logic of Abstract Syntax Trees.
 
 \begin{figure}[H]
     \centering

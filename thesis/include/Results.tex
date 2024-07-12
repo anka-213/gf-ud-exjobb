@@ -25,7 +25,7 @@ The result of running different versions of the algorithm on the example file ca
     Both improvements & 2.7s & 13.9s & 16.6s \\
     Both improvements (fast GC) & 1.25s & 1.25s & 2.5s \\
     \end{tabular}
-    \caption{The total run time for converting the file upto12eng.conllu, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500Mb to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. Each measurement was only performed once, so there might be some inaccuracy because of random noise resulting from preemptive multitasking. }
+    \caption{The total run time for converting the file upto12eng.conllu, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500MB to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. Each measurement was only performed once, so there might be some inaccuracy because of random noise resulting from preemptive multitasking. }
     \label{tab:time-with-gc}
 \end{table}
 
@@ -33,7 +33,7 @@ In \autoref{fig:time-vs-time} we can see the speedup for each individual sentenc
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{thesis/figure/Time-including-GC.png}
-    \caption[The total run time for converting the file \texttt{upto12eng.conllu}, including garbage collection and startup time.]{The total run time for converting the file \texttt{upto12eng.conllu}, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500Mb to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. Each measurement was only performed once, so there might be some inaccuracy because of random noise resulting from preemptive multitasking.}
+    \caption[The total run time for converting the file \texttt{upto12eng.conllu}, including garbage collection and startup time.]{The total run time for converting the file \texttt{upto12eng.conllu}, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500MB to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. Each measurement was only performed once, so there might be some inaccuracy because of random noise resulting from preemptive multitasking.}
     \label{fig:time-including-gc}
 \end{figure}
 \begin{figure}
@@ -99,10 +99,13 @@ As we saw in \autoref{fig:time-including-gc} and \autoref{tab:time-with-gc}, whe
 In our case we have a large amount of long-living data, which means that every major garbage collection is expensive. The code begins by loading the GF grammar into memory, which for our test grammar takes up around 100 megabytes. There are several ways to mitigate this, but the easiest solution is to tweak the parameters for the garbage collector to make it wait longer before attempting to collect garbage, which reduces the total number of major garbage collections.
 % Nope: \todo[inline]{The text above should probably go elsewhere (if anywhere at all)}
 
-The tool ghc-gc-tool allows automatically determining which parameters are best for this by running the executable with different parameters and plotting the result. In \autoref{fig:gf-ud-integ-gc-space} we can see the result of running this on the first 60 items of upto12eng.conllu with the ShallowParse grammar from the repository. This number was chosen arbitrarily to make the runtime not be unreasonably long. 
+The tool ghc-gc-tool allows automatically determining which parameters are best for this by running the executable with different parameters and plotting the result. In \autoref{fig:gf-ud-integ-gc-space} we can see the result of running this on the first 60 items of \texttt{upto12eng.conllu} with the ShallowParse grammar from the repository. This number was chosen arbitrarily to make the runtime not be unreasonably long. 
 
-As can be seen in \autoref{fig:GC-time} any initial heap size over 256M drastically reduces the run time and the logs show that the productivity (time spent on non-GC) goes from 15\% to 50\% and that less than one tenth as many garbage collections are performed. This number depends on the size of the GF grammar and it corresponds to the size of the GF grammar after being loaded into memory. Running the command with the default GC parameters shows that the maximum residency is 180M, which is slightly less than the optimal GC parameter value.
+As can be seen in \autoref{fig:GC-time} any initial heap size over 256MB drastically reduces the run time and the logs show that the productivity (time spent on non-GC) goes from 15\% to 50\% and that less than one tenth as many garbage collections are performed. This number depends on the size of the GF grammar and it corresponds to the size of the GF grammar after being loaded into memory. Running the command with the default GC parameters shows that the maximum residency is 180MB, which is slightly less than the optimal GC parameter value .
 
+
+\begin{figure}
+    \centering
 \begin{verbatim}
 $ ghc-gc-tune -t pdf -spr gf-ud ud2gf grammars/ShallowParse Eng Text
 ...
@@ -112,6 +115,9 @@ gf-ud +RTS -A32768 -H268435456 -RTS ud2gf grammars/ShallowParse Eng Text
     <<GCs   8655, peak   509, resident 176.64m, MUT 1.211s, GC 1.776s>>
 ...
 \end{verbatim}
+    \caption{Selected lines from the output for the ghc-gc-tune command.}
+    \label{fig:ghc-gc-tune-text-output}
+\end{figure}
 
 \begin{figure}
     \centering
@@ -123,7 +129,7 @@ gf-ud +RTS -A32768 -H268435456 -RTS ud2gf grammars/ShallowParse Eng Text
       {\includegraphics[scale=0.5]{thesis/figure/gf-ud-residency-gc-space.pdf}}
     \subcaptionbox{Peak space usage\label{fig:GC-peak-space}}
       {\includegraphics[scale=0.5]{thesis/figure/gf-ud-peak-gc-space.pdf}}
-    \caption{The integral of space usage over time for different GC parameters}
+    \caption{The integral of space usage over time for different GC parameters.}
     \label{fig:gf-ud-integ-gc-space}
 \end{figure}
 

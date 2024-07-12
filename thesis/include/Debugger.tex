@@ -2,9 +2,9 @@
 
 \section{Problem description}
 
-The problem is that sometimes rules do not match and it is difficult to figure out why
+An issue that was encountered when trying to write annotations for \texttt{ud2gf} is that sometimes it can be difficult to figure out why a rule does not fire.
 
-The goal of the debugger project is to automatically give an explanation of why a rule (function label description) doesn't match
+The goal of the debugger project is to automatically give an explanation of why a rule (function label description) doesn't match.
 
 
 % TODO: Better example
@@ -15,26 +15,26 @@ Let's say we have the sentence ``colorless green ideas sleep furiously'' and bel
 used for some reason. Then we would call the \texttt{ud2gf} tool with either \verb|dbg="DetCN 2 3"| or \verb|dbg="DetCN green ideas"| and the debugger would give back one of a list of reasons to what prevented it from being applied:
 
 \begin{itemize}
-    \item The function has been manually disabled
-    \item The function does not exist
-    \item There are multiple definitions of the function
-    \item The wrong number of arguments was given to the debugger (meta-error)
-    \item The requested indices are not found within the UD tree
-    \item The non-head arguments are not direct children of the head argument
-    \item The non-head arguments have labels that don't match the labels within the UD-tree
-    \item Required features are missing for some of the arguments
-    \item No trees with the required category could be found for some of the arguments
-    \item The function was possible to apply, but was pruned away because a different tree with the same category had higher priority
+    \item The function has been manually disabled.
+    \item The function does not exist.
+    \item There are multiple definitions of the function.
+    \item The wrong number of arguments was given to the debugger (meta-error).
+    \item The requested indices are not found within the UD tree.
+    \item The non-head arguments are not direct children of the head argument.
+    \item The non-head arguments have labels that don't match the labels within the UD-tree.
+    \item Required features are missing for some of the arguments.
+    \item No trees with the required category could be found for some of the arguments.
+    \item The function was possible to apply, but was pruned away because a different tree with the same category had higher priority.
 \end{itemize}
 
-If a word exist multiple times in the sentence, you need to use the number form, otherwise you will get an ``Ambiguous word'' error. In order to see the index number of a word you can either look at the conllu file directly or run \verb|ud2gf| with the \verb|ud| or \verb|ut| argument.
+If a word exist multiple times in the sentence, you need to use the number form, otherwise you will get an ``Ambiguous word'' error. In order to see the index number of a word you can either look at the conllu file\footnote{Conllu is the standard file format for UD trees.} directly or run \verb|ud2gf| with the \verb|ud| or \verb|ut| argument.
 
 
 \section{Implementation}
 
 The implementation is mostly a case of going through every step of the algorithm and seeing what can go wrong. Some of this process was simplified by the strong type system of Haskell, since it makes edge cases explicit, so in most cases we would get a type error if we missed handling a possible error.
 
-In order to simplify the implementation and reduce code duplication, we first run the main algorithm to generate all possible GF trees in each node of the UD tree and use this result to check what goes wrong with the specific function we're interested in.
+In order to simplify the implementation and reduce code duplication, we first run the main algorithm to generate all possible GF trees in each node of the UD tree and use this result to check what goes wrong with the specific function we are interested in.
 
 \section{Example}
 

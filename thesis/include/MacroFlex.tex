@@ -16,9 +16,9 @@ In order to overcome some limitations of the conversion from UD to GF, especiall
 
 When one GF function corresponds to multiple different dependency labels, a macro can be used to disambiguate which one is meant and to avoid losing the information of that distinction.
 
-One common case when macros are needed are so-called \emph{syncategorematic} words, that are associated with non-lexical functions\footnote{A lexical function is a function that takes zero arguments, which means that it will be in a leaf of the tree.}. For example, in GF, the copula is syncategorematic, which means that a copula cannot be parsed on its own using GF.
+One common case when macros are needed are so-called \emph{syncategorematic} words, that are associated with non-lexical functions\footnote{A lexical function is a function that takes zero arguments, which means that it will be in a leaf of the tree.}. For example, in GF, the copula and many auxiliary words are syncategorematic, which means that they cannot be parsed on their own using GF.
 
-The following is an example from \cite{kolachina-ranta-2017} that uses macros to handle the syncategorematic nature of copulas:
+The following is an example from \cite{kolachina-ranta-2017} that uses macros to handle the syncategorematic nature of the auxiliary verb \emph{have}:
 
 \todo[inline]{Include some of the commented out content}
 
@@ -54,8 +54,8 @@ The following is an example from \cite{kolachina-ranta-2017} that uses macros to
 
 
 \begin{verbatim}
-#auxfun MkVPS_Perf have vp : Have -> VP -> VPS = MkVPS (TTAnt AAnter 
-  TPres) PPos vp ; aux[Tense=Pres] head
+#auxfun MkVPS_Perf have vp : Have -> VP -> VPS = MkVPS (TTAnt TPres 
+  AAnter) PPos vp ; aux[Tense=Pres] head
 \end{verbatim}
 
 The full syntax of macros can be found in \autoref{app:annotation}.
@@ -77,7 +77,7 @@ Figures \ref{fig:gf_cute} and \ref{fig:ud_cute} show the difference between GFâ€
 %     \label{fig:enter-label}
 % \end{figure}
 
-result from \verb+p -cat=Cl "this cat is small"  | vp -view=open -showfun+:
+% result from \verb+p -cat=Cl "this cat is small"  | vp -view=open -showfun+:
 
 % Produced using: https://maryszmary.github.io/ud-annotatrix//standalone/annotator.html
 % And pressing the printer icon to select latex
@@ -94,7 +94,7 @@ result from \verb+p -cat=Cl "this cat is small"  | vp -view=open -showfun+:
        \depedge{4}{2}{nsubj}
        \depedge{4}{3}{cop}
     \end{dependency} \\
-    \caption{The phrase ``This cat is small'' analysed as a UD tree}
+    \caption{The phrase ``This cat is small'' analysed as a UD tree.}
     \label{fig:enter-label}
 \end{figure}
 
@@ -116,33 +116,33 @@ However, coordination was still a problem in \verb|ud2gf|. The auxiliary categor
 \section{Intro to flexibility problem}
 
 As an example of a phrase that can be difficult to convert using the old ud2gf, let us consider the adjectival phrase ``cute, fluffy and furry''
-would be described in UD format as in Figures \ref{fig:ud_cute_text} and \ref{fig:ud_cute}.
+would be described in UD format as in \autoref{fig:ud_cute}.
 
 
-\begin{figure}
-    \begin{verbatim}
-    1  cute  cute  ADJ  JJ  Degree=Pos  0  root  _  FUN=cute_A
-    2  ,  ,  PUNCT  ,  _  3  punct  _  _
-    3  fluffy  fluffy  ADJ  JJ  Degree=Pos  1  conj  _  FUN=fluffy_A
-    4  and  and  CCONJ  CC  _  5  cc  _  FUN=and_Conj
-    5  furry  furry  ADJ  JJ  Degree=Pos  1  conj  _  FUN=furry_A
-    \end{verbatim}
-    % \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-    % \hline
-    % 1 & cute & cute & ADJ & JJ & Degree\=Pos & 0 & root & \_ & FUN\=cute\_A \
-    % \hline
-    % 2 & , & , & PUNCT & , & \_ & 3 & punct & \_ & \_ \
-    % \hline
-    % 3 & fluffy & fluffy & ADJ & JJ & Degree\=Pos & 1 & conj & _ & FUN\=fluffy\_A \
-    % \hline
-    % 4 & and & and & CCONJ & CC & \_ & 5 & cc & \_ & FUN\=and\_Conj \
-    % \hline
-    % 5 & furry & furry & ADJ & JJ & Degree\=Pos & 1 & conj & \_ & FUN\=furry\_A \
-    % \hline
-    % \end{tabular}
-    \caption{The phrase ``cute, fluffy and furry'' as a textual UD tree}
-    \label{fig:ud_cute_text}
-\end{figure}
+% \begin{figure}
+%     \begin{verbatim}
+%     1  cute  cute  ADJ  JJ  Degree=Pos  0  root  _  FUN=cute_A
+%     2  ,  ,  PUNCT  ,  _  3  punct  _  _
+%     3  fluffy  fluffy  ADJ  JJ  Degree=Pos  1  conj  _  FUN=fluffy_A
+%     4  and  and  CCONJ  CC  _  5  cc  _  FUN=and_Conj
+%     5  furry  furry  ADJ  JJ  Degree=Pos  1  conj  _  FUN=furry_A
+%     \end{verbatim}
+%     % \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+%     % \hline
+%     % 1 & cute & cute & ADJ & JJ & Degree\=Pos & 0 & root & \_ & FUN\=cute\_A \
+%     % \hline
+%     % 2 & , & , & PUNCT & , & \_ & 3 & punct & \_ & \_ \
+%     % \hline
+%     % 3 & fluffy & fluffy & ADJ & JJ & Degree\=Pos & 1 & conj & _ & FUN\=fluffy\_A \
+%     % \hline
+%     % 4 & and & and & CCONJ & CC & \_ & 5 & cc & \_ & FUN\=and\_Conj \
+%     % \hline
+%     % 5 & furry & furry & ADJ & JJ & Degree\=Pos & 1 & conj & \_ & FUN\=furry\_A \
+%     % \hline
+%     % \end{tabular}
+%     \caption{The phrase ``cute, fluffy and furry'' as a textual UD tree}
+%     \label{fig:ud_cute_text}
+% \end{figure}
 
 \begin{figure}
     \centering

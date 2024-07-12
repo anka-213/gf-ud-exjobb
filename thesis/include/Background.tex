@@ -16,7 +16,7 @@
 \section{Background}\label{sect:background}
 % Application in 
 
-In a project\cite{listenmaa-etal-2021-towards} at the Singapore Management University, Center for Computational Law we wanted to convert text into logical form, with the goal of being able to parse and interpret legal text. We initially tried using GF directly, but we ran into issues with it being to strict, so many of the sentences were not parsed at all, either because they contained words not in the dictionary or because it didn't follow the grammatical rules exactly. In order to work around this we used a UD parser, which was based on machine learning, which allowed it to be more robust for unexpected data. However, now the problem of converting into logic became more difficult, so we used the gf2ud tool to convert the UD trees into GF trees. This worked fairly well, but we ran into several problems, described in the next section, which this project aims to solve.
+In a project\cite{listenmaa-etal-2021-towards} at the Singapore Management University, Center for Computational Law we wanted to convert text into logical form, with the goal of being able to parse and interpret legal text. We initially tried using GF directly, but we ran into issues with it being too strict, so many of the sentences were not parsed at all, either because they contained words not in the dictionary or because it didn't follow the grammatical rules exactly. In order to work around this we used a UD parser, which was based on machine learning, which allowed it to be more robust for unexpected data. However, now the problem of converting into logic became more difficult, so we used the gf2ud tool to convert the UD trees into GF trees. This worked fairly well, but we ran into several problems, described in the next section, which this project aims to solve.
 
 \section{Problem}
 % The formulation of the problem at hand and, the assignment. This should include an extended version of the scientific problem definition and references to knowledge within the area given in the thesis proposal.
@@ -96,7 +96,7 @@ Analyze algorithms and improve performance. The main challenge here is to find a
 
 \item
 % macro -> annotation
-Improve flexibility of annotation language, allowing changing the structure of the trees while translating from GF to UD. One challenge here is in figuring out either how to change the algorithms to support these more advanced transformations or to find a way to allow them without needing to change the algorithms.
+Improve flexibility of annotation language, allowing changing the structure of the trees while translating from UD to GF. One challenge here is in figuring out either how to change the algorithms to support these more advanced transformations or to find a way to allow them without needing to change the algorithms.
 \item
  Write a debugging tool, which analyzes exactly what it is that prevents a rule in a labels-file from firing or what prevents that tree from being selected.
 One challenge here is how to explain to the user the issue for all the possible things that can go wrong.

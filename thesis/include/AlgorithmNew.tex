@@ -8,35 +8,47 @@ In the new algorithm (version 3), we make two main improvements:
 
 \section{First improvement: faster keepTrying}
 
-The first modification was to a function called \texttt{keepTrying}, which keeps trying to build new trees based on the currently existing ones until now new trees can be built.
+The first modification was to a function called \texttt{keepTrying}, which works with a word (the current head) in the UD tree and keeps trying to build new GF trees for that word based on the currently existing GF trees for the word and for its direct dependents, until no new trees can be built.
 
-Before the improvement, a high level description of the algorithm would look roughly like this:
+Before the improvement, pseudo-code of the algorithm would look roughly like this:
 \begin{verbatim}
-1. Apply all possible functions on each of the trees
-2. Remove duplicates
-3. Check if there are any new trees, if so go to 1
+1. newTrees <- allFunsLocal(treesAtCurrentHead, childTrees)
+2. combined <- deduplicate(treesAtCurrentHead ++ newTrees)
+3. If combined != treesAtHead:
+4.   treesAtHead <- combined
+5.   Go to 1.
 \end{verbatim}
 
-which had the issue that the same trees were calculated many times just to be immediately thrown away. To solve this, we only calculate new trees based on trees we have not seen before, roughly like this:
+Here, the function \texttt{allFunsLocal} (explained more in \autoref{sect:allFunsLocal}) tries to apply all possible GF functions to each of the trees at the current head. If the GF function that we try to apply takes more than one argument, then we choose that many trees from the dependents that the current tree has not used yet.
+
+% In other words, we combine the new trees with the old trees in one big list which are reused for the next iteration.
+%
+% For each tree at the current head of the UD tree:
+%     Apply all matching functions on the current tree, together with
+%     some choice of trees from dependents that have so far not been
+%     used by that tree, and add the result to the list of trees
+
+This had the issue that the same trees were calculated many times just to be immediately thrown away. To solve this, we only calculate new trees based on trees we have not seen before at the current head of the UD tree:
 
 \begin{verbatim}
-1. newTrees <- trees
-2. newTrees <- apply all possible functions on each of newTrees
-3. trees += newTrees
+1. newTrees <- treesAtCurrentHead
+2. newTrees <- Apply all matching functions on each of newTrees, 
+               together with a choice of unused 
+3. treesAtCurrentHead += newTrees
 4. if notEmpty(newTrees): goto 2
 5. Deduplicate the list of trees
 \end{verbatim}
 
 In the first version, we only have one shared list of all the trees, both old and new trees mixed together. This means that the old trees will be used in every single iteration and time after time generate the same new trees. This produces a lot of duplicates that needs to be removed. In the new algorithm, we only generate based on the newest trees from the previous iteration, which eliminates these duplicates.
 
-Since all previous trees were re-generated in each iteration, the old version was $O(n^2T)$ while the new version is $O(nT)$, where $n$ is the number of iterations (which is equal to the max depth of the tree) and T is the number of possible trees at each level.
+Since all previous trees were re-generated in each iteration, the old version was $O(n^2T)$ while the new version is $O(nT)$, where $n$ is the number of iterations (which is equal to the max depth of the tree) and $T$ is the number of possible trees at each level.
 
 % Next line was first attempt at the above:
 % The first improvement is that when new trees have been constructed by applying functions, we only use these new trees in the next iteration instead of putting both the old trees and the new trees in a shared list. This is because all the the trees that were possible to construct directly from the old trees have already been constructed, so there's no need to include them in the next iteration.
 
 % WONTFIX: \todo[inline]{bild}
 
-\section{Second improvement: faster allFunsLocal}
+\section{Second improvement: faster allFunsLocal} \label{sect:allFunsLocal}
 
 The second modification was to a function called \texttt{allFunsLocal}, which was responsible for finding all the possible combinations of functions and arguments at the current location in the UD tree that satisfy the constraints defined by the annotations. For example, for the function
 
@@ -48,9 +60,9 @@ the first argument needs to come from a child with UD dependency annotation \tex
 
 The old algorithm did this by first listing all possible choices of the previously generated trees for the head and each direct child of the current node and then trying each function for each of those choices. The new algorithm instead starts with each individual function and then only checks choices that could possibly match that function and stops as soon as it has determined that a match is impossible.
 
-Here's pseudocode for the old algorithm for allFunsLocal:
+Below is pseudocode for the old algorithm for allFunsLocal:
 
-Given:
+Given the following variables:
 \begin{verbatim}
 headNode = A local UD head node with a list of possible GF trees
 childNodes = A list of UD child nodes each with a list of
@@ -63,7 +75,7 @@ gfFunctions = A list of all GF functions that we have available
 % 2. For each
 
 % TODO: Overfull hboxes
-
+The algorithm looks as follows
 \begin{verbatim}
 1. For each gfFunction: f
 2.   For each gf tree in headNode: headTree
@@ -81,8 +93,7 @@ gfFunctions = A list of all GF functions that we have available
            childNode for each fun arg
 \end{verbatim}
 
-this can also be expressed in terms of a sequence of choices
-
+This algorithm can also be expressed in terms of a sequence of choices:
 \begin{verbatim}
 1. f <- Choose a gfFunction
 2. headTree <- Choose a gf tree in headNode
@@ -96,6 +107,8 @@ this can also be expressed in terms of a sequence of choices
        childNode for each fun arg
 \end{verbatim}
 
+This algorithm is unfortunately exponential. More precisely:
+
 If we have $f$ functions, each taking $a$ arguments and
 if the headNode contains $h$ gf-trees
 and we have $c$ child-nodes, each containing $t$ gf-trees
@@ -107,14 +120,13 @@ $$
 O(f h t^c (ac+m^a))
 $$
 
-So we can see that the complexity is exponential with respect to the number of child-nodes, with a base proportional to how many GF trees each of those child-nodes have. The complexity is also exponential with the number of arguments, but this has less of an impact since GF functions always have a fixed number of arguments, unlike UD trees, where a node can have an unlimited number of children, e.g. in conjunctions.
+We can see that the complexity is exponential with respect to the number of child-nodes, with a base proportional to how many GF trees each of those child-nodes have. The complexity is also exponential with the number of arguments, but this has less of an impact since GF functions always have a fixed number of arguments, unlike UD trees, where a node can have an unlimited number of children, e.g. in conjunctions.
 
 % \todo[inline]{TODO: Appendix with the actual source}
 
 In addition to having an exponential complexity, this also produces duplicate trees. To see this we need to go through an example.
 
-Let's say we have one function \verb|DetCN : Det -> CN -> NP ; det head| which takes two arguments.
-And a UD tree with a head node \emph{cat} and two children \emph{the} and \emph{black}: (See \autoref{fig:final nested tree})
+Let's say we have one function \verb|DetCN : Det -> CN -> NP ; det head| which takes two arguments and a UD tree with a head node \emph{cat} and two children \emph{the} and \emph{black}: (See \autoref{fig:final nested tree})
 
 Now, if we were to apply this algorithm, we would generate these lists of combinations:
 \begin{verbatim}
