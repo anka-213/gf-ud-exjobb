@@ -30,7 +30,6 @@
             scheme-small
             latexmk
             helvetic
-            biblatex-ieee
             biber
 
             # Generated using nix-index on sty list from \listfiles
@@ -39,7 +38,9 @@
             amsmath
             auxhook
             babel
+            babel-english
             biblatex
+            biblatex-ieee
             bigfoot
             bigintcalc
             bitset
@@ -49,6 +50,7 @@
             csquotes
             datatool
             datetime2
+            datetime2-english
             environ
             epstopdf-pkg
             eso-pic
@@ -63,7 +65,10 @@
             geometry
             gettitlestring
             glossaries
+            glossaries-english
             graphics
+            graphics-cfg
+            graphics-def
             graphviz
             hycolor
             hyper
@@ -76,12 +81,20 @@
             kvdefinekeys
             kvoptions
             kvsetkeys
+            l3backend
             l3kernel
             l3packages
             latex
+            latex-amsmath-dev
+            latex-base-dev
+            latex-graphics-companion
+            latex-graphics-dev
+            latex-tools-dev
+            latexconfig
             letltxmacro
             lineno
             listings
+            listings-ext
             lm
             logreq
             ltxcmds
@@ -90,6 +103,7 @@
             microtype
             minted
             moreverb
+            mptopdf
             parskip
             pdfescape
             pdftexcmds
