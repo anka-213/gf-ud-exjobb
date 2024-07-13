@@ -31,7 +31,12 @@
             latexmk
             helvetic
             biber
+            # Latexdiff
             latexdiff
+            latexpand
+            git-latexdiff
+            # For chemfig
+            simplekv
 
             # Generated using nix-index on sty list from \listfiles
             acronym
@@ -47,7 +52,7 @@
             bitset
             caption
             catchfile
-            # chemfig
+            chemfig
             csquotes
             datatool
             datetime2
