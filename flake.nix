@@ -31,6 +31,7 @@
             latexmk
             helvetic
             biber
+            latexdiff
 
             # Generated using nix-index on sty list from \listfiles
             acronym
