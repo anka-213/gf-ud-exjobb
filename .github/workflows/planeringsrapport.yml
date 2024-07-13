@@ -55,7 +55,7 @@ jobs:
         run: |
           mkdir _site
           cp planeringsrapport/main.pdf _site/planeringsrapport.pdf
-          cp thesis/main.pdf _site/thesis.pdf
+          cp main.pdf _site/thesis.pdf
 
       # - name: Setup Pages
       #   uses: actions/configure-pages@v3
