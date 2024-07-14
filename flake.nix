@@ -35,8 +35,9 @@
             latexdiff
             latexpand
             git-latexdiff
+            epstopdf
             # For chemfig
-            simplekv
+            # simplekv
 
             # Generated using nix-index on sty list from \listfiles
             acronym
@@ -52,7 +53,7 @@
             bitset
             caption
             catchfile
-            chemfig
+            # chemfig
             csquotes
             datatool
             datetime2
