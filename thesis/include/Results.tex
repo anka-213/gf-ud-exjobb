@@ -43,8 +43,8 @@ In \autoref{fig:time-vs-time} we can see the speedup for each individual sentenc
     \label{fig:time-vs-time}
 \end{figure}
 \footnotetext{http://www.serpentine.com/criterion/}
- 
-In \autoref{fig:keepTrying-speedup-factor} we can see that the speedup from the keepTrying improvement is linear with respect to the logarithm of the original code, which matches the expectation of moving from converting a quadratic factor to a linear factor. 
+
+In \autoref{fig:keepTrying-speedup-factor} we can see that the speedup from the keepTrying improvement is linear with respect to the logarithm of the original code, which matches the expectation of moving from converting a quadratic factor to a linear factor.
 Looking at the slowest sentence ``In Danish, the word may even apply to shallow lagoons'', it takes 83 seconds with the original algorithm and 10 seconds with the keepTrying improvement, giving a speedup factor of 8.3. Looking at the generated tree we can confirm that it has a maximum tree depth of 9 at the top, matching the expectation.
 
 \begin{figure}
@@ -75,21 +75,21 @@ In \autoref{fig:allFunsLocal-speedup-factor} we can see that the allFunsLocal im
 %      178,448,096 bytes maximum residency (37 sample(s))
 %        2,051,952 bytes maximum slop
 %              516 MiB total memory in use (0 MB lost due to fragmentation)
-% 
+%
 %                                      Tot time (elapsed)  Avg pause  Max pause
 %   Gen  0      7351 colls,     0 par    9.128s   9.260s     0.0013s    0.0056s
 %   Gen  1        37 colls,     0 par    4.828s   5.069s     0.1370s    0.2165s
-% 
+%
 %   INIT    time    0.000s  (  0.005s elapsed)
 %   MUT     time    2.612s  (  2.666s elapsed)
 %   GC      time   13.956s  ( 14.329s elapsed)
 %   EXIT    time    0.000s  (  0.005s elapsed)
 %   Total   time   16.569s  ( 17.004s elapsed)
-% 
+%
 %   %GC     time       0.0%  (0.0% elapsed)
-% 
+%
 %   Alloc rate    2,979,803,301 bytes per MUT second
-% 
+%
 %   Productivity  15.8% of total user, 15.7% of total elapsed
 % \end{verbatim}
 
@@ -99,7 +99,7 @@ As we saw in \autoref{fig:time-including-gc} and \autoref{tab:time-with-gc}, whe
 In our case we have a large amount of long-living data, which means that every major garbage collection is expensive. The code begins by loading the GF grammar into memory, which for our test grammar takes up around 100 megabytes. There are several ways to mitigate this, but the easiest solution is to tweak the parameters for the garbage collector to make it wait longer before attempting to collect garbage, which reduces the total number of major garbage collections.
 % Nope: \todo[inline]{The text above should probably go elsewhere (if anywhere at all)}
 
-The tool ghc-gc-tool allows automatically determining which parameters are best for this by running the executable with different parameters and plotting the result. In \autoref{fig:gf-ud-integ-gc-space} we can see the result of running this on the first 60 items of \texttt{upto12eng.conllu} with the ShallowParse grammar from the repository. This number was chosen arbitrarily to make the runtime not be unreasonably long. 
+The tool ghc-gc-tool allows automatically determining which parameters are best for this by running the executable with different parameters and plotting the result. In \autoref{fig:gf-ud-integ-gc-space} we can see the result of running this on the first 60 items of \texttt{upto12eng.conllu} with the ShallowParse grammar from the repository. This number was chosen arbitrarily to make the runtime not be unreasonably long.
 
 As can be seen in \autoref{fig:GC-time} any initial heap size over 256MB drastically reduces the run time and the logs show that the productivity (time spent on non-GC) goes from 15\% to 50\% and that less than one tenth as many garbage collections are performed. This number depends on the size of the GF grammar and it corresponds to the size of the GF grammar after being loaded into memory. Running the command with the default GC parameters shows that the maximum residency is 180MB, which is slightly less than the optimal GC parameter value .
 
@@ -135,6 +135,10 @@ gf-ud +RTS -A32768 -H268435456 -RTS ud2gf grammars/ShallowParse Eng Text
 
 We also explored other methods for reducing the impact of garbage collection, like compact regions\cite{yang2015efficient}, but they provided no improvement over the simpler method of tweaking the GC parameters and in some cases using them made performance worse, because they force all data stored to be fully evaluated.
 
+\clearpage
+% Another alternative would be to switch to using the GF C runtime instead of the GF Haskell runtime.
+A yet unexplored option is to try using the GF C runtime instead of the GF Haskell runtime. This should also solve the garbage collection issues, since C is not a garbage collected language and the C heap is not touched by the Haskell garbage collector.
+
 \section{Correctness}
 
 Because the accuracy of the conversion depends on manually written annotation files, evaluating the accuracy of the conversion is outside of the scope for this paper.
@@ -148,7 +152,7 @@ The debugging tool that was written in this project allows finding what prevente
 
 \section{Flexibility}
 
-%The new recursive macros made it possible to express the tree shape changes required to convert from the UD way of writing coordination into the GF way of writing conjunctions. Initial tests were successful in converting coordinate structures\footnote{For example ``furry, fluffy and cute'' or ``dog, cat or capybara''} of different lengths and different parts of speech. 
+%The new recursive macros made it possible to express the tree shape changes required to convert from the UD way of writing coordination into the GF way of writing conjunctions. Initial tests were successful in converting coordinate structures\footnote{For example ``furry, fluffy and cute'' or ``dog, cat or capybara''} of different lengths and different parts of speech.
 
 The new recursive macros made it possible to express more significant changes in tree shapes when converting between UD and GF. The motivating example is \emph{coordination}: structures like ``big \emph{or} small'' or ``cats, dogs \emph{and} capybaras''. Before the recursive macros, it was only possible to convert structures with exactly 2 conjuncts, since those had sufficiently similar structure, but now ud2gf can convert coordinate structures of arbitrary length.
 
@@ -156,10 +160,10 @@ The new recursive macros made it possible to express more significant changes in
 \section{Use in robust parsing}
 
 As mentioned in \autoref{sect:background}, the improvement of ud2gf was done as a part of the SMU CCLAW project, with the goal of using ud2gf as a part of a pipeline for parsing unrestricted text in the legal domain.
-Experiments on that were performed on a small scale, but the results were deemed unsatisfactory for that specific use. A major part of the problem was the correctness of udpipe itself: legal text contains many uncommon structures, and the initial parses were inaccurate relatively often. 
+Experiments on that were performed on a small scale, but the results were deemed unsatisfactory for that specific use. A major part of the problem was the correctness of udpipe itself: legal text contains many uncommon structures, and the initial parses were inaccurate relatively often.
 Given the dissatisfaction with the approach, we never did a quantitative evaluation of the results.
 
-Anecdotally, we found the macro system useful in recovering from parser errors, but it was a lot of tedious work\footnote{Example auxfuns written to recover from errors in udpipe output can be found at \url{https://github.com/smucclaw/sandbox/blob/default/inari/ud/copied-from-dsl/grammars/UDAppEng.labels\#L105-L136}}, with a long tail of fixes that only applied to a single sentence. 
+Anecdotally, we found the macro system useful in recovering from parser errors, but it was a lot of tedious work\footnote{Example auxfuns written to recover from errors in udpipe output can be found at \url{https://github.com/smucclaw/sandbox/blob/default/inari/ud/copied-from-dsl/grammars/UDAppEng.labels\#L105-L136}}, with a long tail of fixes that only applied to a single sentence.
 
 % Write something about the results of using it in the singapore project
 

@@ -1,10 +1,10 @@
 % CREATED BY DAVID FRISK, 2016
 \chapter{Conclusion and future work}
-% You may consider to instead divide this chapter into discussion of the results and a summary. 
+% You may consider to instead divide this chapter into discussion of the results and a summary.
 % \section{Discussion}
 \section{Summary}
 
-In this project we set out to improve the overall usability of ud2gf, focusing on issues with performance, difficulty in debugging and lack of flexibility regarding differing tree shapes. 
+In this project we set out to improve the overall usability of ud2gf, focusing on issues with performance, difficulty in debugging and lack of flexibility regarding differing tree shapes.
 
 \paragraph*{Performance}
 % Resounding success
@@ -12,8 +12,14 @@ We reduced some combinatorial explosions and prevented same candidates being gen
 
 We could also see that garbage collection can have a large impact on the performance of Haskell programs. However, in our case it could easily be alleviated, without a significant impact on total memory use, by increasing the initial heap size for the program.
 
+Another future option to improve performance would be to try using the GF C runtime instead of the GF Haskell runtime.
+
+% Future work?
+% A yet unexplored option is to try using the GF C runtime instead of the GF Haskell runtime. This would also solve the garbage collection issues, since C is not a garbage collected language and the C heap is not touched by the Haskell garbage collector.
+% Another alternative would be to switch to using the GF C runtime instead of the GF Haskell runtime.
+
 \paragraph*{Debugging}
-We added a debugger feature, where the user can query ud2gf for an explanation why a certain function was not applied. This feature was much less mature compared to the performance improvements, but the single user who tested it gave positive feedback. 
+We added a debugger feature, where the user can query ud2gf for an explanation why a certain function was not applied. This feature was much less mature compared to the performance improvements, but the single user who tested it gave positive feedback.
 % But the project changed its approach away from the UD-based workflow, so this tool didn't get much use after the initial experiments.
 
 \paragraph*{Tree shape flexibility}
@@ -24,7 +30,7 @@ We made the macro system recursive, which made it possible to do conversions tha
 
 \section{Future work}
 
-% 
+%
 
 The translation described by a labels file is not one-to-one and there are often many possible GF trees that a UD tree could be translated to. The possible trees are currently ranked by completeness, as in how many of the words are included in the generated tree. However this ranking is incomplete and in case two possible trees, with the same GF category, cover the same words, an arbitrary tree will be chosen. A better choice could be to also check the linearization of these trees and rank those whose linearization is more similar to the original string higher. It would also be possible to completely exclude trees with differing linearization, but that would run counter to the goal of robustness.
 
