@@ -179,7 +179,7 @@
             ;
           # inherit (pkgs.texlive) scheme-medium chngcntr ;
         };
-        pygments = pkgs.python38Packages.pygments;
+        pygments = pkgs.python312Packages.pygments;
       in
       rec {
         packages = {
@@ -187,13 +187,13 @@
           document = pkgs.stdenvNoCC.mkDerivation rec {
             name = "latex-demo-document";
             src = self;
-            buildInputs = [ pkgs.coreutils tex ];
+            buildInputs = [ pkgs.coreutils tex pygments ];
             phases = [ "unpackPhase" "buildPhase" "installPhase" ];
             buildPhase = ''
               export PATH="${pkgs.lib.makeBinPath buildInputs}";
               mkdir -p .cache/texmf-var
               env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-                latexmk -interaction=nonstopmode -pdf -lualatex \
+                latexmk -interaction=nonstopmode -pdf \
                 -shell-escape main.tex
             '';
             installPhase = ''
