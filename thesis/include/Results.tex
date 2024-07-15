@@ -32,13 +32,13 @@ The result of running different versions of the algorithm on the example file ca
 In \autoref{fig:time-vs-time} we can see the speedup for each individual sentence. The improvement of the keepTrying function gives a close to linear speedup, while the speedup from the optimized version of allFunsLocal is much larger. The theoretical expected speedup from keepTrying is a quadratic factor that becomes a linear factor based on the depth of the resulting trees. The library Criterion\protect\footnotemark{} was used to perform the measurements. A full table of results can be found in \autoref{appendix:performance}.
 \begin{figure}
     \centering
-    \includegraphics[scale=0.75]{thesis/figure/Time-including-GC.png}
+    \includegraphics[scale=0.75]{figure/Time-including-GC.png}
     \caption[The total run time for converting the file \texttt{upto12eng.conllu}, including garbage collection and startup time.]{The total run time for converting the file \texttt{upto12eng.conllu}, including garbage collection and startup time. The bars marked ``fast GC'' have increased initial heap size to 500Mb to reduce the number of unnecessary garbage collections, based on the experiments in \autoref{sect:gc-time}. Each measurement was only performed once, so there might be some inaccuracy because of random noise resulting from preemptive multitasking.}
     \label{fig:time-including-gc}
 \end{figure}
 \begin{figure}
     \centering
-    \includegraphics[scale=0.7]{thesis/figure/Time-against-time-plot.png}
+    \includegraphics[scale=0.7]{figure/Time-against-time-plot.png}
     \caption{A log-log plot of time for each optimization against the time for the original algorithm. Each data point is the average time over several runs for a single sentence. The library Criterion\protect\footnotemark{} was used to perform the measurements.}
     \label{fig:time-vs-time}
 \end{figure}
@@ -49,7 +49,7 @@ Looking at the slowest sentence ``In Danish, the word may even apply to shallow 
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.5]{thesis/figure/keepTrying-speedup-factor.png}
+    \includegraphics[scale=0.5]{figure/keepTrying-speedup-factor.png}
     \caption{A plot of the speedup factor for the improved keepTrying algorithm: new time divided by original time, against the original time taken. A linear speedup is the expected result for converting a quadratic algorithm to a linear algorithm.}
     \label{fig:keepTrying-speedup-factor}
 \end{figure}
@@ -58,7 +58,7 @@ In \autoref{fig:allFunsLocal-speedup-factor} we can see that the allFunsLocal im
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.75]{thesis/figure/allFunsLocal-speedup-factor.png}
+    \includegraphics[scale=0.75]{figure/allFunsLocal-speedup-factor.png}
     \caption{A log-log plot of the speedup factor for the improved allFunsLocal algorithm: new time divided by original time, against the original time taken. The linear pattern indicates an exponential speedup.}
     \label{fig:allFunsLocal-speedup-factor}
 \end{figure}
@@ -116,13 +116,13 @@ gf-ud +RTS -A32768 -H268435456 -RTS ud2gf grammars/ShallowParse Eng Text
 \begin{figure}
     \centering
     \subcaptionbox{Integral of space use over time\label{fig:GC-time-integ}}
-      {\includegraphics[scale=0.5]{thesis/figure/gf-ud-integ-gc-space.pdf}}
+      {\includegraphics[scale=0.5]{figure/gf-ud-integ-gc-space.pdf}}
     \subcaptionbox{Time taken\label{fig:GC-time}}
-      {\includegraphics[scale=0.5]{thesis/figure/gf-ud-time-gc-space.pdf}}
+      {\includegraphics[scale=0.5]{figure/gf-ud-time-gc-space.pdf}}
     \subcaptionbox{Resident space usage\label{fig:GC-resident-space}}
-      {\includegraphics[scale=0.5]{thesis/figure/gf-ud-residency-gc-space.pdf}}
+      {\includegraphics[scale=0.5]{figure/gf-ud-residency-gc-space.pdf}}
     \subcaptionbox{Peak space usage\label{fig:GC-peak-space}}
-      {\includegraphics[scale=0.5]{thesis/figure/gf-ud-peak-gc-space.pdf}}
+      {\includegraphics[scale=0.5]{figure/gf-ud-peak-gc-space.pdf}}
     \caption{The integral of space usage over time for different GC parameters}
     \label{fig:gf-ud-integ-gc-space}
 \end{figure}

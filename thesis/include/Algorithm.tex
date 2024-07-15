@@ -300,7 +300,7 @@ After converting UD POS annotations to GF categories and parsing words to GF lex
 \begin{figure}[H]
     \centering
     \subcaptionbox{``black'' as an adjective : A}[0.4\textwidth]
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_A_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/black_A_gf.eps}}
     \caption{The available GF trees on the word ``black'' before the first iteration}\label{fig:black iter 0}
 \end{figure}
 
@@ -310,9 +310,9 @@ Next we get to ``black'', with the available tree \lstinline|black_A| (\autoref{
 \begin{figure}[H]
     \centering
     \subcaptionbox{``black'' as an adjective : A}[0.4\textwidth]
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_A_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/black_A_gf.eps}}
     \subcaptionbox{``black'' as an adjectival phrase: AP}[0.4\textwidth]
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_AP_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/black_AP_gf.eps}}
     \caption{The available GF trees on the word ``black'' after the first iteration}\label{fig:black iter 1}
 \end{figure}
 
@@ -323,7 +323,7 @@ Now we are done with all the children of ``cat'', so we can start processing it.
 \begin{figure}[H]
     \centering
     \subcaptionbox{``cat'' : N}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/cat_N_gf.eps}}
     \caption{The available GF trees on the word ``cat'' before the first iteration}\label{fig:cat iter 0}
 \end{figure}
 
@@ -336,9 +336,9 @@ Looking through all the functions, only \lstinline|UseN : N -> CN ; head| takes 
 \begin{figure}[H]
     \centering
     \subcaptionbox{``cat'' as a noun : N}[0.4\textwidth]
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/cat_N_gf.eps}}
     \subcaptionbox{``cat'' as a common noun: CN}[0.4\textwidth]
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_CN_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/cat_CN_gf.eps}}
     \caption{The available GF trees on the word ``cat'' after the first iteration}\label{fig:cat iter 1}
 \end{figure}
 
@@ -352,13 +352,13 @@ Let us verify that these are possible to apply: For \lstinline|DetCN| we need a 
 \begin{figure}[H]
     \centering
     \subcaptionbox{cat : N\label{cat_N}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/cat_N_gf.eps}}
     \subcaptionbox{cat : CN\label{cat_CN}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_CN_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/cat_CN_gf.eps}}
     \subcaptionbox{the cat : NP\label{the_cat_NP}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_cat_NP_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/the_cat_NP_gf.eps}}
     \subcaptionbox{black cat : CN\label{black_cat_CN}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/black_cat_CN_gf.eps}}
     \caption{The four available trees on the word ``cat'' after the second iteration}\label{fig:cat iter 2}
 \end{figure}
 
@@ -372,11 +372,11 @@ and one of them is a strict superset of the other when it comes to words covered
 \begin{figure}[H]
     \centering
     \subcaptionbox{Cat\label{ci2p:cat_N}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/cat_N_gf.eps}}
     \subcaptionbox{The cat\label{ci2p:the_cat_NP}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_cat_NP_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/the_cat_NP_gf.eps}}
     \subcaptionbox{Black cat\label{ci2p:black_cat_CN}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/black_cat_CN_gf.eps}}
     \caption{The three available trees on the word ``cat'' after the second iteration after pruning. Tree (b) will not be a subtree of the final tree}\label{fig:cat iter 2 pruned}
 \end{figure}
 
@@ -394,13 +394,13 @@ After this step, one function is still possible to apply, namely $DetCN$, which 
 \begin{figure}[H]
     \centering
     \subcaptionbox{Cat : N\label{ci3:cat_N}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/cat_N_gf.eps}}
     \subcaptionbox{The cat : NP\label{ci3:the_cat_NP}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_cat_NP_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/the_cat_NP_gf.eps}}
     \subcaptionbox{Black cat : CN\label{ci3:black_cat_CN}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/black_cat_CN_gf.eps}}
     \subcaptionbox{The black cat : NP\label{ci3:the_black_cat_NP}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_black_cat_NP_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/the_black_cat_NP_gf.eps}}
     \caption{The four available trees on the word ``cat'' after the third iteration \emph{before} pruning. Trees (a) and (c) are both subtrees of the final tree (d), while tree (b) is not a subtree of (d), because it connects ``the'' directly to ``cat'' ignoring the adjective ``black''}\label{fig:cat iter 3}
 \end{figure}
 
@@ -420,11 +420,11 @@ After this no more functions can be applied at the ``cat'' node, giving us a fin
 \begin{figure}
     \centering
     \subcaptionbox{Cat : N\label{ci3p:cat_N}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/cat_N_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/cat_N_gf.eps}}
     \subcaptionbox{Black cat : CN\label{ci3p:black_cat_CN}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/black_cat_CN_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/black_cat_CN_gf.eps}}
     \subcaptionbox{The black cat : NP\label{ci3p:the_black_cat_NP}}
-        {\includegraphics[scale=0.75]{thesis/figure/black_cats/the_black_cat_NP_gf.eps}}
+        {\includegraphics[scale=0.75]{figure/black_cats/the_black_cat_NP_gf.eps}}
     \caption{The three available trees on the word ``cat'' after the third iteration \emph{after} pruning. Trees (a) and (b) are both subtrees of the final tree (c)}\label{fig:cat iter 3 pruned}
 \end{figure}
 
@@ -472,7 +472,7 @@ To compensate for this issue, one can disable the potentially ambiguous function
 
 \begin{figure}
     \centering
-\includegraphics[scale=0.5]{thesis/figure/eight_eighteen_eighty.png}
+\includegraphics[scale=0.5]{figure/eight_eighteen_eighty.png}
     \caption{Three GF trees formed of the digit \texttt{n8}}
     \label{fig:eight}
 \end{figure}
