@@ -36,6 +36,7 @@
             latexpand
             git-latexdiff
             epstopdf
+            # ucs # For utf8 listings
             # For chemfig
             # simplekv
 
