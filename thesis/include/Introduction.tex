@@ -6,7 +6,7 @@
 
 % TODO: Link to the code somewhere
 
-Since the advent of computers, people have been trying to make them understand natural languages. Today machine learning methods are very popular, but the more traditional method is so called rule-based 
+Since the advent of computers, people have been trying to make them understand natural languages. Today machine learning methods are very popular, but the more traditional method is so called rule-based
 \ac{NLP}
 % Natural Language Processing (NLP)
 and Natural Language Generation (NLG), in which we treat natural languages more like programming languages and write the grammar rules explicitly into the computer in order to parse the text into structured data and/or generate text from abstract data.\cite{chomsky-1957,lambek-1958,curry1961some}
@@ -24,18 +24,18 @@ These properties are particularly important when correctness is crucial, for exa
 While technically even the most naive string replacement method\footnote{e.g. adding an ``s'' to the end of a word to make it plural, producing ``foots'' instead of the correct ``feet''} is an instance of ``rule-based \ac{NLP}'', in practice we tend to use more sophisticated tools, namely \emph{grammar formalisms}.
 
 % % Draft
-% One problem in \ac{NLP} is to convert from text into mathematical logic, to allow a computer program to deduce things. 
-% 
+% One problem in \ac{NLP} is to convert from text into mathematical logic, to allow a computer program to deduce things.
+%
 % % SMU in background or here?
-% 
+%
 % Something converting directly from text to logic is difficult
 % Converting from AST to logic is easy (this is what programming languages do)
-% 
-% % Forward references 
-% 
+%
+% % Forward references
+%
 % % Way too specific to come this early!
 % Among the most simple and naive methods for handling natural language text is string replacement, e.g. adding an ``s'' to the end of a word to make it plural, regardless of what word it actually is, so we would get ``foots'' instead of the correct ``feet'' as the plural form for ``foot''.
-% 
+%
 % Now, we could keep adding more exceptions to these string replacement rules and get somewhat better results, but we would quickly run into complexity issues with more advanced grammar concepts, like word order changing when asking a question (``The cat is hungry'' vs ``Is the cat hungry?'') and person/number/gender agreement (e.g. person/number: ``I eat''/``The cat eats''/``They eat'' and gender agreement (in Swedish): ``Huset är fint'' vs ``Katten är fin''), so a more systematic approach would be helpful. This is where grammar formalisms come in.
 % % End irrelevant stuff
 
@@ -43,7 +43,7 @@ A grammar formalism is used to describe the connection between a plain text and 
 %If we want to represent its grammatical structure in machine readable way, we need a \emph{grammar formalism}.
 
 
-% One method for doing this is to convert the text into an abstract structure that does not care about morphological details like 
+% One method for doing this is to convert the text into an abstract structure that does not care about morphological details like
 
 % Skillnaden mellan strängar och att ha en struktur
 
@@ -191,7 +191,7 @@ In order to create a tree from a sentence, UD uses supervised machine-learning t
 %  - abstr trees, GF
 \section{Abstract syntax trees and Grammatical Framework}
 
-Another way of describing the grammatical structure of a sentence is through abstract syntax trees, where instead of using words as the nodes in the tree, you use nodes tagged with functions for combining different parts of speech and with the words only being in the leaves. \todo[inline]{make this not be wrong} 
+Another way of describing the grammatical structure of a sentence is through abstract syntax trees, where instead of using words as the nodes in the tree, you use nodes tagged with functions for combining different parts of speech and with the words only being in the leaves. \todo[inline]{make this not be wrong}
 
 % \todo[inline]{Write about abstract trees}
 % \todo[inline]{Add an image}
@@ -202,17 +202,17 @@ In \autoref{fig:cat_sleeps_gf}, the sentence ``The cat sleeps'' is analyzed as a
 
 In order to build up this tree, we used these functions:
 \begin{itemize}
-    \item  \verb|UseN : N -> CN| is a function that takes a noun and converts it to a common noun, 
-    \item \verb|DetCN : Det -> CN -> NP| is a function that takes a determiner and a common noun and converts it to a noun phrase, 
+    \item  \verb|UseN : N -> CN| is a function that takes a noun and converts it to a common noun,
+    \item \verb|DetCN : Det -> CN -> NP| is a function that takes a determiner and a common noun and converts it to a noun phrase,
     \item \verb|UseV : V -> VP| is a function that takes a verb and converts it to a verb phrase
-    \item and finally, \verb|PredVP : NP -> VP -> Cl| is a function that takes a noun phrase and a verb phrase and converts it to a clause 
+    \item and finally, \verb|PredVP : NP -> VP -> Cl| is a function that takes a noun phrase and a verb phrase and converts it to a clause
 \end{itemize}
 
 \begin{figure}[htb]
   \centering
   % p -cat=S "the cat sleeps"  | vt
-  % \includegraphics[width=0.5\linewidth]{thesis/figure/cat_is_black_gf.eps}
-  \includegraphics[width=0.5\linewidth]{thesis/figure/cat_sleeps_cl.eps}
+  % \includegraphics[width=0.5\linewidth]{figure/cat_is_black_gf.eps}
+  \includegraphics[width=0.5\linewidth]{figure/cat_sleeps_cl.eps}
   \caption{The sentence ``The cat sleeps'' analyzed as a GF tree}
   \label{fig:cat_sleeps_gf}
 \end{figure}
@@ -256,7 +256,7 @@ In order to build up this tree, we used these functions:
 % #lemma PredVP,ImpVP do Do aux head
 
 %  - strengths and weaknesses
-% 
+%
 \section{Differences between GF and UD}
 % Strengths and weaknesses
 
@@ -322,9 +322,9 @@ It has also been used to analyze legal texts as a part of a Controlled Natural L
 
 \section{What problem does ud2gf solve?}
 % \todo[inline]{This is the main focus of the intro}
-% 
+%
 % \todo[inline]{Add edge labels to graph}
-% 
+%
 % \todo[inline]{write this text}
 
 One problem within \ac{NLP} is converting from text to logic. There are several different paths one could take, each with their own issues, see \autoref{fig:text-to-logic} for an overview. The tool gf2ud makes it possible to get the robust parsing available for dependency trees and the ease of conversion to logic of Abstract Syntax Trees.
