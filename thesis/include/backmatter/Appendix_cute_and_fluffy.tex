@@ -19,25 +19,25 @@ Below is the complete annotation code for implementing conjunctions for adjectiv
 -- fluffy and cute
 #auxfun CommaAP_ ap comma : AP -> Conj -> APComma =  ap ; head punct[LEMMA=\,]
 
--- Pattern match, and the corresponding continuation-based syntax
--- #auxfun AndCutePatternMatch_ and cute : Conj -> AP -> AP2AP = MkAP2AP and cute ; cc head
 #auxfun AndCuteCont_ and cute : Conj -> AP -> Pair_Conj_AP = MkPair_ and cute ; cc head
+-- If we had pattern matching, the above function could have looked like this
+-- #auxfun AndCutePatternMatch_ and cute : Conj -> AP -> AP2AP = MkAP2AP and cute ; cc head
 
--- If we had pattern matching, the following function could have looked like this
--- #auxfun AP2_ small (MkAP2AP and cute) : AP -> AP2AP -> AP = ConjAP and (BaseAP small cute)) ; head conj
 #auxfun AP2_ small andCute : AP -> Pair_Conj_AP -> AP = UsePair_ (AP2_helper_ small) andCute ; head conj
 #auxfun AP2_helper_ small and cute :  AP -> Conj -> AP -> AP = ConjAP and (BaseAP small cute) ; head dummy nonexistent
+-- If we had pattern matching, the above two functions could have been replaced by this
+-- #auxfun AP2_ small (MkAP2AP and cute) : AP -> AP2AP -> AP = ConjAP and (BaseAP small cute) ; head conj
 
--- #auxfun APBaseComma_ small fluffy (MkAP2AP and cute)  : AP -> APComma -> AP2AP -> ConjListAP = ConjConsAP and small (BaseAP fluffy cute) ; head conj conj
 #auxfun APBaseComma_ small fluffy andCute : AP -> APComma -> Pair_Conj_AP -> ConjListAP = UsePair_ (APBaseComma_helper_ small fluffy) andCute ; head conj conj
 #auxfun APBaseComma_helper_ small fluffy and cute : AP -> APComma -> Conj -> AP -> ConjListAP = MkTriple_ and small (BaseAP fluffy cute) ; head dummy dummy
+-- #auxfun APBaseComma_ small fluffy (MkAP2AP and cute)  : AP -> APComma -> AP2AP -> ConjListAP = ConjConsAP and small (BaseAP fluffy cute) ; head conj conj
 
--- #auxfun ConjListToAP2_ (ConjConsAP and small furryFluffyCute) : ConjListAP -> AP = ConjAP and (ConsAP small furryFluffyCute) ; head
 #auxfun ConjListToAP2_ and_small_furryFluffyCute : ConjListAP -> AP = UseTriple_ ConjListToAP2_helper_ and_small_furryFluffyCute ; head
 #auxfun ConjListToAP2_helper_ and small furryFluffyCute : Conj -> AP -> ListAP -> AP = ConjAP and (ConsAP small furryFluffyCute) ; notreal head dummy
+-- #auxfun ConjListToAP2_ (ConjConsAP and small furryFluffyCute) : ConjListAP -> AP = ConjAP and (ConsAP small furryFluffyCute) ; head
 
--- #auxfun APAddComma_ furry (ConjConsAP and small fluffyAndCute)  : APComma -> ConjListAP -> ConjListAP = ConjConsAP and small (ConsAP furry fluffyAndCute) ; conj head
 #auxfun APAddComma_ furry and_small_fluffyCute  : APComma -> ConjListAP -> ConjListAP = UseTriple_ (APAddComma_helper_ furry) and_small_fluffyCute ; conj head
 #auxfun APAddComma_helper_ furry and small fluffyCute : APComma -> Conj -> AP -> ListAP -> ConjListAP = MkTriple_ and small (ConsAP furry fluffyCute) ; dummy head
+-- #auxfun APAddComma_ furry (ConjConsAP and small fluffyAndCute)  : APComma -> ConjListAP -> ConjListAP = ConjConsAP and small (ConsAP furry fluffyAndCute) ; conj head
 
 \end{lstlisting}

@@ -7,7 +7,7 @@
 % Explain what has changed
 
 
-% The new algorithm is based on 
+% The new algorithm is based on
 
 % \section{Definitions}
 
@@ -61,7 +61,7 @@
 % Parameters aren't automatically handled, but you need to create auxfuns
 
 
-% Auxfun are not type checked 
+% Auxfun are not type checked
 
 % Needed for halftime report:
 % Write what the empty chapters will contain
@@ -81,7 +81,7 @@ In this chapter, we first explain the annotations that are used to describe the 
 
 The ud2gf tool uses annotations in a so called \verb|.labels|-file to describe the relation between the \ac{UD} labels and the \ac{GF} functions. These annotations give constraints, which are used to decide which \ac{GF} functions can be applied where. The algorithm starts by parsing each individual word using \ac{GF} for each of the possible categories according to the annotations and the Part of Speech. After that the algorithm tries to recursively apply as many functions as possible, following the constraints from the annotations and the \ac{UD} tree structure. When multiple trees of the same category are generated at the same location in the \ac{UD} tree, the most complete ones are selected. Here, completeness is a partial order measured in terms of how many words are included in the selected tree. A tree that contains all words that another tree has is considered more complete. Finally backup functions are inserted to include the words that were not included in (one of) the most complete trees.
 
-\section{How annotations work}
+\section{How annotations work}\label{sec:annotations-intro}
 
 In order for the program to know which \ac{UD} \ac{POS} corresponds to which \ac{GF} categories (can be multiple) and how the \ac{GF} functions relate to the \ac{UD} dependency labels, we need to supply annotations which describe these correspondences. Most of these annotations are bidirectional and are used both by ud2gf and gf2ud. A complete description of these annotations can be found in \autoref{app:annotation}.
 
@@ -132,7 +132,7 @@ The function \lstinline{UseN} only has a single argument (of type \lstinline{N})
 
 Both of these annotations are bidirectional and language-independent, since they only refer to the abstract syntax in \ac{GF}.
 
-%% TODO: Other 
+%% TODO: Other
 
 % The different kinds of annotations in labels files
 % Funs
@@ -141,7 +141,7 @@ Both of these annotations are bidirectional and language-independent, since they
 %\section{Examples}
 
 % When converting the sentence ``The cat is black'', from UD format to a GF format using ud2gf something happens
-% 
+%
 % \begin{lstlisting}
 % # gf, (gf2ud) original GF tree:
 % UseCl TSim PPos (PredVP (DetCN the_Det (UseN cat_N)) (UseAP (PositA black_A)))
@@ -150,13 +150,13 @@ Both of these annotations are bidirectional and language-independent, since they
 %     @2: cat cat NOUN Number=Sing  cat_N N nsubj
 %         @1: the the DET _  the_Det Det det
 %     @3: is be AUX Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin  UseAP VP cop
-% 
+%
 % # ut, tree-structured UD tree:
 % 4       black   black   ADJ     A       _       0       root    _       FUN=black_A
 %     2   cat     cat     NOUN    N       Number=Sing     4       nsubj   _       FUN=cat_N
 %         1       the     the     DET     Det     _       2       det     _       FUN=the_Det
 %     3   is      be      AUX     VP      Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin   4       cop     _       FUN=UseAP
-% 
+%
 % # ud, UD tree in CoNLLU format:
 % # sent_id = gfud1000001
 % # text = the cat is black
@@ -164,7 +164,7 @@ Both of these annotations are bidirectional and language-independent, since they
 % 2       cat     cat     NOUN    N       Number=Sing     4       nsubj   _       FUN=cat_N
 % 3       is      be      AUX     VP      Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin   4       cop     _       FUN=UseAP
 % 4       black   black   ADJ     A       _       0       root    _       FUN=black_A
-% 
+%
 % \end{lstlisting}
 
 \section{Overview of algorithm}\label{sec:overview-of-algorithm}
@@ -172,7 +172,7 @@ Both of these annotations are bidirectional and language-independent, since they
 We start with a \ac{UD} tree (e.g. \autoref{fig:the_black_cat_ud}), then we first map each \ac{POS} label into a \ac{GF} category and then assign lexical entries to each node in the tree according to those categories. For example, the string ``cat'', with \ac{POS} ``NOUN'' would become \lstinline|cat_N : N|, which is a nullary (takes no arguments) \ac{GF} function of type/category \lstinline|N|. This is done through \ac{GF}'s built-in parse function. In some cases, there are multiple possible \ac{GF} expressions of the correct type and linearization, in these cases all of the possibilities are added.
 
 Now we have a \ac{UD} tree with a list of \ac{GF} trees at each node (\autoref{fig:the_black_cat_ud_gf}). We process the tree bottom up, starting with the leaf words and then the words for which all the children/dependents have been processed.
-% We start traversing the tree, depth first, when we reach a leaf, we start processing the leaf. Afterwards we 
+% We start traversing the tree, depth first, when we reach a leaf, we start processing the leaf. Afterwards we
 
 The main loop at each word consists of trying to apply each of the available \ac{GF} functions to each of the available trees for that word, combined with as many trees from unused dependent words as the function requires. For each combination, the algorithm checks that the used trees match the annotations for the function in both in \ac{GF} category and \ac{UD} dependency labels. Each of the generated trees are added to the list of trees for the current word.
 %  go through all the available functions and apply as many as possible and add the result to our list
@@ -239,7 +239,7 @@ and the following corresponding dependency configuration (labels-file):
     #fun ModCN  : AP  -> CN -> CN ; amod head
     #fun UseN   : N         -> CN ; head
     #fun PositA : A         -> AP ; head
-    
+
     #cat A                        ; ADJ
     #cat Det                      ; DET
     #cat N                        ; NOUN
@@ -337,7 +337,7 @@ After having processed the children of ``cat'', the \ac{UD} tree annotated with 
     \label{fig:children_nested_compact}
 \end{figure}
 
-Now that we are done with all the children of ``cat'', we can start processing it. We have \lstinline|cat_N : N|. 
+Now that we are done with all the children of ``cat'', we can start processing it. We have \lstinline|cat_N : N|.
 
 \begin{figure}[H]
     \centering
@@ -447,9 +447,9 @@ After this no more functions can be applied at the ``cat'' node, giving us a fin
     \caption{The three available trees on the word ``cat'' after the third iteration \emph{after} pruning. Trees (a) and (b) are both subtrees of the final tree (c).}\label{fig:cat iter 3 pruned}
 \end{figure}
 
-Now finally we have a complete tree which contains all of the words of the phrase, so we will choose the tree in \autoref{ci3p:the_black_cat_NP} as the final tree. 
+Now finally we have a complete tree which contains all of the words of the phrase, so we will choose the tree in \autoref{ci3p:the_black_cat_NP} as the final tree.
 
-In the end, the data structure used in the calculation will look like in \autoref{fig:final nested tree} or \autoref{fig:final_nested_compact}, with the \ac{UD} structure outside which we traverse in order to find which parts can be connected and in each node of this tree a list of the \ac{GF} trees that are possible to construct using the words in the local \ac{UD} subtree, while conforming to the \ac{UD} labels. In this case, the word ``the'' has one \ac{GF} tree, the word ``black'' has two possible trees and the word ``cat'', which depends on the words ``the'' and ``black'' has four possible trees. 
+In the end, the data structure used in the calculation will look like in \autoref{fig:final nested tree} or \autoref{fig:final_nested_compact}, with the \ac{UD} structure outside which we traverse in order to find which parts can be connected and in each node of this tree a list of the \ac{GF} trees that are possible to construct using the words in the local \ac{UD} subtree, while conforming to the \ac{UD} labels. In this case, the word ``the'' has one \ac{GF} tree, the word ``black'' has two possible trees and the word ``cat'', which depends on the words ``the'' and ``black'' has four possible trees.
 
 \begin{figure}[H]
     \centering
@@ -482,7 +482,7 @@ In the end, the data structure used in the calculation will look like in \autore
 \subsection{Multiple possible GF trees of the same category}
 \label{sec:multiple_trees}
 
-In this simple example, we arrived at a state with intermediate trees that had the same type, and one was a strict subset of the other (``cat'' and ``black cat''). In a case like that, the old algorithm prunes away the smaller of the trees and continues on to the next iteration. 
+In this simple example, we arrived at a state with intermediate trees that had the same type, and one was a strict subset of the other (``cat'' and ``black cat''). In a case like that, the old algorithm prunes away the smaller of the trees and continues on to the next iteration.
 
 However, in a different grammar, we might very well end up with several trees that are of the same type, but not subsets of each other. This is the case for numerals in \ac{GF} standard library, where the trees for numbers like ``eight'', ``eighteen'' and ``eighty'' formed by applying different functions to the underlying digit called \texttt{n8}. Figure \ref{fig:eight} shows an example.
 
@@ -503,13 +503,13 @@ To compensate for this issue, one can disable the potentially ambiguous function
 % Each node in the UD tree corresponds to a word.
 
 As explained in \autoref{sec:overview-of-algorithm}, the algorithm works as follows.
-For each word, we try to apply all possible functions that match in both type and dependency label against the current head and a selection of children. As a result, we may get zero or more new trees for the given word. 
+For each word, we try to apply all possible functions that match in both type and dependency label against the current head and a selection of children. As a result, we may get zero or more new trees for the given word.
 Then we want to check if these new trees can, in turn, become the head argument for new function applications.
 In the old algorithm, we check with \emph{all} the available trees for that word against each available function.
 
-%After we have applied all possible functions and 
+%After we have applied all possible functions and
 
-%want to check if that 
+%want to check if that
 
 This means that all the trees that were possible to construct in the previous iteration are still possible to construct, so we will construct them again and will need to remove the duplicates afterwards.
 
