@@ -1,4 +1,4 @@
-name: "build"
+name: "build thesis with nix"
 on:
   # pull_request:
   push:
@@ -15,6 +15,8 @@ jobs:
         # Only needed for private caches
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     #- run: for f in $(nix-instantiate); do echo $f; cat $f; done
-    - run: nix build .#document
+    - run: nix build -L .#document
+    - name: Fetch other branch
+      run: git fetch origin pre-presentation-fixup:pre-presentation-fixup
     - run: nix develop -L --command sh generate-latex-diff.sh
     # - run: nix-shell --run "echo OK"
