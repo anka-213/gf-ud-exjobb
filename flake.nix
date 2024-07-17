@@ -139,43 +139,6 @@
             xstring
 
 
-
-            # moreverb
-            # textcomp
-            # lmodern
-            # helvet
-            # fontenc
-            # babel
-            # inputenc
-            # amsmath
-            # amssymb
-            # graphviz
-            # graphicx
-            # subfig
-            # caption
-            # subcaption
-            # acronym
-            # glossaries
-            # tikz-dependency
-            # tikzmark
-            # tikz
-            # minted
-            # chemfig
-            # eso-pic
-            # float
-            # parskip
-            # datetime2
-            # microtype
-            # makecell
-            # lua-visual-debug
-            # hyperref
-            # biblatex
-            # csquotes
-            # listings
-            # titlesec
-            # fancyhdr
-            # todonotes
-
             # \listfiles
             # grep -o "^[^ ]*\.sty" thesis/needed_pkgs.txt | sed 's/\.sty//'
             ;
@@ -187,7 +150,7 @@
         packages = {
           inherit tex pygments;
           document = pkgs.stdenvNoCC.mkDerivation rec {
-            name = "latex-demo-document";
+            name = "my-thesis";
             src = self;
             buildInputs = [ pkgs.coreutils tex pygments ];
             phases = [ "unpackPhase" "buildPhase" "installPhase" ];
