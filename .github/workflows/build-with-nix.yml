@@ -1,9 +1,10 @@
-name: "build thesis with nix"
+name: "Build thesis with nix"
 on:
   # pull_request:
   push:
+    branches: [ "main" ]
 jobs:
-  tests:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -20,3 +21,43 @@ jobs:
       run: git fetch origin pre-presentation-fixup:pre-presentation-fixup
     - run: nix develop -L --command sh generate-latex-diff.sh
     # - run: nix-shell --run "echo OK"
+
+
+    - name: Copy pdfs
+      run: |
+        mkdir _site
+        cp planeringsrapport/main.pdf _site/planeringsrapport.pdf
+        cp result/main.pdf _site/thesis.pdf
+        cp thesis-diff.pdf _site/thesis-diff.pdf
+
+    # - name: Setup Pages
+    #   uses: actions/configure-pages@v3
+
+    - name: Upload GitHub Pages artifact
+      uses: actions/upload-pages-artifact@v1.0.7
+
+  # Deploy job
+  deploy:
+    # Add a dependency to the build job
+    needs: build
+    # Allow one concurrent deployment
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
