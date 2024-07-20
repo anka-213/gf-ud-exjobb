@@ -111,10 +111,11 @@ As a solution, \verb|ud2gf| introduced the notion of \emph{auxiliary categories}
 % This consists of the following parts:
 This time we use the following auxiliary category and auxiliary function:
 \begin{itemize}
-    \item Auxiliary category for copula: \verb|#auxcat Cop VERB|
-    \item Auxiliary function that recognises the auxiliary category: \\
-          \verb|  #auxfun UseAP_ cop ap : Cop -> AP -> VP = UseAP ap ; cop head|
-    \item A declaration of the lemma \emph{be}: \\ \verb|#lemma DEFAULT_ be Cop cop head|. \\
+    \item Auxiliary category for copula: \verb|#auxcat Cop VERB|. This annotation introduces an auxiliary category \texttt{Cop} and associates it with the UD part of speech \texttt{VERB}.
+    \item Auxiliary function (macro) that recognises the auxiliary category: \\
+          \verb|  #auxfun UseAP_ cop ap : Cop -> AP -> VP = UseAP ap ; cop head|. \\
+          The macro takes a copula and an adjectival phrase and then throws away the copula, because the copula (\emph{is}) is created by the \texttt{UseAP} function.
+    \item A declaration of the lemma \emph{be}: \\ \verb|  #lemma DEFAULT_ be Cop cop head|. \\
     Here we declare that the lemma can be used with all functions (\verb|DEFAULT_|), the lemma is \emph{be}, the auxiliary category should be \emph{Cop}, the dependency label pointing at the lemma should be \emph{cop} and that the \emph{head} argument of the function should be the parent of the copula. Most parts of the \verb|#lemma| declaration are only used for the gf2ud direction. Only the lemma name and category name are used by ud2gf.
 \end{itemize}
 % #lemma DEFAULT_ be Cop cop head
@@ -133,7 +134,7 @@ However, coordination was still a problem in \verb|ud2gf|. The auxiliary categor
 
 \FloatBarrier
 
-\section{Introdoction to flexibility problem}
+\section{Problem: Limitations of the possible tree transformation}
 
 As an example of a phrase that can be difficult to convert using the old ud2gf, let us consider the adjectival phrase ``small, furry, fluffy and cute''
 would be described in UD format as in \autoref{fig:ud_cute}.
