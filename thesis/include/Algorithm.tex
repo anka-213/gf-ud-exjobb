@@ -119,6 +119,7 @@ The function \lstinline{UseN} only has a single argument (of type \lstinline{N})
         \node (arg1) [below of = \wordref{1}{1}, yshift = -1ex]  {\texttt{Det}};
         \node (arg2) [below of = \wordref{1}{2}, yshift = -1ex]  {\texttt{CN}};
         \node (result) [right of = arg2, xshift = 1ex]  {\texttt{NP}};
+        \node (annot) [right of = result, xshift = 2ex]  {\texttt{; det head}};
         \node (function) [left of = arg1, xshift = -1.5ex]  {\texttt{DetCN :}};
           % Det} -> \subnode{arg2}{CN} -> NP}};
         \draw [->, thick] (arg1) -- (arg2);
@@ -167,7 +168,25 @@ Both of these annotations are bidirectional and language-independent, since they
 %
 % \end{lstlisting}
 
-\section{Overview of algorithm}\label{sec:overview-of-algorithm}
+\section{Overview of the old algorithm}\label{sec:overview-of-algorithm}
+
+% TODO: Describe how this is a variation of a bottom-up parser with the UD tree guiding it
+The algorithm is a variation of a bottom-up parser, guided by both the structure and the labels of the UD tree.
+
+In contrast with ordinary bottom-up parsers, we don't start with a linear string, but instead start with a UD tree, where each node corresponds to a word, and annotate each word with one or several GF trees.
+Then we combine GF trees in a bottom-up fashion, but instead of combining neighboring trees, we combine a GF tree for a word with GF trees from a number of dependents of that word.
+More precisely, as mentioned in \autoref{sec:annotations-intro}, each syntactic GF function is annotated with exactly one \texttt{head} argument and zero or more other arguments with their respective dependency labels. In an iteration, we pick one GF tree from the head word and one GF tree from each of as many unused dependent words as the function has non-head arguments. Then if both the category of the used GF trees and the dependency labels of the used dependents match the annotations, we add the new GF tree to the head word.
+
+% Then we build up larger GF trees by combining a GF tree from one node in the UD tree (the head) with GF trees from a number of children of that UD node.
+
+\todo{Fix overlap with text below}
+
+% A function can be applied only when it matches both in category and dependency and dependency labels between the head argument and the other arguments.
+% In order for a function to be applied it has to match (head, children)
+
+% We use the annotated dependency labels to match against the tree
+% Whenever a syntactic function takes more than one argument,
+
 
 We start with a \ac{UD} tree (e.g. \autoref{fig:the_black_cat_ud}), then we first map each \ac{POS} label into a \ac{GF} category and then assign lexical entries to each node in the tree according to those categories. For example, the string ``cat'', with \ac{POS} ``NOUN'' would become \lstinline|cat_N : N|, which is a nullary (takes no arguments) \ac{GF} function of type/category \lstinline|N|. This is done through \ac{GF}'s built-in parse function. In some cases, there are multiple possible \ac{GF} expressions of the correct type and linearization, in these cases all of the possibilities are added.
 
@@ -186,22 +205,6 @@ For a very simple initial example, we start with the noun-phrase ``the black cat
     \centering
     %% the black cat
     \setlength{\unitlength}{0.2mm}
-    % \begin{picture}(158.0,90.0)
-    %   \put(0.0,0.0){the}
-    %   \put(37.0,0.0){black}
-    %   \put(92.0,0.0){cat}
-    %   \put(0.0,15.0){{\tiny DET}}
-    %   \put(37.0,15.0){{\tiny ADJ}}
-    %   \put(92.0,15.0){{\tiny NOUN}}
-    %   \put(56.0,30.0){\oval(88.73913043478261,66.66666666666667)[t]}
-    %   \put(11.630434782608695,35.0){\vector(0,-1){5.0}}
-    %   \put(41.0,66.33333333333334){{\tiny det}}
-    %   \put(74.5,30.0){\oval(49.54545454545455,33.333333333333336)[t]}
-    %   \put(49.72727272727273,35.0){\vector(0,-1){5.0}}
-    %   \put(59.5,49.66666666666667){{\tiny amod}}
-    %   \put(107.0,90.0){\vector(0,-1){60.0}}
-    %   \put(112.0,80.0){{\tiny root}}
-    % \end{picture}
     \begin{dependency}
         \begin{deptext}[column sep=0.4cm]
               the \& black \& cat \\
@@ -305,7 +308,35 @@ After converting \ac{UD} \ac{POS} annotations to \ac{GF} categories and parsing 
 \end{figure}
 
 Next we get to ``black'', with the available tree \lstinline|black_A| (\autoref{fig:black iter 0}) and here we can apply \lstinline|PositA : A -> AP ; head|, which converts an adjective into an Adjectival Phrase (AP), so now the available trees on ``black'' are
-\lstinline|[black_A : A, PositA black_A : AP]| (\autoref{fig:black iter 0}), no more functions can be applied here, so we continue.
+\lstinline|[black_A : A, PositA black_A : AP]| (\autoref{fig:black iter 0}), no more functions can be applied here, so we continue. \autoref{fig:cat iter 1 PositA} illustrates how the rule for \texttt{PositA} matches against this node.
+
+\begin{figure}[H]
+    \centering
+    %% the black cat
+    \setlength{\unitlength}{0.2mm}
+    \begin{dependency}
+        % TODO: Maybe don't center each line here
+        \begin{deptext}[column sep=0.4cm]
+              the\_Det : Det \& black\_A : A \& cat\_N : N \\
+            % \& PositA black\_A : AP \& UseN cat\_N : CN \\
+            % \& \& DetCN the\_Det (UseN cat\_N) : NP \\
+            % \& \& AdjCN (PositA black\_A) (UseN cat\_N) : CN \\
+        \end{deptext}
+        \depedge{3}{1}{det}
+        \depedge{3}{2}{amod}
+        \deproot{3}{root}
+
+        \node (arg1) [below of = \wordref{1}{2}, yshift = -1ex]  {\texttt{A}};
+        \node (result) [right of = arg1, xshift = 1ex]  {\texttt{AP}};
+        % \node (annot) [right of = result, xshift = 2ex]  {\texttt{; det head}};
+        \node (function) [left of = arg1, xshift = -2ex]  {\texttt{PositA :}};
+          % Det} -> \subnode{arg2}{CN} -> NP}};
+        \draw [->, thick] (arg1) -- (result);
+        \draw [->, very thick, dashed, gray] (arg1) -- node[right] {head} (\wordref{1}{2});
+    \end{dependency} \\
+    \caption{An illustration of how the rule for \texttt{PositA} matches against the tree \texttt{black\_A} for the word \emph{black} in the phrase ``the black cat''.}
+    \label{fig:cat iter 1 PositA}
+\end{figure}
 
 \begin{figure}[H]
     \centering
@@ -361,12 +392,57 @@ Looking through all the functions, only \lstinline|UseN : N -> CN ; head| takes 
     \caption{The available GF trees on the word ``cat'' after the first iteration}\label{fig:cat iter 1}
 \end{figure}
 
-In the next iteration we have a \lstinline|CN| available and can apply either of the functions
+In the next iteration we have a \lstinline|CN| available for ``cat'', which means that, as is illustrated in \autoref{fig:cat iter 2 DetCN}, we can apply either of the following functions:
 \begin{lstlisting}
     DetCN : Det -> CN -> NP ; det head
     ModCN : AP -> CN -> CN  ; amod head
 \end{lstlisting}
 Let us verify that these are possible to apply: For \lstinline|DetCN| we need a tree of type $Det$ with the $det$ \ac{UD} label for the relation and indeed, the word ``the'' has the $det$ label on the relation to ``cat'' and we have the tree \lstinline|the_Det : Det| available on ``the''. Secondly we need a $CN$ at the head and since our current head is ``cat'' and we have \lstinline|UseN cat_N : CN|, that fits perfectly giving us \lstinline|DetCN the_Det (UseN cat_N) : NP|. With similar reasoning for \lstinline{ModCN}, we have ``black'' with \ac{UD}-label $amod$ and one of the available trees for ``black'' is \lstinline|PositA black_A : AP| which has the correct category, which allows us to construct \lstinline|ModCN (PositA black_A) (UseN cat_N) : CN|. After this we have the trees in \autoref{fig:cat iter 2}
+
+% \todo[inline]{Refer to the figure below in the paragraph above}
+\begin{figure}[H]
+    \centering
+    %% the black cat
+    \setlength{\unitlength}{0.2mm}
+    \begin{dependency}
+        % TODO: Maybe don't center each line here
+        \begin{deptext}[column sep=0.4cm]
+              the\_Det : Det \& black\_A : A \& cat\_N : N \\
+            \& PositA black\_A : AP \& UseN cat\_N : CN \\
+            % \& \& DetCN the\_Det (UseN cat\_N) : NP \\
+            % \& \& AdjCN (PositA black\_A) (UseN cat\_N) : CN \\
+        \end{deptext}
+        \depedge{3}{1}{det}
+        \depedge{3}{2}{amod}
+        \deproot{3}{root}
+
+        \node (arg1) [below of = \wordref{2}{1}, yshift = -1ex]  {\texttt{Det}};
+        \node (arg2) [below of = \wordref{2}{3}, yshift = -1ex]  {\texttt{CN}};
+        \node (result) [right of = arg2, xshift = 1ex]  {\texttt{NP}};
+        % \node (annot) [right of = result, xshift = 2ex]  {\texttt{; det head}};
+        \node (function) [left of = arg1, xshift = -1.5ex]  {\texttt{DetCN :}};
+          % Det} -> \subnode{arg2}{CN} -> NP}};
+        \draw [->, thick] (arg1) -- (arg2);
+        \draw [->, thick] (arg2) -- (result);
+        \draw [->, very thick, dashed, gray] (arg1) -- node[right] {det} (\wordref{1}{1});
+        \draw [->, very thick, dashed, gray] (arg2) -- node[right] {head} (\wordref{2}{3});
+
+        \node (f2arg1) [below of = \wordref{2}{2}, yshift = -7ex]  {\texttt{AP}};
+        \node (f2arg2) [below of = \wordref{2}{3}, yshift = -7ex]  {\texttt{CN}};
+        \node (f2result) [right of = f2arg2, xshift = 1ex]  {\texttt{CN}};
+        % \node (annot) [right of = f2result, xshift = 2ex]  {\texttt{; det head}};
+        \node (f2function) [left of = f2arg1, xshift = -1.5ex]  {\texttt{ModCN :}};
+          % Det} -> \subnode{f2arg2}{CN} -> NP}};
+        \draw [->, thick] (f2arg1) -- (f2arg2);
+        \draw [->, thick] (f2arg2) -- (f2result);
+        \draw [->, very thick, dashed, gray] (f2arg1) -- node[right, yshift = -3ex] {amod} (\wordref{2}{2});
+        \draw [->, very thick, dashed, gray, xshift = -1ex] (f2arg2) edge[bend left=50] node[left, yshift = -3ex] {head} (\wordref{2}{3});
+        % \draw [->, very thick, dashed, gray, xshift = -1ex] (f2arg2) -- node[below=-2ex] {head} (\wordref{1}{3});
+    \end{dependency} \\
+    \caption{An illustration of how \texttt{DetCN} matches against the words \emph{the} and \emph{cat} and how \texttt{ModCN} matches against the words \emph{black} and \emph{cat} in the phrase ``the black cat''.}
+    \label{fig:cat iter 2 DetCN}
+\end{figure}
+
 
 \begin{figure}[H]
     \centering
