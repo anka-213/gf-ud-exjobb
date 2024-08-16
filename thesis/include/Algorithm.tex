@@ -124,8 +124,8 @@ The function \lstinline{UseN} only has a single argument (of type \lstinline{N})
           % Det} -> \subnode{arg2}{CN} -> NP}};
         \draw [->, thick] (arg1) -- (arg2);
         \draw [->, thick] (arg2) -- (result);
-        \draw [->, very thick, dashed, gray] (arg1) -- (\wordref{1}{1});
-        \draw [->, very thick, dashed, gray] (arg2) -- (\wordref{1}{2});
+        \draw [->, very thick, dashed, gray] (arg1) -- node[left] {det} (\wordref{1}{1});
+        \draw [->, very thick, dashed, gray] (arg2) -- node[right] {head} (\wordref{1}{2});
     \end{dependency} \\
     \caption{The UD shape that the function \texttt{DetCN} matches against.}
     \label{fig:DetCN}
@@ -173,9 +173,13 @@ Both of these annotations are bidirectional and language-independent, since they
 % TODO: Describe how this is a variation of a bottom-up parser with the UD tree guiding it
 The algorithm is a variation of a bottom-up parser, guided by both the structure and the labels of the UD tree.
 
-In contrast with ordinary bottom-up parsers, we don't start with a linear string, but instead start with a UD tree, where each node corresponds to a word, and annotate each word with one or several GF trees.
-Then we combine GF trees in a bottom-up fashion, but instead of combining neighboring trees, we combine a GF tree for a word with GF trees from a number of dependents of that word.
-More precisely, as mentioned in \autoref{sec:annotations-intro}, each syntactic GF function is annotated with exactly one \texttt{head} argument and zero or more other arguments with their respective dependency labels. In an iteration, we pick one GF tree from the head word and one GF tree from each of as many unused dependent words as the function has non-head arguments. Then if both the category of the used GF trees and the dependency labels of the used dependents match the annotations, we add the new GF tree to the head word.
+Similarly to an ordinary bottom up parser, we annotate each word with one or several GF trees and then build up larger trees by combining these from the bottom up.
+However, rather than starting with a linear string, we instead start with a UD tree, where each node in the UD tree corresponds to a word. And instead of combining neighboring GF trees in the linear string, we combine a GF tree for a word with GF trees from a number of dependents of that word.
+% Similarly to an ordinary bottom up parser, we annotate each word with one or several GF trees. However, In contrast with ordinary bottom-up parsers, we don't start with a linear string, but instead start with a UD tree, where each node corresponds to a word,
+% Then we combine GF trees in a bottom-up fashion, but instead of combining neighboring trees, we combine a GF tree for a word with GF trees from a number of dependents of that word.
+
+More precisely, as mentioned in \autoref{sec:annotations-intro}, each syntactic GF function is annotated with exactly one \texttt{head} argument and zero or more other arguments with their respective dependency labels. In an iteration, we pick one GF tree from the head word and one GF tree from each of as many unused dependent words as the function has non-head arguments. Then if both the category of the used GF trees and the dependency labels of the used dependents match the annotations (as illustrated in \autoref{fig:DetCN}), we add the new GF tree to the head word.
+After this, we keep trying to apply functions on the generated GF trees for the current head word until no more can be applied and then continue to the next word.
 
 % Then we build up larger GF trees by combining a GF tree from one node in the UD tree (the head) with GF trees from a number of children of that UD node.
 
@@ -188,14 +192,14 @@ More precisely, as mentioned in \autoref{sec:annotations-intro}, each syntactic 
 % Whenever a syntactic function takes more than one argument,
 
 
-We start with a \ac{UD} tree (e.g. \autoref{fig:the_black_cat_ud}), then we first map each \ac{POS} label into a \ac{GF} category and then assign lexical entries to each node in the tree according to those categories. For example, the string ``cat'', with \ac{POS} ``NOUN'' would become \lstinline|cat_N : N|, which is a nullary (takes no arguments) \ac{GF} function of type/category \lstinline|N|. This is done through \ac{GF}'s built-in parse function. In some cases, there are multiple possible \ac{GF} expressions of the correct type and linearization, in these cases all of the possibilities are added.
-
-Now we have a \ac{UD} tree with a list of \ac{GF} trees at each node (\autoref{fig:the_black_cat_ud_gf}). We process the tree bottom up, starting with the leaf words and then the words for which all the children/dependents have been processed.
-% We start traversing the tree, depth first, when we reach a leaf, we start processing the leaf. Afterwards we
-
-The main loop at each word consists of trying to apply each of the available \ac{GF} functions to each of the available trees for that word, combined with as many trees from unused dependent words as the function requires. For each combination, the algorithm checks that the used trees match the annotations for the function in both in \ac{GF} category and \ac{UD} dependency labels. Each of the generated trees are added to the list of trees for the current word.
-%  go through all the available functions and apply as many as possible and add the result to our list
-When no more functions can be applied, we go to the next word in the tree.
+% We start with a \ac{UD} tree (e.g. \autoref{fig:the_black_cat_ud}), then we first map each \ac{POS} label into a \ac{GF} category and then assign lexical entries to each node in the tree according to those categories. For example, the string ``cat'', with \ac{POS} ``NOUN'' would become \lstinline|cat_N : N|, which is a nullary (takes no arguments) \ac{GF} function of type/category \lstinline|N|. This is done through \ac{GF}'s built-in parse function. In some cases, there are multiple possible \ac{GF} expressions of the correct type and linearization, in these cases all of the possibilities are added.
+%
+% Now we have a \ac{UD} tree with a list of \ac{GF} trees at each node (\autoref{fig:the_black_cat_ud_gf}). We process the tree bottom up, starting with the leaf words and then the words for which all the children/dependents have been processed.
+% % We start traversing the tree, depth first, when we reach a leaf, we start processing the leaf. Afterwards we
+%
+% The main loop at each word consists of trying to apply each of the available \ac{GF} functions to each of the available trees for that word, combined with as many trees from unused dependent words as the function requires. For each combination, the algorithm checks that the used trees match the annotations for the function in both in \ac{GF} category and \ac{UD} dependency labels. Each of the generated trees are added to the list of trees for the current word.
+% %  go through all the available functions and apply as many as possible and add the result to our list
+% When no more functions can be applied, we go to the next word in the tree.
 
 \subsection{Example: The black cat}
 
@@ -435,7 +439,7 @@ Let us verify that these are possible to apply: For \lstinline|DetCN| we need a 
           % Det} -> \subnode{f2arg2}{CN} -> NP}};
         \draw [->, thick] (f2arg1) -- (f2arg2);
         \draw [->, thick] (f2arg2) -- (f2result);
-        \draw [->, very thick, dashed, gray] (f2arg1) -- node[right, yshift = -3ex] {amod} (\wordref{2}{2});
+        \draw [->, very thick, dashed, gray] (f2arg1) -- node[left, yshift = -3ex] {amod} (\wordref{2}{2});
         \draw [->, very thick, dashed, gray, xshift = -1ex] (f2arg2) edge[bend left=50] node[left, yshift = -3ex] {head} (\wordref{2}{3});
         % \draw [->, very thick, dashed, gray, xshift = -1ex] (f2arg2) -- node[below=-2ex] {head} (\wordref{1}{3});
     \end{dependency} \\
